@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.forsteri.ratatouille.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "ratatouille.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
