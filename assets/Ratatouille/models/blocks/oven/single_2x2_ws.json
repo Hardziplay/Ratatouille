@@ -6,7 +6,8 @@
 		"3": "Ratatouille:blocks/oven/oven_3x3_top_hole_inner",
 		"4": "Ratatouille:blocks/oven/oven_3x3_sin",
 		"5": "Ratatouille:blocks/oven/oven_3x3_top",
-		"6": "Ratatouille:blocks/oven/oven_3x3_top_inner"
+		"6": "Ratatouille:blocks/oven/oven_3x3_top_inner",
+		"particle": "Ratatouille:blocks/oven/oven_3x3_sin"
 	},
 	"elements": [
 		{
