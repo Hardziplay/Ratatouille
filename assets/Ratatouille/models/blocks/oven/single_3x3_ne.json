@@ -1,0 +1,117 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "Ratatouille:blocks/oven/oven_3x3_mut",
+		"2": "Ratatouille:blocks/oven/oven_3x3_top_hole",
+		"3": "Ratatouille:blocks/oven/oven_3x3_top_hole_inner",
+		"4": "Ratatouille:blocks/oven/oven_3x3_top_inner",
+		"5": "Ratatouille:blocks/oven/oven_3x3_top",
+		"6": "Ratatouille:blocks/oven/windows _double",
+		"7": "Ratatouille:blocks/oven/oven_3x3_sin",
+		"particle": "Ratatouille:blocks/oven/oven_3x3_mut"
+	},
+	"elements": [
+		{
+			"from": [0, 12, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 5.33333, 1.33333], "texture": "#0"},
+				"east": {"uv": [0, 0, 5.33333, 1.33333], "texture": "#0"},
+				"south": {"uv": [10.66667, 0, 16, 1.33333], "texture": "#0"},
+				"west": {"uv": [10.66667, 0, 16, 1.33333], "texture": "#0"},
+				"up": {"uv": [10.66667, 0, 16, 5.33333], "texture": "#2"},
+				"down": {"uv": [10.66667, 10.66667, 16, 16], "texture": "#3"}
+			}
+		},
+		{
+			"from": [0, 8, 0],
+			"to": [3, 12, 0],
+			"faces": {
+				"north": {"uv": [0, 0, 1.5, 2], "texture": "#6"},
+				"east": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"south": {"uv": [9.5, 0, 11, 2], "texture": "#6"},
+				"west": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"up": {"uv": [0, 0, 3, 0], "texture": "#missing"},
+				"down": {"uv": [0, 0, 3, 0], "texture": "#missing"}
+			}
+		},
+		{
+			"from": [0, 4, 0],
+			"to": [3, 8, 0],
+			"faces": {
+				"north": {"uv": [0, 2, 1.5, 4], "texture": "#6"},
+				"east": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"south": {"uv": [9.5, 2, 11, 4], "texture": "#6"},
+				"west": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"up": {"uv": [0, 0, 3, 0], "texture": "#missing"},
+				"down": {"uv": [0, 0, 3, 0], "texture": "#missing"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 4, 16],
+			"faces": {
+				"north": {"uv": [0, 14.66667, 5.33333, 16], "texture": "#0"},
+				"east": {"uv": [0, 14.66667, 5.33333, 16], "texture": "#0"},
+				"south": {"uv": [10.66667, 14.66667, 16, 16], "texture": "#0"},
+				"west": {"uv": [10.66667, 14.66667, 16, 16], "texture": "#0"},
+				"up": {"uv": [10.66667, 0, 16, 5.33333], "texture": "#4"},
+				"down": {"uv": [10.66667, 10.66667, 16, 16], "texture": "#5"}
+			}
+		},
+		{
+			"from": [3, 4, 0],
+			"to": [16, 12, 1],
+			"faces": {
+				"north": {"uv": [0, 12, 4.33333, 14.66667], "texture": "#7"},
+				"south": {"uv": [11.66667, 12, 16, 14.66667], "texture": "#7"},
+				"west": {"uv": [11.33333, 12, 11.66667, 14.66667], "texture": "#7"},
+				"up": {"uv": [11.66667, 12, 16, 11.66667], "texture": "#7"},
+				"down": {"uv": [11.66667, 15, 16, 14.66667], "texture": "#7"}
+			}
+		},
+		{
+			"from": [15, 4, 0],
+			"to": [16, 12, 13],
+			"faces": {
+				"east": {"uv": [11.66667, 12, 16, 14.66667], "texture": "#7"},
+				"south": {"uv": [4.33333, 12, 4.66667, 14.66667], "texture": "#7"},
+				"west": {"uv": [0, 12, 4.33333, 14.66667], "texture": "#7"},
+				"up": {"uv": [11.66667, 10.33333, 16, 10.66667], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [11.66667, 14.66667, 16, 15], "texture": "#0"}
+			}
+		},
+		{
+			"from": [15, 8, 13],
+			"to": [15, 12, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"east": {"uv": [9.5, 0, 11, 2], "texture": "#6"},
+				"south": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"west": {"uv": [0, 0, 1.5, 2], "texture": "#6"},
+				"up": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 3], "texture": "#missing"}
+			}
+		},
+		{
+			"from": [15, 4, 13],
+			"to": [15, 8, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"east": {"uv": [9.5, 2, 11, 4], "texture": "#6"},
+				"south": {"uv": [0, 0, 0, 5], "texture": "#missing"},
+				"west": {"uv": [0, 2, 1.5, 4], "texture": "#6"},
+				"up": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 3], "texture": "#missing"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7]
+		}
+	]
+}
