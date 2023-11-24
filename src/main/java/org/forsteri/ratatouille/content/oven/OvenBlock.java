@@ -1,0 +1,64 @@
+package org.forsteri.ratatouille.content.oven;
+
+import com.simibubi.create.api.connectivity.ConnectivityHandler;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.foundation.block.IBE;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import org.forsteri.ratatouille.entry.Registrate;
+import org.jetbrains.annotations.NotNull;
+
+public class OvenBlock extends Block implements IWrenchable, IBE<OvenBlockEntity> {
+    public static final BooleanProperty TOP = BooleanProperty.create("top");
+    public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
+
+    public OvenBlock(Properties p_i48440_1_) {
+        super(p_i48440_1_);
+        registerDefaultState(defaultBlockState().setValue(TOP, true)
+                .setValue(BOTTOM, true));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onPlace(BlockState state, @NotNull Level world, @NotNull BlockPos pos, BlockState oldState, boolean moved) {
+        if (oldState.getBlock() == state.getBlock())
+            return;
+        if (moved)
+            return;
+
+        withBlockEntityDo(world, pos, OvenBlockEntity::updateConnectivity);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_206840_1_) {
+        p_206840_1_.add(TOP, BOTTOM);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+        if (state.hasBlockEntity() && (state.getBlock() != newState.getBlock() || !newState.hasBlockEntity())) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (!(be instanceof OvenBlockEntity ovenBE))
+                return;
+            world.removeBlockEntity(pos);
+            ConnectivityHandler.splitMulti(ovenBE);
+        }
+    }
+
+    @Override
+    public Class<OvenBlockEntity> getBlockEntityClass() {
+        return OvenBlockEntity.class;
+    }
+
+    @Override
+    public BlockEntityType<? extends OvenBlockEntity> getBlockEntityType() {
+        return Registrate.OVEN_ENTITY.get();
+    }
+}
