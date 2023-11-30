@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.client.model.generators.ModelFile;
+import org.forsteri.ratatouille.entry.Registrate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,19 +29,21 @@ import java.util.*;
 
 public class OvenModel extends CTModel {
     public OvenModel(BakedModel originalModel, CTSpriteShiftEntry side, CTSpriteShiftEntry top,
-                           CTSpriteShiftEntry topInner, CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner) {
-        super(originalModel, new OvenCTBehavior(side, top, topInner, bottom, bottomInner));
+                           CTSpriteShiftEntry topInner, CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
+        super(originalModel, new OvenCTBehavior(side, top, topInner, bottom, bottomInner, shift2x2));
     }
 
     public static class OvenCTBehavior extends FluidTankCTBehaviour {
         private final CTSpriteShiftEntry bottomShift;
         private final CTSpriteShiftEntry bottomInnerShift;
+        private final CTSpriteShiftEntry shift2x2;
 
         public OvenCTBehavior(CTSpriteShiftEntry layerShift, CTSpriteShiftEntry topShift, CTSpriteShiftEntry innerShift,
-                              CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner) {
+                              CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
             super(layerShift, topShift, innerShift);
             this.bottomShift = bottom;
             this.bottomInnerShift = bottomInner;
+            this.shift2x2 = shift2x2;
         }
 
         @Override
@@ -49,7 +52,10 @@ public class OvenModel extends CTModel {
                 return bottomShift;
             if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomInnerShift.getOriginal() == sprite)
                 return bottomInnerShift;
-            return super.getShift(state, direction, sprite);
+            CTSpriteShiftEntry shift = super.getShift(state, direction, sprite);
+            if (shift == Registrate.OVEN_SPRITE && state.getValue(OvenBlock.IS_2x2))
+                return shift2x2;
+            return shift;
         }
     }
 
@@ -60,8 +66,9 @@ public class OvenModel extends CTModel {
                                                 ModelData blockEntityData) {
         super.gatherModelData(builder, world, pos, state, blockEntityData);
         CullData cullData = new CullData();
-        for (Direction d : Iterate.directions)
+        for (Direction d : Iterate.directions) {
             cullData.setCulled(d, ConnectivityHandler.isConnected(world, pos, pos.relative(d)));
+        }
         return builder.with(CULL_PROPERTY, cullData);
     }
 
@@ -164,6 +171,7 @@ public class OvenModel extends CTModel {
                             .cullface(Direction.WEST)
                         .end()
                     .end()
+                    .texture("particle", prov.modLoc("block/oven/oven"))
                     .texture("top", prov.modLoc("block/oven/oven_top"))
                     .texture("bottom", prov.modLoc("block/oven/oven_bottom"))
                     .texture("side", prov.modLoc("block/oven/oven"))

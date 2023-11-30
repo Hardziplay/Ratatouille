@@ -17,11 +17,13 @@ import org.jetbrains.annotations.NotNull;
 public class OvenBlock extends Block implements IWrenchable, IBE<OvenBlockEntity> {
     public static final BooleanProperty TOP = BooleanProperty.create("top");
     public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
+    public static final BooleanProperty IS_2x2 = BooleanProperty.create("is_2x2");
 
     public OvenBlock(Properties p_i48440_1_) {
         super(p_i48440_1_);
         registerDefaultState(defaultBlockState().setValue(TOP, true)
-                .setValue(BOTTOM, true));
+                .setValue(BOTTOM, true)
+                .setValue(IS_2x2, false));
     }
 
     @SuppressWarnings("deprecation")
@@ -37,7 +39,7 @@ public class OvenBlock extends Block implements IWrenchable, IBE<OvenBlockEntity
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_206840_1_) {
-        p_206840_1_.add(TOP, BOTTOM);
+        p_206840_1_.add(TOP, BOTTOM, IS_2x2);
     }
 
     @SuppressWarnings("deprecation")
