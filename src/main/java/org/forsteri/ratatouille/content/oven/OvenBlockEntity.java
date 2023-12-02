@@ -133,12 +133,14 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
             return;
         if (!isController())
             return;
-         ConnectivityHandler.formMulti(this);
+        ConnectivityHandler.formMulti(this);
     }
 
     @Override
     public void notifyMultiUpdated() {
         assert level != null;
+
+        level.setBlock(getBlockPos(), getBlockState().setValue(OvenBlock.IS_2x2, getWidth() == 2), 6);
 
         itemCapability.invalidate();
         setChanged();

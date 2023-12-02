@@ -1,8 +1,8 @@
-// 1.19.2	2023-11-24T19:19:34.354016	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
-5e17497ebb2c7442e1b8031e3d23f5dc5a66781e assets/ratatouille/blockstates/oven.json
+// 1.19.2	2023-11-30T18:42:54.033462	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+507c409fc30d16f74a78c7a90022bf101c67073a assets/ratatouille/blockstates/oven.json
 5ebbe8808b29fbe89390fe437d6fa47f16e4141a assets/ratatouille/lang/en_ud.json
 01e68a2628fcfaf4e10a28fffb578c1c7e335adf assets/ratatouille/lang/en_us.json
-3c793b2ffefeeaf5c2c7e128955bca83ff837826 assets/ratatouille/models/block/oven.json
+baa15cef8d67a9736459077376d6bf9a5abf7983 assets/ratatouille/models/block/oven.json
 03a57ff097cc5eeffa58dfbef29fb5ff680d5228 assets/ratatouille/models/item/oven.json
 8c0daabf8351f800a5324acf955794b210d9b30c data/minecraft/tags/blocks/mineable/pickaxe.json
 5699350508ed14e2e0301ee2c13c76c492224f0e data/ratatouille/loot_tables/blocks/oven.json

@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.entry;
 
-import com.simibubi.create.content.fluids.tank.FluidTankItem;
 import com.simibubi.create.foundation.block.connected.AllCTTypes;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
@@ -13,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.oven.OvenBlock;
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
+import org.forsteri.ratatouille.content.oven.OvenBlockItem;
 import org.forsteri.ratatouille.content.oven.OvenModel;
 
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -22,7 +22,8 @@ public class Registrate {
                                             OVEN_SPRITE_TOP = getCT("oven/oven_top"),
                                             OVEN_SPRITE_TOP_INNER = getCT("oven/oven_top_inner"),
                                             OVEN_SPRITE_BOTTOM = getCT("oven/oven_bottom"),
-                                            OVEN_SPRITE_BOTTOM_INNER = getCT("oven/oven_bottom_inner");
+                                            OVEN_SPRITE_BOTTOM_INNER = getCT("oven/oven_bottom_inner"),
+                                            OVEN_SPRITE_SHIFT_2x2 = getCT("oven/oven", "oven/oven_2x2");
 
     @SuppressWarnings("removal")
     public static final BlockEntry<OvenBlock> OVEN = Ratatouille.REGISTRATE
@@ -32,9 +33,9 @@ public class Registrate {
             .transform(pickaxeOnly())
             .blockstate(new OvenModel.OvenGenerator()::generate)
             .onRegister(CreateRegistrate.blockModel(() -> originalModel -> new OvenModel(originalModel,
-                    OVEN_SPRITE, OVEN_SPRITE_TOP, OVEN_SPRITE_TOP_INNER, OVEN_SPRITE_BOTTOM, OVEN_SPRITE_BOTTOM_INNER)))
+                    OVEN_SPRITE, OVEN_SPRITE_TOP, OVEN_SPRITE_TOP_INNER, OVEN_SPRITE_BOTTOM, OVEN_SPRITE_BOTTOM_INNER, OVEN_SPRITE_SHIFT_2x2)))
             .addLayer(() -> RenderType::cutoutMipped)
-            .item(FluidTankItem::new)
+            .item(OvenBlockItem::new)
             .build()
             .register();
 

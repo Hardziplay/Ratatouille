@@ -83,6 +83,7 @@
     "inner_bottom": "ratatouille:block/oven/oven_bottom_inner",
     "inner_side": "ratatouille:block/oven/oven",
     "inner_top": "ratatouille:block/oven/oven_top_inner",
+    "particle": "ratatouille:block/oven/oven",
     "side": "ratatouille:block/oven/oven",
     "top": "ratatouille:block/oven/oven_top"
   }
