@@ -76,6 +76,26 @@
         16,
         16
       ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#layer"
+        },
+        "up": {
+          "texture": "#layer"
+        }
+      },
+      "from": [
+        0,
+        7,
+        0
+      ],
+      "to": [
+        16,
+        7,
+        16
+      ]
     }
   ],
   "textures": {
@@ -83,6 +103,7 @@
     "inner_bottom": "ratatouille:block/oven/oven_bottom_inner",
     "inner_side": "ratatouille:block/oven/oven",
     "inner_top": "ratatouille:block/oven/oven_top_inner",
+    "layer": "ratatouille:block/oven/oven_layer",
     "particle": "ratatouille:block/oven/oven",
     "side": "ratatouille:block/oven/oven",
     "top": "ratatouille:block/oven/oven_top"

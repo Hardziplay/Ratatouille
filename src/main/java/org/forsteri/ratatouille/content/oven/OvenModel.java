@@ -3,6 +3,7 @@ package org.forsteri.ratatouille.content.oven;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.fluids.tank.FluidTankCTBehaviour;
 import com.simibubi.create.content.fluids.tank.FluidTankGenerator;
+import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
 import com.simibubi.create.foundation.block.connected.CTModel;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -67,8 +68,14 @@ public class OvenModel extends CTModel {
         super.gatherModelData(builder, world, pos, state, blockEntityData);
         CullData cullData = new CullData();
         for (Direction d : Iterate.directions) {
-            cullData.setCulled(d, ConnectivityHandler.isConnected(world, pos, pos.relative(d)));
+            cullData.setCulled(d, ConnectivityHandler.isConnected(world, pos, pos.relative(d)) ||
+                    (world.getBlockState(pos.relative(d)).getBlock() instanceof EncasedFanBlock &&
+                            world.getBlockState(pos.relative(d)).getValue(EncasedFanBlock.FACING) == d.getOpposite()));
         }
+
+        cullData.setCulled(null, !(ConnectivityHandler.isConnected(world, pos, pos.above()) ||
+                ConnectivityHandler.isConnected(world, pos, pos.below())));
+
         return builder.with(CULL_PROPERTY, cullData);
     }
 
@@ -84,7 +91,10 @@ public class OvenModel extends CTModel {
                 continue;
             quads.addAll(super.getQuads(state, d, rand, extraData, renderType));
         }
-        quads.addAll(super.getQuads(state, null, rand, extraData, renderType));
+
+        if (extraData.has(CULL_PROPERTY) && !Objects.requireNonNull(extraData.get(CULL_PROPERTY))
+                .isCulled(null))
+            quads.addAll(super.getQuads(state, null, rand, extraData, renderType));
         return quads;
     }
 
@@ -171,13 +181,24 @@ public class OvenModel extends CTModel {
                             .cullface(Direction.WEST)
                         .end()
                     .end()
+                    .element()
+                        .from(0, 7, 0)
+                        .to(16, 7, 16)
+                        .face(Direction.UP)
+                            .texture("#layer")
+                        .end()
+                        .face(Direction.DOWN)
+                            .texture("#layer")
+                        .end()
+                    .end()
                     .texture("particle", prov.modLoc("block/oven/oven"))
                     .texture("top", prov.modLoc("block/oven/oven_top"))
                     .texture("bottom", prov.modLoc("block/oven/oven_bottom"))
                     .texture("side", prov.modLoc("block/oven/oven"))
                     .texture("inner_top", prov.modLoc("block/oven/oven_top_inner"))
                     .texture("inner_bottom", prov.modLoc("block/oven/oven_bottom_inner"))
-                    .texture("inner_side", prov.modLoc("block/oven/oven"));
+                    .texture("inner_side", prov.modLoc("block/oven/oven"))
+                    .texture("layer", prov.modLoc("block/oven/oven_layer"));
         }
     }
 }
