@@ -1,10 +1,12 @@
 package org.forsteri.ratatouille.content.oven;
 
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.inventory.VersionedInventoryWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -13,9 +15,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -242,4 +249,45 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
             compound.put("Inventory", inventory.serializeNBT());
         }
     }
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (isItemHandlerCap(cap)) {
+            initCapability();
+            return itemCapability.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    private void initCapability() {
+        assert level != null;
+
+        if (itemCapability.isPresent())
+            return;
+        if (!isController()) {
+            OvenBlockEntity controllerBE = getControllerBE();
+            if (controllerBE == null)
+                return;
+            controllerBE.initCapability();
+            itemCapability = controllerBE.itemCapability;
+            return;
+        }
+
+        IItemHandlerModifiable[] invs = new IItemHandlerModifiable[height * radius * radius];
+        for (int yOffset = 0; yOffset < height; yOffset++) {
+            for (int xOffset = 0; xOffset < radius; xOffset++) {
+                for (int zOffset = 0; zOffset < radius; zOffset++) {
+                    BlockPos vaultPos = worldPosition.offset(xOffset, yOffset, zOffset);
+                    OvenBlockEntity vaultAt =
+                            ConnectivityHandler.partAt(AllBlockEntityTypes.ITEM_VAULT.get(), level, vaultPos);
+                    invs[yOffset * radius * radius + xOffset * radius + zOffset] =
+                            vaultAt != null ? vaultAt.inventory : new ItemStackHandler();
+                }
+            }
+        }
+
+        IItemHandler itemHandler = new VersionedInventoryWrapper(new CombinedInvWrapper(invs));
+        itemCapability = LazyOptional.of(() -> itemHandler);
+    }
+
 }
