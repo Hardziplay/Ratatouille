@@ -10,10 +10,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.content.oven.OvenBlock;
-import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
-import org.forsteri.ratatouille.content.oven.OvenBlockItem;
-import org.forsteri.ratatouille.content.oven.OvenModel;
+import org.forsteri.ratatouille.content.oven.*;
 
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
@@ -41,6 +38,7 @@ public class Registrate {
 
     public static final BlockEntityEntry<OvenBlockEntity> OVEN_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("oven", OvenBlockEntity::new)
+            .renderer(() -> OvenRenderer::new)
             .validBlock(OVEN)
             .register();
 

@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.content.oven;
 
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
@@ -11,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,6 +21,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.forsteri.ratatouille.entry.Registrate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,10 +34,20 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
     protected BlockPos controller;
     protected BlockPos lastKnownPos;
 
-    protected ItemStackHandler inventory = new ItemStackHandler(10 /* todo: Demo*/) {
+    protected ItemStackHandler inventory = new ItemStackHandler() {
         @Override
         protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
+            assert level != null;
+            if (!level.isClientSide) {
+                setChanged();
+                sendData();
+                notifyUpdate();
+            }
+        }
+
+        @Override
+        protected int getStackLimit(int slot, @NotNull ItemStack stack) {
+            return 16;
         }
     };
 
@@ -170,7 +181,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         return 3;
     }
 
-    protected int height;
+    protected int height = 1;
 
     @Override
     public int getHeight() {
@@ -182,7 +193,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         this.height = height;
     }
 
-    protected int radius;
+    protected int radius = 1;
 
     @Override
     public int getWidth() {
@@ -217,8 +228,9 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
             height = compound.getInt("Height");
         }
 
+        inventory.deserializeNBT(compound.getCompound("Inventory"));
+
         if (!clientPacket) {
-            inventory.deserializeNBT(compound.getCompound("Inventory"));
             return;
         }
 
@@ -244,10 +256,8 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
 
         super.write(compound, clientPacket);
 
-        if (!clientPacket) {
-            compound.putString("StorageType", "CombinedInv");
-            compound.put("Inventory", inventory.serializeNBT());
-        }
+        compound.putString("StorageType", "CombinedInv");
+        compound.put("Inventory", inventory.serializeNBT());
     }
 
     @Override
@@ -279,7 +289,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
                 for (int zOffset = 0; zOffset < radius; zOffset++) {
                     BlockPos vaultPos = worldPosition.offset(xOffset, yOffset, zOffset);
                     OvenBlockEntity vaultAt =
-                            ConnectivityHandler.partAt(AllBlockEntityTypes.ITEM_VAULT.get(), level, vaultPos);
+                            ConnectivityHandler.partAt(Registrate.OVEN_ENTITY.get(), level, vaultPos);
                     invs[yOffset * radius * radius + xOffset * radius + zOffset] =
                             vaultAt != null ? vaultAt.inventory : new ItemStackHandler();
                 }
@@ -289,5 +299,4 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         IItemHandler itemHandler = new VersionedInventoryWrapper(new CombinedInvWrapper(invs));
         itemCapability = LazyOptional.of(() -> itemHandler);
     }
-
 }

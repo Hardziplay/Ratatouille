@@ -1,27 +1,9 @@
 {
   "variants": {
-    "bottom=false,is_2x2=false,top=false": {
+    "is_2x2=false": {
       "model": "ratatouille:block/oven"
     },
-    "bottom=false,is_2x2=false,top=true": {
-      "model": "ratatouille:block/oven"
-    },
-    "bottom=false,is_2x2=true,top=false": {
-      "model": "ratatouille:block/oven"
-    },
-    "bottom=false,is_2x2=true,top=true": {
-      "model": "ratatouille:block/oven"
-    },
-    "bottom=true,is_2x2=false,top=false": {
-      "model": "ratatouille:block/oven"
-    },
-    "bottom=true,is_2x2=false,top=true": {
-      "model": "ratatouille:block/oven"
-    },
-    "bottom=true,is_2x2=true,top=false": {
-      "model": "ratatouille:block/oven"
-    },
-    "bottom=true,is_2x2=true,top=true": {
+    "is_2x2=true": {
       "model": "ratatouille:block/oven"
     }
   }
