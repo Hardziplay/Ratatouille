@@ -4,7 +4,10 @@ import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -58,5 +61,18 @@ public class OvenBlock extends Block implements IWrenchable, IBE<OvenBlockEntity
     @Override
     public BlockEntityType<? extends OvenBlockEntity> getBlockEntityType() {
         return Registrate.OVEN_ENTITY.get();
+    }
+
+    @Override
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        withBlockEntityDo(level, pos, OvenBlockEntity::updateOvenState);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @NotNull BlockState updateShape(@NotNull BlockState p_60541_, @NotNull Direction p_60542_, @NotNull BlockState p_60543_, @NotNull LevelAccessor p_60544_, @NotNull BlockPos p_60545_, @NotNull BlockPos p_60546_) {
+        if (p_60542_ == Direction.DOWN && p_60543_.getBlock() != this)
+            withBlockEntityDo(p_60544_, p_60545_, OvenBlockEntity::updateBoilerTemperature);
+        return super.updateShape(p_60541_, p_60542_, p_60543_, p_60544_, p_60545_, p_60546_);
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -33,6 +34,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
     private boolean updateConnectivity = true;
     protected BlockPos controller;
     protected BlockPos lastKnownPos;
+    protected BakeData bakeData;
 
     protected ItemStackHandler inventory = new ItemStackHandler() {
         @Override
@@ -53,11 +55,14 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
 
     public OvenBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        bakeData = new BakeData();
     }
 
     @Override
     public void tick() {
         super.tick();
+        if (isController())
+            bakeData.tick(this);
 
         if (lastKnownPos == null)
             lastKnownPos = getBlockPos();
@@ -129,6 +134,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         height = 1;
 
         itemCapability.invalidate();
+        bakeData.clear();
         setChanged();
         sendData();
     }
@@ -161,6 +167,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         level.setBlock(getBlockPos(), getBlockState().setValue(OvenBlock.IS_2x2, getWidth() == 2), 6);
 
         itemCapability.invalidate();
+        updateOvenState();
         setChanged();
     }
 
@@ -206,6 +213,36 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
     }
 
     @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        OvenBlockEntity controllerBE = getControllerBE();
+        if (controllerBE == null)
+            return false;
+
+        return controllerBE.bakeData.addToGoggleTooltip(tooltip, isPlayerSneaking);
+    }
+
+
+    public void updateOvenState() {
+        System.out.println("updateOvenState");
+
+        if (!isController()) {
+            getControllerBE().updateOvenState();
+            return;
+        }
+
+        if (bakeData.evaluate(this)) {
+            notifyUpdate();
+        }
+    }
+
+    public void updateBoilerTemperature() {
+        OvenBlockEntity be = getControllerBE();
+        if (be == null)
+            return;
+        be.bakeData.needsHeatLevelUpdate = true;
+    }
+
+    @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         assert level != null;
         super.read(compound, clientPacket);
@@ -229,6 +266,8 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         }
 
         inventory.deserializeNBT(compound.getCompound("Inventory"));
+
+        bakeData.read(compound, clientPacket);
 
         if (!clientPacket) {
             return;
@@ -258,6 +297,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
 
         compound.putString("StorageType", "CombinedInv");
         compound.put("Inventory", inventory.serializeNBT());
+        bakeData.write(compound, clientPacket);
     }
 
     @Override
