@@ -5,10 +5,12 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -71,8 +73,32 @@ public class OvenBlock extends Block implements IWrenchable, IBE<OvenBlockEntity
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull BlockState updateShape(@NotNull BlockState p_60541_, @NotNull Direction p_60542_, @NotNull BlockState p_60543_, @NotNull LevelAccessor p_60544_, @NotNull BlockPos p_60545_, @NotNull BlockPos p_60546_) {
-        if (p_60542_ == Direction.DOWN && p_60543_.getBlock() != this)
-            withBlockEntityDo(p_60544_, p_60545_, OvenBlockEntity::updateBoilerTemperature);
+        if (p_60543_.getBlock() != this)
+            withBlockEntityDo(p_60544_, p_60545_, OvenBlockEntity::updateBakeData);
         return super.updateShape(p_60541_, p_60542_, p_60543_, p_60544_, p_60545_, p_60546_);
+    }
+
+    @Override
+    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos blockPos, @NotNull RandomSource random) {
+        super.animateTick(state, level, blockPos, random);
+        OvenBlockEntity be = getBlockEntity(level, blockPos);
+        if (be == null)
+            return;
+
+        be = be.getControllerBE();
+
+        if (be == null)
+            return;
+
+        if (random.nextInt(5) != 0)
+            return;
+
+        if (be.bakeData.tempLevel <= 0)
+            return;
+
+        if (level.getBlockState(blockPos.above()).getBlock() instanceof OvenBlock)
+            return;
+
+        CampfireBlock.makeParticles(level, blockPos, be.bakeData.tempLevel > 4, false);
     }
 }

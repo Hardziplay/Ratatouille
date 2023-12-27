@@ -5,38 +5,45 @@ import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.blockEntity.behaviour.inventory.VersionedInventoryWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.entry.Registrate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IMultiBlockEntityContainer.Inventory {
-    protected LazyOptional<IItemHandler> itemCapability = LazyOptional.empty();
+    protected LazyOptional<CombinedInvWrapper> itemCapability = LazyOptional.empty();
     private boolean updateConnectivity = true;
     protected BlockPos controller;
     protected BlockPos lastKnownPos;
     protected BakeData bakeData;
+    protected Inventory inventory = new Inventory();
 
-    protected ItemStackHandler inventory = new ItemStackHandler() {
+    public class Inventory extends ItemStackHandler {
+        public int tickTillFinishCooking = -1;
+        public SmokingRecipe lastRecipe = null;
+        private final RecipeWrapper RECIPE_WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
         @Override
         protected void onContentsChanged(int slot) {
             assert level != null;
@@ -48,10 +55,63 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         }
 
         @Override
-        protected int getStackLimit(int slot, @NotNull ItemStack stack) {
+        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+            assert level != null;
+
+            ItemStack returnValue = super.insertItem(slot, stack, simulate);
+
+            if (!simulate) {
+                level.getRecipeManager().getRecipeFor(RecipeType.SMOKING, RECIPE_WRAPPER, level).ifPresent(recipe -> {
+                    tickTillFinishCooking = recipe.getCookingTime() * ((getStackInSlot(slot).getCount() - 1) / 16 + 1);
+                    lastRecipe = recipe;
+                });
+            }
+
+            return returnValue;
+        }
+
+        @Override
+        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (!simulate) {
+                tickTillFinishCooking = -1;
+            }
+            return super.extractItem(slot, amount, simulate);
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
             return 16;
         }
-    };
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            assert level != null;
+            RECIPE_WRAPPER.setItem(0, stack);
+            return level.getRecipeManager()
+                    .getRecipeFor(RecipeType.SMOKING, RECIPE_WRAPPER, level).isPresent();
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag nbt) {
+            assert level != null;
+            super.deserializeNBT(nbt);
+            if (nbt.contains("tickTillFinishCooking"))
+                tickTillFinishCooking = nbt.getInt("tickTillFinishCooking");
+            if (nbt.contains("lastRecipe"))
+                lastRecipe = (SmokingRecipe) level.getRecipeManager().byKey(new ResourceLocation(nbt.getString("lastRecipe"))).orElse(null);
+
+
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            CompoundTag tag = super.serializeNBT();
+            tag.putInt("tickTillFinishCooking", tickTillFinishCooking);
+            if (lastRecipe != null)
+                tag.putString("lastRecipe", lastRecipe.getId().toString());
+            return tag;
+        }
+    }
 
     public OvenBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -77,7 +137,6 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
     }
 
     private void refreshCapability() {
-
         itemCapability.invalidate();
     }
 
@@ -223,9 +282,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
 
 
     public void updateOvenState() {
-        System.out.println("updateOvenState");
-
-        if (!isController()) {
+        if (!isController() && getControllerBE() != null) {
             getControllerBE().updateOvenState();
             return;
         }
@@ -235,11 +292,11 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         }
     }
 
-    public void updateBoilerTemperature() {
+    public void updateBakeData() {
         OvenBlockEntity be = getControllerBE();
         if (be == null)
             return;
-        be.bakeData.needsHeatLevelUpdate = true;
+        be.bakeData.updateRequired = 2;
     }
 
     @Override
@@ -309,6 +366,8 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         return super.getCapability(cap, side);
     }
 
+    public List<List<List<Inventory>>> inventories = null;
+
     private void initCapability() {
         assert level != null;
 
@@ -324,19 +383,25 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         }
 
         IItemHandlerModifiable[] invs = new IItemHandlerModifiable[height * radius * radius];
-        for (int yOffset = 0; yOffset < height; yOffset++) {
-            for (int xOffset = 0; xOffset < radius; xOffset++) {
+        inventories = new ArrayList<>();
+        for (int xOffset = 0; xOffset < radius; xOffset++) {
+            List<List<Inventory>> x = new ArrayList<>();
+            inventories.add(x);
+            for (int yOffset = 0; yOffset < height; yOffset++) {
+                List<Inventory> y = new ArrayList<>();
+                x.add(y);
                 for (int zOffset = 0; zOffset < radius; zOffset++) {
                     BlockPos vaultPos = worldPosition.offset(xOffset, yOffset, zOffset);
                     OvenBlockEntity vaultAt =
                             ConnectivityHandler.partAt(Registrate.OVEN_ENTITY.get(), level, vaultPos);
-                    invs[yOffset * radius * radius + xOffset * radius + zOffset] =
-                            vaultAt != null ? vaultAt.inventory : new ItemStackHandler();
+                    Inventory inv = vaultAt != null ? vaultAt.inventory : new Inventory();
+                    invs[yOffset * radius * radius + xOffset * radius + zOffset] = inv;
+                    y.add(inv);
                 }
             }
         }
 
-        IItemHandler itemHandler = new VersionedInventoryWrapper(new CombinedInvWrapper(invs));
+        CombinedInvWrapper itemHandler = new CombinedInvWrapper(invs);
         itemCapability = LazyOptional.of(() -> itemHandler);
     }
 }
