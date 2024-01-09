@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -41,14 +42,16 @@ public class BakeData {
                     if (inventory.tickTillFinishCooking < 0)
                         continue;
 
-                    if (inventory.tickTillFinishCooking == 0) {
-                        if (inventory.lastRecipe == null)
-                            continue;
-                        inventory.setStackInSlot(0, inventory.lastRecipe.getResultItem().copy());
-                    }
-
                     if (inventory.tickTillFinishCooking > 0)
                         inventory.tickTillFinishCooking -= Math.min(Math.min(fanLevel, sizeLevel), tempLevel);
+
+                    if (inventory.tickTillFinishCooking <= 0) {
+                        if (inventory.lastRecipe == null)
+                            continue;
+                        ItemStack resultStack = inventory.lastRecipe.getResultItem().copy();
+                        resultStack.setCount(inventory.getStackInSlot(0).getCount());
+                        inventory.setStackInSlot(0, resultStack);
+                    }
                 }
             }
         }
