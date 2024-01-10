@@ -1,7 +1,10 @@
-// 1.19.2	2024-01-08T00:06:40.905224	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.19.2	2024-01-10T22:03:42.767924	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 668322c0152337430163a4b37c6e1c94a0f9ebd5 assets/ratatouille/blockstates/oven.json
-5ebbe8808b29fbe89390fe437d6fa47f16e4141a assets/ratatouille/lang/en_ud.json
-01e68a2628fcfaf4e10a28fffb578c1c7e335adf assets/ratatouille/lang/en_us.json
+f51ea1ea5a30ac4116690e04008528689c1236a1 assets/ratatouille/blockstates/thresher.json
+d1b0e9d0929f4f44792968f4c54c406754239408 assets/ratatouille/lang/en_ud.json
+5a200011854e99bdffd3334de0087fa9524d8082 assets/ratatouille/lang/en_us.json
 03a57ff097cc5eeffa58dfbef29fb5ff680d5228 assets/ratatouille/models/item/oven.json
-8c0daabf8351f800a5324acf955794b210d9b30c data/minecraft/tags/blocks/mineable/pickaxe.json
+9e9409e4d1de4785f160beac2e686587e92ee327 assets/ratatouille/models/item/thresher.json
+820335f3076e661efb15d314d2006f1414110d57 data/minecraft/tags/blocks/mineable/pickaxe.json
 5699350508ed14e2e0301ee2c13c76c492224f0e data/ratatouille/loot_tables/blocks/oven.json
+93aa704fa752ad442b37d307af4e58f834277ca0 data/ratatouille/loot_tables/blocks/thresher.json
