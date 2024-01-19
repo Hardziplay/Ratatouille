@@ -1,0 +1,17 @@
+{
+  "type": "ratatouille:threshing",
+  "ingredients": [
+    {
+      "item": "farmersdelight:rice_panicle"
+    }
+  ],
+  "results": [
+    {
+      "item": "farmersdelight:rice"
+    },
+    {
+      "chance": 0.5,
+      "item": "farmersdelight:rice"
+    }
+  ]
+}
