@@ -33,7 +33,7 @@ public class Registrate {
     public static final BlockEntry<OvenBlock> OVEN = Ratatouille.REGISTRATE
             .block("oven", OvenBlock::new)
             .initialProperties(SharedProperties::copperMetal)
-            .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
+            .properties(p -> p.lightLevel(state -> 1).isRedstoneConductor((p1, p2, p3) -> true))
             .transform(pickaxeOnly())
             .blockstate(new OvenModel.OvenGenerator()::generate)
             .onRegister(CreateRegistrate.blockModel(() -> originalModel -> new OvenModel(originalModel,
@@ -55,7 +55,7 @@ public class Registrate {
             .initialProperties(SharedProperties::copperMetal)
             .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
             .transform(pickaxeOnly())
-            .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p), 90))
+            .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p), 270))
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/thresher/item")))
