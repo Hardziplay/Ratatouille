@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.entry.Registrate;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -32,6 +33,7 @@ public class Ratatouille {
         REGISTRATE.registerEventListeners(modEventBus);
 
         Registrate.register();
+        CRRecipeTypes.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
