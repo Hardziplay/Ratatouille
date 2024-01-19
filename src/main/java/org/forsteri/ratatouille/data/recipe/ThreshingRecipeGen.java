@@ -1,11 +1,15 @@
 package org.forsteri.ratatouille.data.recipe;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 public class ThreshingRecipeGen extends ProcessingRecipeGen {
 
+    GeneratedRecipe
+            RICE = this.create(
+                () -> ModItems.RICE_PANICLE.get(),
+                b -> b.output(ModItems.RICE.get()).output(0.5F, ModItems.RICE.get())
+            );
     public ThreshingRecipeGen(DataGenerator p_i48262_1_) {
         super(p_i48262_1_);
     }

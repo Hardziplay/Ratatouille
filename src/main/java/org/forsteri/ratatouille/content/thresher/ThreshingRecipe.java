@@ -2,6 +2,7 @@ package org.forsteri.ratatouille.content.thresher;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import org.forsteri.ratatouille.data.recipe.RataouilleRecipeProvider.GeneratedRecipe;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
