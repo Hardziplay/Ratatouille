@@ -2,17 +2,17 @@
   "type": "ratatouille:threshing",
   "ingredients": [
     {
-      "item": "farmersdelight:rice_panicle"
+      "item": "culturaldelights:corn_cob"
     }
   ],
   "processingTime": 200,
   "results": [
     {
-      "item": "farmersdelight:rice"
+      "item": "culturaldelights:corn_kernels"
     },
     {
       "chance": 0.5,
-      "item": "farmersdelight:rice"
+      "item": "culturaldelights:corn_kernels"
     }
   ]
 }
