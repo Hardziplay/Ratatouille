@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -113,20 +114,7 @@ public class ThresherBlockEntity extends KineticBlockEntity {
     }
 
     private Direction getEjectDirection() {
-        var block = ((ThresherBlock) getBlockState().getBlock());
-        var speed = getSpeed();
-        block.getRotationAxis(getBlockState());
-        boolean rotation = speed >= 0;
-        Direction ejectDirection = Direction.UP;
-        switch (block.getRotationAxis(getBlockState())) {
-            case X -> {
-                ejectDirection = rotation ? Direction.NORTH : Direction.SOUTH;
-            }
-            case Z -> {
-                ejectDirection = rotation ? Direction.EAST : Direction.WEST;
-            }
-        }
-        return ejectDirection;
+        return getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
     }
 
     public void invalidate() {
