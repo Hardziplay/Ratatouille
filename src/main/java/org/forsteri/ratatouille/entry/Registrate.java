@@ -16,6 +16,7 @@ import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
 import org.forsteri.ratatouille.content.thresher.ThresherInstance;
+import org.forsteri.ratatouille.content.thresher.ThresherRenderer;
 
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
@@ -66,6 +67,7 @@ public class Registrate {
             .blockEntity("thresher", ThresherBlockEntity::new)
             .instance(() -> ThresherInstance::new)
             .validBlock(THRESHER)
+            .renderer(() -> ThresherRenderer::new)
             .register();
 
     private static CTSpriteShiftEntry getCT(String blockTextureName, String connectedTextureName) {
