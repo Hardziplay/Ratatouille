@@ -39,7 +39,7 @@ public class ThresherBlockEntity extends KineticBlockEntity {
     public ItemStackHandler outputInv;
     public LazyOptional<IItemHandler> capability;
     public int timer;
-    private ThreshingRecipe lastRecipe;
+    public ThreshingRecipe lastRecipe;
 
     public ThresherBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -113,7 +113,7 @@ public class ThresherBlockEntity extends KineticBlockEntity {
         }
     }
 
-    private Direction getEjectDirection() {
+    public Direction getEjectDirection() {
         return getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
     }
 
