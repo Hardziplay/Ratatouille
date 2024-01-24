@@ -1,0 +1,18 @@
+{
+  "type": "ratatouille:threshing",
+  "ingredients": [
+    {
+      "item": "minecraft:wheat"
+    }
+  ],
+  "processingTime": 200,
+  "results": [
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "chance": 0.5,
+      "item": "minecraft:wheat_seeds"
+    }
+  ]
+}
