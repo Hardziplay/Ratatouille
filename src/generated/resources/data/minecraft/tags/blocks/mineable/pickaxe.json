@@ -1,6 +1,7 @@
 {
   "values": [
     "ratatouille:oven",
-    "ratatouille:thresher"
+    "ratatouille:thresher",
+    "ratatouille:oven_fan"
   ]
 }

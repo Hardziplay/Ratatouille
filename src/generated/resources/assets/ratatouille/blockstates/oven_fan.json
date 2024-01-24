@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ratatouille:block/oven_fan/block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ratatouille:block/oven_fan/block"
+    },
+    "facing=south": {
+      "model": "ratatouille:block/oven_fan/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ratatouille:block/oven_fan/block",
+      "y": 270
+    }
+  }
+}

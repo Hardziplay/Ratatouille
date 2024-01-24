@@ -1,6 +1,7 @@
 package org.forsteri.ratatouille.entry;
 
 import com.jozufozu.flywheel.core.PartialModel;
+import com.simibubi.create.content.kinetics.crafter.ShaftlessCogwheelInstance;
 import com.simibubi.create.foundation.block.connected.AllCTTypes;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
@@ -13,6 +14,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.oven.*;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanRenderer;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
 import org.forsteri.ratatouille.content.thresher.ThresherInstance;
@@ -68,6 +72,26 @@ public class Registrate {
             .instance(() -> ThresherInstance::new)
             .validBlock(THRESHER)
             .renderer(() -> ThresherRenderer::new)
+            .register();
+
+    @SuppressWarnings("removal")
+    public static final BlockEntry<OvenFanBlock> OVEN_FAN = Ratatouille.REGISTRATE
+            .block("oven_fan", OvenFanBlock::new)
+            .initialProperties(SharedProperties::copperMetal)
+            .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
+            .transform(pickaxeOnly())
+            .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p), 270))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item()
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/oven_fan/item")))
+            .build()
+            .register();
+
+    public static final BlockEntityEntry<OvenFanBlockEntity> OVEN_FAN_ENTITY = Ratatouille.REGISTRATE
+            .blockEntity("oven_fan", OvenFanBlockEntity::new)
+            .instance(() -> ShaftlessCogwheelInstance::new)
+            .validBlock(OVEN_FAN)
+            .renderer(() -> OvenFanRenderer::new)
             .register();
 
     private static CTSpriteShiftEntry getCT(String blockTextureName, String connectedTextureName) {
