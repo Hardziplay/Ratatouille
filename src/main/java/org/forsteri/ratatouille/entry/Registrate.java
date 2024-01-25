@@ -12,10 +12,12 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.MaterialColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanInstance;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanRenderer;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
@@ -33,6 +35,7 @@ public class Registrate {
                                             OVEN_SPRITE_SHIFT_2x2 = getCT("oven/oven", "oven/oven_2x2");
 
     public static final PartialModel THRESHER_BLADE = of("block/thresher/partial");
+    public static final PartialModel OVEN_FAN_BLADE = of("block/oven_fan/partial");
 
     @SuppressWarnings("removal")
     public static final BlockEntry<OvenBlock> OVEN = Ratatouille.REGISTRATE
@@ -78,7 +81,7 @@ public class Registrate {
     public static final BlockEntry<OvenFanBlock> OVEN_FAN = Ratatouille.REGISTRATE
             .block("oven_fan", OvenFanBlock::new)
             .initialProperties(SharedProperties::copperMetal)
-            .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
+            .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
             .transform(pickaxeOnly())
             .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p), 270))
             .addLayer(() -> RenderType::cutoutMipped)
@@ -89,7 +92,7 @@ public class Registrate {
 
     public static final BlockEntityEntry<OvenFanBlockEntity> OVEN_FAN_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("oven_fan", OvenFanBlockEntity::new)
-            .instance(() -> ShaftlessCogwheelInstance::new)
+            .instance(() -> OvenFanInstance::new)
             .validBlock(OVEN_FAN)
             .renderer(() -> OvenFanRenderer::new)
             .register();
