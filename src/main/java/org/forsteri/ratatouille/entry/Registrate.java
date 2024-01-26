@@ -41,7 +41,7 @@ public class Registrate {
     public static final BlockEntry<OvenBlock> OVEN = Ratatouille.REGISTRATE
             .block("oven", OvenBlock::new)
             .initialProperties(SharedProperties::copperMetal)
-            .properties(p -> p.lightLevel(state -> 1).isRedstoneConductor((p1, p2, p3) -> true))
+            .properties(p -> p.lightLevel(state -> 1).isRedstoneConductor((p1, p2, p3) -> true).noOcclusion())
             .transform(pickaxeOnly())
             .blockstate(new OvenModel.OvenGenerator()::generate)
             .onRegister(CreateRegistrate.blockModel(() -> originalModel -> new OvenModel(originalModel,
