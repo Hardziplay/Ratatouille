@@ -50,9 +50,10 @@ public class OvenFanInstance extends KineticBlockEntityInstance<OvenFanBlockEnti
     }
 
     public void updateLight() {
+        BlockPos behind = this.pos.relative(this.opposite);
+        this.relight(behind, new FlatLit[]{this.cogWheel});
         BlockPos inFront = this.pos.relative(this.direction);
         this.relight(inFront, new FlatLit[]{this.fan});
-        this.relight(inFront, new FlatLit[]{this.cogWheel});
     }
 
     public void remove() {

@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.block.connected.AllCTTypes;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
 import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -83,7 +84,7 @@ public class Registrate {
             .initialProperties(SharedProperties::copperMetal)
             .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
             .transform(pickaxeOnly())
-            .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p), 270))
+            .blockstate(BlockStateGen.directionalBlockProvider(true))
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/oven_fan/item")))
