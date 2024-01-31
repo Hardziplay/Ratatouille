@@ -2,8 +2,6 @@ package org.forsteri.ratatouille.content.oven;
 
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.BoilerHeaters;
-import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
-import com.simibubi.create.content.kinetics.fan.EncasedFanBlockEntity;
 import com.simibubi.create.foundation.utility.Components;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,6 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
 
 import java.util.List;
 
@@ -100,9 +100,9 @@ public class BakeData {
                     for (Direction direction : Direction.values()) {
                         BlockPos pos = controller.getBlockPos().offset(i, j, k).relative(direction);
                         BlockState state = controller.getLevel().getBlockState(pos);
-                        if (state.getBlock() instanceof EncasedFanBlock
-                                && state.getValue(EncasedFanBlock.FACING) == direction.getOpposite()) {
-                            EncasedFanBlockEntity fan = (EncasedFanBlockEntity) controller.getLevel().getBlockEntity(pos);
+                        if (state.getBlock() instanceof OvenFanBlock
+                                && state.getValue(OvenFanBlock.HORIZONTAL_FACING) == direction.getOpposite()) {
+                            OvenFanBlockEntity fan = (OvenFanBlockEntity) controller.getLevel().getBlockEntity(pos);
                             if (fan == null)
                                 continue;
                             newFanLevel += Math.abs(fan.getSpeed()) / 256f;
