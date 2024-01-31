@@ -61,7 +61,7 @@ public class Registrate {
     @SuppressWarnings("removal")
     public static final BlockEntry<ThresherBlock> THRESHER = Ratatouille.REGISTRATE
             .block("thresher", ThresherBlock::new)
-            .initialProperties(SharedProperties::copperMetal)
+            .initialProperties(SharedProperties::stone)
             .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
             .transform(pickaxeOnly())
             .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p), 270))
@@ -81,7 +81,7 @@ public class Registrate {
     @SuppressWarnings("removal")
     public static final BlockEntry<OvenFanBlock> OVEN_FAN = Ratatouille.REGISTRATE
             .block("oven_fan", OvenFanBlock::new)
-            .initialProperties(SharedProperties::copperMetal)
+            .initialProperties(SharedProperties::stone)
             .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
             .transform(pickaxeOnly())
             .blockstate(BlockStateGen.directionalBlockProvider(true))
