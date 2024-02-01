@@ -54,7 +54,7 @@ public class CRBlocks {
             .initialProperties(SharedProperties::stone)
             .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
             .transform(pickaxeOnly())
-            .blockstate(BlockStateGen.directionalBlockProvider(true))
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/oven_fan/item")))

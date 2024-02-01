@@ -1,5 +1,6 @@
 {
   "block.ratatouille.oven": "Oven",
   "block.ratatouille.oven_fan": "Oven Fan",
-  "block.ratatouille.thresher": "Thresher"
+  "block.ratatouille.thresher": "Thresher",
+  "item.ratatouille.sausage_casing": "Sausage Casing"
 }
