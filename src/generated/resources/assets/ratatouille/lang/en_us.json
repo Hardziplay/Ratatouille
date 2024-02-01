@@ -2,5 +2,8 @@
   "block.ratatouille.oven": "Oven",
   "block.ratatouille.oven_fan": "Oven Fan",
   "block.ratatouille.thresher": "Thresher",
+  "item.ratatouille.raw_sausage": "Raw Sausage",
+  "item.ratatouille.salt": "Salt",
+  "item.ratatouille.sausage": "Sausage",
   "item.ratatouille.sausage_casing": "Sausage Casing"
 }

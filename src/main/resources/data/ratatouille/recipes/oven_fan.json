@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    " # ",
+    " Y "
+  ],
+  "key": {
+    "X": {
+      "item": "create:cogwheel"
+    },
+    "#": {
+      "item": "create:andesite_casing"
+    },
+    "Y": {
+      "item": "create:propeller"
+    }
+  },
+  "result": {
+    "item": "ratatouille:oven_fan",
+    "count": 1
+  }
+}

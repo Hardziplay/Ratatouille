@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    " # ",
+    " X "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:barrel"
+    },
+    "X": {
+      "item": "create:andesite_alloy"
+    }
+  },
+  "result": {
+    "item": "ratatouille:oven",
+    "count": 1
+  }
+}

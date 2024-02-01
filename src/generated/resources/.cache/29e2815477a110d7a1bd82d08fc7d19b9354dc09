@@ -1,10 +1,17 @@
-// 1.19.2	2024-01-11T16:51:51.54729	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.19.2	2024-02-01T21:36:16.6815937	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 668322c0152337430163a4b37c6e1c94a0f9ebd5 assets/ratatouille/blockstates/oven.json
+e8f712901d2b2939584d4479e3305179b2904682 assets/ratatouille/blockstates/oven_fan.json
 73f9eab0ba2b9cf32d65a8d2a6908c946753bdde assets/ratatouille/blockstates/thresher.json
-d1b0e9d0929f4f44792968f4c54c406754239408 assets/ratatouille/lang/en_ud.json
-5a200011854e99bdffd3334de0087fa9524d8082 assets/ratatouille/lang/en_us.json
+3902cacac61ab60fefbc18d745aaa91374a10571 assets/ratatouille/lang/en_ud.json
+983f66ffc2bc9843a1603f613e934d5e81b7a854 assets/ratatouille/lang/en_us.json
 03a57ff097cc5eeffa58dfbef29fb5ff680d5228 assets/ratatouille/models/item/oven.json
+9bca958035a024dbce36cde5b99192b710268d69 assets/ratatouille/models/item/oven_fan.json
+2e7f20f3ab8473dd0871e8b7f709b632383bd17a assets/ratatouille/models/item/raw_sausage.json
+2321c977404581bcbd79d48d643896ffd592fcbe assets/ratatouille/models/item/salt.json
+5dbefae87a30b539f07b56a9504ff3aef0d29e9a assets/ratatouille/models/item/sausage.json
+4ce398e1f378320ff76598f71698d4a81fdff6a4 assets/ratatouille/models/item/sausage_casing.json
 9e9409e4d1de4785f160beac2e686587e92ee327 assets/ratatouille/models/item/thresher.json
-820335f3076e661efb15d314d2006f1414110d57 data/minecraft/tags/blocks/mineable/pickaxe.json
+1dac6ccd69d31467e0df1a4b7ace30d5d18337e2 data/minecraft/tags/blocks/mineable/pickaxe.json
 5699350508ed14e2e0301ee2c13c76c492224f0e data/ratatouille/loot_tables/blocks/oven.json
+59cf41378e0d5660e319036213633d8182d81b31 data/ratatouille/loot_tables/blocks/oven_fan.json
 93aa704fa752ad442b37d307af4e58f834277ca0 data/ratatouille/loot_tables/blocks/thresher.json
