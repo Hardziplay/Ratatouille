@@ -1,0 +1,28 @@
+package org.forsteri.ratatouille.entry;
+
+import com.simibubi.create.foundation.block.connected.AllCTTypes;
+import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
+import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
+import net.minecraft.resources.ResourceLocation;
+import org.forsteri.ratatouille.Ratatouille;
+
+public class CRSpriteShifts {
+    public static final CTSpriteShiftEntry OVEN_SPRITE = getCT("oven/oven"),
+            OVEN_SPRITE_TOP = getCT("oven/oven_top"),
+            OVEN_SPRITE_TOP_INNER = getCT("oven/oven_top_inner"),
+            OVEN_SPRITE_BOTTOM = getCT("oven/oven_bottom"),
+            OVEN_SPRITE_BOTTOM_INNER = getCT("oven/oven_bottom_inner"),
+            OVEN_SPRITE_SHIFT_2x2 = getCT("oven/oven", "oven/oven_2x2");
+
+    private static CTSpriteShiftEntry getCT(String blockTextureName, String connectedTextureName) {
+        return CTSpriteShifter.getCT(AllCTTypes.RECTANGLE, new ResourceLocation(Ratatouille.MOD_ID, "block/" + blockTextureName),
+                new ResourceLocation(Ratatouille.MOD_ID, "block/" + connectedTextureName + "_connected"));
+    }
+
+    private static CTSpriteShiftEntry getCT(String blockTextureName) {
+        return getCT(blockTextureName, blockTextureName);
+    }
+
+    public CRSpriteShifts() {}
+    public static void register() {}
+}

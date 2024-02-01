@@ -13,7 +13,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.jetbrains.annotations.NotNull;
 
 public class OvenBlockItem extends BlockItem {
@@ -72,7 +72,7 @@ public class OvenBlockItem extends BlockItem {
         if (!(placedOnState.getBlock() instanceof OvenBlock))
             return;
         OvenBlockEntity tankAt = ConnectivityHandler.partAt(
-                Registrate.OVEN_ENTITY.get(), world, placedOnPos
+                CRBlockEntityTypes.OVEN_ENTITY.get(), world, placedOnPos
         );
         if (tankAt == null)
             return;

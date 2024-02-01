@@ -16,7 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRPartialModels;
 
 public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEntity> {
     public OvenFanRenderer(BlockEntityRendererProvider.Context context) {
@@ -34,7 +34,7 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
             int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
             int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
             SuperByteBuffer cogWheel = CachedBufferer.partialFacing(AllPartialModels.SHAFTLESS_COGWHEEL, be.getBlockState(), direction.getOpposite());
-            SuperByteBuffer fanInner = CachedBufferer.partialFacing(Registrate.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
+            SuperByteBuffer fanInner = CachedBufferer.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
             float time = AnimationTickHolder.getRenderTime(be.getLevel());
             float speed = be.getSpeed() * 5.0F;
             if (speed > 0.0F) {

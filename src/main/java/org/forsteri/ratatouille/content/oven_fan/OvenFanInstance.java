@@ -12,7 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRPartialModels;
 
 import java.util.function.Supplier;
 
@@ -26,7 +26,7 @@ public class OvenFanInstance extends KineticBlockEntityInstance<OvenFanBlockEnti
         this.direction = (Direction)this.blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         this.opposite = this.direction.getOpposite();
         this.cogWheel = (RotatingData)this.getRotatingMaterial().getModel(AllPartialModels.SHAFTLESS_COGWHEEL, this.blockState, this.opposite, this.rotateToFace(this.opposite)).createInstance();
-        this.fan = (RotatingData)materialManager.defaultCutout().material(AllMaterialSpecs.ROTATING).getModel(Registrate.OVEN_FAN_BLADE, this.blockState, this.opposite).createInstance();
+        this.fan = (RotatingData)materialManager.defaultCutout().material(AllMaterialSpecs.ROTATING).getModel(CRPartialModels.OVEN_FAN_BLADE, this.blockState, this.opposite).createInstance();
         this.setup(this.cogWheel);
         this.setup(this.fan, this.getFanSpeed());
     }

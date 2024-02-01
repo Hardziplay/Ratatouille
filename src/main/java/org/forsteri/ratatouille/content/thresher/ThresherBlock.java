@@ -1,22 +1,17 @@
 package org.forsteri.ratatouille.content.thresher;
 
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
-import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
-import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
-import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 
 public class ThresherBlock extends HorizontalKineticBlock implements IBE<ThresherBlockEntity> {
     public ThresherBlock(Properties properties) {
@@ -42,7 +37,7 @@ public class ThresherBlock extends HorizontalKineticBlock implements IBE<Threshe
 
     @Override
     public BlockEntityType<? extends ThresherBlockEntity> getBlockEntityType() {
-        return Registrate.THRESHER_ENTITY.get();
+        return CRBlockEntityTypes.THRESHER_ENTITY.get();
     }
 
     @Override

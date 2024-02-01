@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.client.model.generators.ModelFile;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRSpriteShifts;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +54,7 @@ public class OvenModel extends CTModel {
             if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomInnerShift.getOriginal() == sprite)
                 return bottomInnerShift;
             CTSpriteShiftEntry shift = super.getShift(state, direction, sprite);
-            if (shift == Registrate.OVEN_SPRITE && state.getValue(OvenBlock.IS_2x2))
+            if (shift == CRSpriteShifts.OVEN_SPRITE && state.getValue(OvenBlock.IS_2x2))
                 return shift2x2;
             return shift;
         }

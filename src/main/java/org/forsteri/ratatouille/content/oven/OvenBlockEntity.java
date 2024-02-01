@@ -24,7 +24,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -393,7 +393,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
                 for (int zOffset = 0; zOffset < radius; zOffset++) {
                     BlockPos vaultPos = worldPosition.offset(xOffset, yOffset, zOffset);
                     OvenBlockEntity vaultAt =
-                            ConnectivityHandler.partAt(Registrate.OVEN_ENTITY.get(), level, vaultPos);
+                            ConnectivityHandler.partAt(CRBlockEntityTypes.OVEN_ENTITY.get(), level, vaultPos);
                     Inventory inv = vaultAt != null ? vaultAt.inventory : new Inventory();
                     invs[yOffset * radius * radius + xOffset * radius + zOffset] = inv;
                     y.add(inv);

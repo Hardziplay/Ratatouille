@@ -6,11 +6,9 @@ import org.forsteri.ratatouille.entry.tab.CRBaseCreativeModeTab;
 public class CRCreativeModeTabs {
     public static final CreativeModeTab BASE_CREATIVE_TAB = new CRBaseCreativeModeTab();
 
-    public CRCreativeModeTabs() {
-    }
+    public CRCreativeModeTabs() {}
 
-    public static void init() {
-    }
+    public static void register() {}
 }
 
 

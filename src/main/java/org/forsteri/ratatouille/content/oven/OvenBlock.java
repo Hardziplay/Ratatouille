@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.jetbrains.annotations.NotNull;
 
 public class OvenBlock extends Block implements IWrenchable, IBE<OvenBlockEntity> {
@@ -62,7 +62,7 @@ public class OvenBlock extends Block implements IWrenchable, IBE<OvenBlockEntity
 
     @Override
     public BlockEntityType<? extends OvenBlockEntity> getBlockEntityType() {
-        return Registrate.OVEN_ENTITY.get();
+        return CRBlockEntityTypes.OVEN_ENTITY.get();
     }
 
     @Override

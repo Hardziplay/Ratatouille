@@ -8,7 +8,7 @@ import com.simibubi.create.foundation.render.AllMaterialSpecs;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.forsteri.ratatouille.entry.Registrate;
+import org.forsteri.ratatouille.entry.CRPartialModels;
 
 public class ThresherInstance extends ShaftInstance<ThresherBlockEntity> {
     public ThresherInstance(MaterialManager materialManager, ThresherBlockEntity blockEntity) {
@@ -20,7 +20,7 @@ public class ThresherInstance extends ShaftInstance<ThresherBlockEntity> {
         BlockState referenceState = blockEntity.getBlockState();
         Direction facing = referenceState.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise();
         return materialManager.defaultCutout()
-                .material(AllMaterialSpecs.ROTATING).getModel(Registrate.THRESHER_BLADE, referenceState, facing);
+                .material(AllMaterialSpecs.ROTATING).getModel(CRPartialModels.THRESHER_BLADE, referenceState, facing);
     }
 
 
