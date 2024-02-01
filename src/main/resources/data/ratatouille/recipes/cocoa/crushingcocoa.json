@@ -1,0 +1,15 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "cocoa:roastedcocoabeans"
+    }
+  ],
+  "results": [
+    {
+      "item": "cocoa:roastednibs",
+      "count": 2
+    }
+  ],
+  "processingTime": 400
+}

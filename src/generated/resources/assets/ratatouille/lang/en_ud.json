@@ -2,8 +2,17 @@
   "block.ratatouille.oven": "uǝʌO",
   "block.ratatouille.oven_fan": "uɐℲ uǝʌO",
   "block.ratatouille.thresher": "ɹǝɥsǝɹɥ⟘",
+  "item.ratatouille.cake_mold": "pןoW ǝʞɐƆ",
+  "item.ratatouille.chocolate_mold": "pןoW ǝʇɐןoɔoɥƆ",
+  "item.ratatouille.cocoabean_powder": "ɹǝpʍoԀ uɐǝqɐoɔoƆ",
+  "item.ratatouille.cocoabutter": "ɹǝʇʇnqɐoɔoƆ",
+  "item.ratatouille.dried_cocoabeans": "suɐǝqɐoɔoƆ pǝıɹᗡ",
+  "item.ratatouille.dried_cocoanibs": "sqıuɐoɔoƆ pǝıɹᗡ",
+  "item.ratatouille.ice_crystal": "ןɐʇsʎɹƆ ǝɔI",
   "item.ratatouille.raw_sausage": "ǝbɐsnɐS ʍɐᴚ",
   "item.ratatouille.salt": "ʇןɐS",
   "item.ratatouille.sausage": "ǝbɐsnɐS",
-  "item.ratatouille.sausage_casing": "buısɐƆ ǝbɐsnɐS"
+  "item.ratatouille.sausage_casing": "buısɐƆ ǝbɐsnɐS",
+  "item.ratatouille.sugar_bar": "ɹɐᗺ ɹɐbnS",
+  "item.ratatouille.vanilla_powder": "ɹǝpʍoԀ ɐןןıuɐΛ"
 }

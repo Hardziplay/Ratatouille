@@ -1,0 +1,18 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "cocoa:roastednibs"
+    }
+  ],
+  "results": [
+    {
+      "item": "cocoa:cocoabean_powder"
+    },
+    {
+      "item": "cocoa:cocoabutter",
+      "chance": 0.75
+    }
+  ],
+  "processingTime": 500
+}

@@ -2,8 +2,17 @@
   "block.ratatouille.oven": "Oven",
   "block.ratatouille.oven_fan": "Oven Fan",
   "block.ratatouille.thresher": "Thresher",
+  "item.ratatouille.cake_mold": "Cake Mold",
+  "item.ratatouille.chocolate_mold": "Chocolate Mold",
+  "item.ratatouille.cocoabean_powder": "Cocoabean Powder",
+  "item.ratatouille.cocoabutter": "Cocoabutter",
+  "item.ratatouille.dried_cocoabeans": "Dried Cocoabeans",
+  "item.ratatouille.dried_cocoanibs": "Dried Cocoanibs",
+  "item.ratatouille.ice_crystal": "Ice Crystal",
   "item.ratatouille.raw_sausage": "Raw Sausage",
   "item.ratatouille.salt": "Salt",
   "item.ratatouille.sausage": "Sausage",
-  "item.ratatouille.sausage_casing": "Sausage Casing"
+  "item.ratatouille.sausage_casing": "Sausage Casing",
+  "item.ratatouille.sugar_bar": "Sugar Bar",
+  "item.ratatouille.vanilla_powder": "Vanilla Powder"
 }

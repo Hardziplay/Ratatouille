@@ -1,0 +1,13 @@
+{
+  "type": "create:mixing",
+   "ingredient": {
+     "fluidTag": "forge:milk"
+      "amount": 250
+  },
+"results": [
+    {
+      "item": "cocoa:milkbutter"
+    }
+  ],
+  "heatRequirement": "heated"
+}

@@ -1,0 +1,15 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "cocoa:cocoabean_powder"
+    }
+  ],
+  "results": [
+    {
+      "fluid": "cocoa:cocoa_liquor",
+      "amount": 250
+    }
+  ],
+  "heatRequirement": "heated"
+}
