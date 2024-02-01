@@ -12,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.forsteri.ratatouille.data.recipe.RataouilleDataGen;
+import org.forsteri.ratatouille.entry.CRCreativeModeTabs;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.entry.Registrate;
 
@@ -36,6 +37,7 @@ public class Ratatouille {
 
         Registrate.register();
         CRRecipeTypes.register(modEventBus);
+        CRCreativeModeTabs.init();
         modEventBus.addListener(EventPriority.LOWEST, RataouilleDataGen::gatherData);
     }
 
