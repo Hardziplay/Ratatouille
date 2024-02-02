@@ -37,6 +37,7 @@ public class Ratatouille {
         CRSpriteShifts.register();
         CRBlocks.register();
         CRItems.register();
+        CRFluids.register();
         CRCreativeModeTabs.register();
         CRBlockEntityTypes.register();
         CRRecipeTypes.register(modEventBus);
