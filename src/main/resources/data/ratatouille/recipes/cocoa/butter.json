@@ -1,13 +1,15 @@
 {
   "type": "create:mixing",
-   "ingredient": {
-     "fluidTag": "forge:milk"
-      "amount": 250
-  },
-"results": [
+  "heatRequirement": "heated",
+  "ingredients": [
     {
-      "item": "cocoa:milkbutter"
+      "amount": 250,
+      "fluid": "minecraft:milk"
     }
   ],
-  "heatRequirement": "heated"
+  "results": [
+    {
+      "item": "ratatouille:cocoa_butter"
+    }
+  ]
 }

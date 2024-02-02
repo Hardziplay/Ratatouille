@@ -6,11 +6,11 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.forsteri.ratatouille.Ratatouille;
 
 public class CRFluids {
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> MEAT_SOUP =
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> COCOA_LIQUOR =
             ((FluidBuilder) Ratatouille.REGISTRATE
-                .standardFluid("meat_soup")
+                .standardFluid("cocoa_liquor")
                 .source(ForgeFlowingFluid.Source::new)
-                .lang("Meat soup")
+                .lang("Cocoa liquor")
                 .bucket()
                 .build()
             )

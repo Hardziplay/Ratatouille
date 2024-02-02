@@ -1,18 +1,18 @@
 {
-  "type": "create:crushing",
+  "type": "create:milling",
   "ingredients": [
     {
-      "item": "cocoa:roastednibs"
+      "item": "ratatouille:dried_cocoa_nibs"
     }
   ],
   "results": [
     {
-      "item": "cocoa:cocoabean_powder"
+      "item": "ratatouille:cocoa_bean_powder"
     },
     {
-      "item": "cocoa:cocoabutter",
+      "item": "ratatouille:cocoa_butter",
       "chance": 0.75
     }
   ],
-  "processingTime": 500
+  "processingTime": 70
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "ratatouille:item/cocoabutter"
+    "layer0": "ratatouille:item/cocoa_liquor_bucket"
   }
 }

@@ -2,12 +2,12 @@
   "type": "create:mixing",
   "ingredients": [
     {
-      "item": "cocoa:cocoabean_powder"
+      "item": "ratatouille:cocoa_bean_powder"
     }
   ],
   "results": [
     {
-      "fluid": "cocoa:cocoa_liquor",
+      "fluid": "ratatouille:cocoa_liquor",
       "amount": 250
     }
   ],

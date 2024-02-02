@@ -1,15 +1,15 @@
 {
-  "type": "create:crushing",
+  "type": "create:milling",
   "ingredients": [
     {
-      "item": "cocoa:roastedcocoabeans"
+      "item": "ratatouille:dried_cocoa_beans"
     }
   ],
   "results": [
     {
-      "item": "cocoa:roastednibs",
+      "item": "ratatouille:dried_cocoa_nibs",
       "count": 2
     }
   ],
-  "processingTime": 400
+  "processingTime": 70
 }

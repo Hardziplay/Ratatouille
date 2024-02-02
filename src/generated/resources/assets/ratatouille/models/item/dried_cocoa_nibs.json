@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "ratatouille:item/cocoabean_powder"
+    "layer0": "ratatouille:item/dried_cocoa_nibs"
   }
 }
