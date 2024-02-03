@@ -2,7 +2,7 @@
   "type": "create:mixing",
   "ingredients": [
     {
-      "item": "ratatouille:cocoa_bean_powder"
+      "item": "ratatouille:dried_cocoa_nibs"
     }
   ],
   "results": [

@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "heated",
+  "ingredients": [
+    {
+      "item": "ratatouille:cocoa_bar"
+    },
+    {
+      "item": "ratatouille:cocoa_butter"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "fluid": "create:chocolate"
+    }
+  ]
+}

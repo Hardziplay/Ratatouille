@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "amount": 250,
+      "fluid": "ratatouille:cocoa_liquor"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:cocoa_bar"
+    },
+    {
+      "item": "ratatouille:cocoa_butter",
+      "chance": 0.75
+    }
+  ]
+}

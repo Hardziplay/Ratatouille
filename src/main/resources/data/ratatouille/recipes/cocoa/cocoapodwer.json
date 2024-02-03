@@ -1,0 +1,13 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "ratatouille:cocoa_bar"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:cocoa_bean_powder"
+    }
+  ]
+}
