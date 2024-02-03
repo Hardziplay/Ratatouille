@@ -6,3 +6,4 @@ run-data
 blockbench_helper_ignored
 *.psd
 src/generated/resources/.cache/
+/src/generated/

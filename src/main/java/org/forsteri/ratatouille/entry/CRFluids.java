@@ -20,9 +20,9 @@ import java.util.function.Supplier;
 
 public class CRFluids {
     public static final FluidEntry<ForgeFlowingFluid.Flowing> COCOA_LIQUOR =
-            Create.REGISTRATE
-                .standardFluid("cocoa_liquor", BaseFluidType.create(6430752, () -> {return 0.1f;}))
-                .lang("Cocoa liquor")
+            Ratatouille.REGISTRATE
+            .standardFluid("cocoa_liquor", BaseFluidType.create(6430752, () -> {return 0.1f;}))
+            .lang("Cocoa liquor")
             .register();
 
     public CRFluids() {}
