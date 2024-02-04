@@ -1,0 +1,17 @@
+{
+  "type": "create:emptying",
+  "ingredients": [
+    {
+      "item": "minecraft:egg"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "fluid": "ratatouille:egg_yolk"
+    },
+    {
+      "item": "ratatouille:egg_shell"
+    }
+  ]
+}

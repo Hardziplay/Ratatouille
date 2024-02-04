@@ -1,19 +1,25 @@
-// 1.19.2	2024-02-03T21:32:59.1451688	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.19.2	2024-02-04T22:25:12.6227699	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 2d746697cdbc0367f0b632b342fb2ffdbbe76046 assets/ratatouille/blockstates/cocoa_liquor.json
+a0d09034470deaebbbccd0472eb4d34d38855d15 assets/ratatouille/blockstates/egg_yolk.json
 668322c0152337430163a4b37c6e1c94a0f9ebd5 assets/ratatouille/blockstates/oven.json
 e8f712901d2b2939584d4479e3305179b2904682 assets/ratatouille/blockstates/oven_fan.json
 73f9eab0ba2b9cf32d65a8d2a6908c946753bdde assets/ratatouille/blockstates/thresher.json
-16241ac67c0392341d616961e1ceddc0b224934c assets/ratatouille/lang/en_ud.json
-1dba278c03f271c468ccb6d554ab448643595833 assets/ratatouille/lang/en_us.json
+e39d9c47dd1926f6be7091e914c393da8326ec74 assets/ratatouille/lang/en_ud.json
+839bb2ffec7de6dbc6422bf49837a36251edeb16 assets/ratatouille/lang/en_us.json
 3dd93c72fb532ead0f0723c5119696d6871c2c3e assets/ratatouille/models/block/cocoa_liquor.json
+3da1fb44cb8d0859a94823f0719ed451461f82f6 assets/ratatouille/models/block/egg_yolk.json
 4d3a5d81b23f8e6da015e6dcc81044ff41b9a3ba assets/ratatouille/models/item/cake_mold.json
 723e946513c9565471b29056014ba9470e5588fe assets/ratatouille/models/item/chocolate_mold.json
-a81b6a24fef9fd329df04623e6bad463900cb96e assets/ratatouille/models/item/cocoa_bar.json
-94b82e854fcc9573c9599e5c3c1658139dd382a9 assets/ratatouille/models/item/cocoa_bean_powder.json
+1ac7a21cc3fb6bc77357d5d6e810dc8dee895e98 assets/ratatouille/models/item/chocolate_mold_filled.json
+91136aab1dbaf77a8f099ce2d4eee444393ab0f5 assets/ratatouille/models/item/chocolate_mold_solid.json
 09493e31a2522168032f742b8b137fd286f44a5f assets/ratatouille/models/item/cocoa_butter.json
 ce73d77bcc0efd3879423c71589d43e29aab13c9 assets/ratatouille/models/item/cocoa_liquor_bucket.json
+6152c2d111cad6b53f907aec9ad938c134d69746 assets/ratatouille/models/item/cocoa_powder.json
+f1e6d7b01f04ed75f1d39e79bdc0793d8ca56f5b assets/ratatouille/models/item/cocoa_solids.json
 2039070605d5d870d68f2e71bc2ceada658b5825 assets/ratatouille/models/item/dried_cocoa_beans.json
 9c4688651e342b7ab282c2c1ebb7c5cbdae939f3 assets/ratatouille/models/item/dried_cocoa_nibs.json
+58ecd2442fe032170dc4d4278cd9691212c70600 assets/ratatouille/models/item/egg_shell.json
+8f63bc5138c92d08ac7986602f25494c65b65783 assets/ratatouille/models/item/egg_yolk_bucket.json
 a66b40d9cb003da3958febe65d95b763eefb7f8b assets/ratatouille/models/item/ice_crystal.json
 03a57ff097cc5eeffa58dfbef29fb5ff680d5228 assets/ratatouille/models/item/oven.json
 9bca958035a024dbce36cde5b99192b710268d69 assets/ratatouille/models/item/oven_fan.json
@@ -24,6 +30,7 @@ a66b40d9cb003da3958febe65d95b763eefb7f8b assets/ratatouille/models/item/ice_crys
 2673f50ead6328dccad9a2e4eba794817ce109c7 assets/ratatouille/models/item/sugar_bar.json
 9e9409e4d1de4785f160beac2e686587e92ee327 assets/ratatouille/models/item/thresher.json
 6cfeab3dc0a97d360a41d51b56e1db500c4ce5f3 assets/ratatouille/models/item/vanilla_powder.json
+7b804d6816ac1ecd274c99e23936e467d6becff4 assets/ratatouille/models/item/wheat_kernels.json
 1dac6ccd69d31467e0df1a4b7ace30d5d18337e2 data/minecraft/tags/blocks/mineable/pickaxe.json
 5699350508ed14e2e0301ee2c13c76c492224f0e data/ratatouille/loot_tables/blocks/oven.json
 59cf41378e0d5660e319036213633d8182d81b31 data/ratatouille/loot_tables/blocks/oven_fan.json

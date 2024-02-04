@@ -25,6 +25,12 @@ public class CRFluids {
             .lang("Cocoa liquor")
             .register();
 
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> EGG_YOLK =
+            Ratatouille.REGISTRATE
+                    .standardFluid("egg_yolk", BaseFluidType.create(6430753, () -> {return 0.1f;}))
+                    .lang("egg yolk")
+                    .register();
+
     public CRFluids() {}
     public static void register() {}
 

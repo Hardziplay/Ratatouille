@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "ratatouille:chocolate_mold"
+    },
+    {
+      "amount": 250,
+      "fluid": "create:chocolate"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:chocolate_mold_filled"
+    }
+  ]
+}

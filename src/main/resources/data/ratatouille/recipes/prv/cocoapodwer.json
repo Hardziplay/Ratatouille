@@ -2,12 +2,12 @@
   "type": "create:milling",
   "ingredients": [
     {
-      "item": "ratatouille:cocoa_bar"
+      "item": "ratatouille:cocoa_solids"
     }
   ],
   "results": [
     {
-      "item": "ratatouille:cocoa_bean_powder"
+      "item": "ratatouille:cocoa_powder"
     }
   ]
 }

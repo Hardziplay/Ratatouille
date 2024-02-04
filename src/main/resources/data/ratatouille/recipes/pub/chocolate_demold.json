@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ratatouille:chocolate_mold_solid"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:chocolate_mold"
+    },
+    {
+      "item": "create:bar_of_chocolate"
+    }
+  ]
+}

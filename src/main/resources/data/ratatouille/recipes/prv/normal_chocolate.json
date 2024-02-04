@@ -3,7 +3,7 @@
   "heatRequirement": "heated",
   "ingredients": [
     {
-      "item": "ratatouille:cocoa_bar"
+      "item": "ratatouille:cocoa_solids"
     },
     {
       "item": "ratatouille:cocoa_butter"
