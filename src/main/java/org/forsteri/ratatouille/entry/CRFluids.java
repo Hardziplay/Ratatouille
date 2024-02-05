@@ -31,6 +31,7 @@ public class CRFluids {
                     .lang("egg yolk")
                     .register();
 
+
     public CRFluids() {}
     public static void register() {}
 

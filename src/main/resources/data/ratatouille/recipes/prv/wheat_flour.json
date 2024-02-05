@@ -1,0 +1,19 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "ratatouille:wheat_kernels"
+    }
+  ],
+  "results": [
+    {
+      "item": "create:wheat_flour",
+      "count": 2
+    },
+    {
+      "item": "create:wheat_flour",
+      "count": 2,
+      "chance": 0.5
+    }
+  ]
+}

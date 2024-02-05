@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smoking",
+  "cookingtime": 200,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "ratatouille:cake_mold_filled"
+  },
+  "result":
+    {"item": "ratatouille:cake_mold_baked" }
+
+}
