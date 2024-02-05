@@ -27,8 +27,12 @@ public class CRItems {
     public static final ItemEntry<Item> SUGAR_BAR = Ratatouille.REGISTRATE.item("sugar_bar", Item::new).register();
     public static final ItemEntry<Item> CHOCOLATE_MOLD_filled = Ratatouille.REGISTRATE.item("chocolate_mold_filled", Item::new).register();
     public static final ItemEntry<Item> CHOCOLATE_MOLD_SOLID = Ratatouille.REGISTRATE.item("chocolate_mold_solid", Item::new).register();
+    public static final ItemEntry<Item> CAKE_MOLD_filled = Ratatouille.REGISTRATE.item("cake_mold_filled", Item::new).register();
+    public static final ItemEntry<Item> CAKE_MOLD_BAKED = Ratatouille.REGISTRATE.item("cake_mold_baked", Item::new).register();
     public static final ItemEntry<Item> EGG_SHELL = Ratatouille.REGISTRATE.item("egg_shell", Item::new).register();
     public static final ItemEntry<Item> WHEAT_KERNELS = Ratatouille.REGISTRATE.item("wheat_kernels", Item::new).register();
+    public static final ItemEntry<Item> SALTY_DOUGH = Ratatouille.REGISTRATE.item("salty_dough", Item::new).register();
+
 
     public CRItems() {}
 

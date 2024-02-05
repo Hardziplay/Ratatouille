@@ -1,14 +1,19 @@
-// 1.19.2	2024-02-04T22:25:12.6227699	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.19.2	2024-02-05T11:38:06.6247898	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+a56bd5b6725043499b605210ff32f3acf1024629 assets/ratatouille/blockstates/cake_batter.json
 2d746697cdbc0367f0b632b342fb2ffdbbe76046 assets/ratatouille/blockstates/cocoa_liquor.json
 a0d09034470deaebbbccd0472eb4d34d38855d15 assets/ratatouille/blockstates/egg_yolk.json
 668322c0152337430163a4b37c6e1c94a0f9ebd5 assets/ratatouille/blockstates/oven.json
 e8f712901d2b2939584d4479e3305179b2904682 assets/ratatouille/blockstates/oven_fan.json
 73f9eab0ba2b9cf32d65a8d2a6908c946753bdde assets/ratatouille/blockstates/thresher.json
-e39d9c47dd1926f6be7091e914c393da8326ec74 assets/ratatouille/lang/en_ud.json
-839bb2ffec7de6dbc6422bf49837a36251edeb16 assets/ratatouille/lang/en_us.json
+0c500cdd387b5897b0e984e8753ec63dfbcbbc0b assets/ratatouille/lang/en_ud.json
+6d32973facfd0b33993bf9847f2f96e868dc4e06 assets/ratatouille/lang/en_us.json
+9cf0a17b64bf7c786d7e2d758df8d8b1886570b6 assets/ratatouille/models/block/cake_batter.json
 3dd93c72fb532ead0f0723c5119696d6871c2c3e assets/ratatouille/models/block/cocoa_liquor.json
 3da1fb44cb8d0859a94823f0719ed451461f82f6 assets/ratatouille/models/block/egg_yolk.json
+eb9f62d4bc6ea93cbe56962b8974c69b449d40c3 assets/ratatouille/models/item/cake_batter_bucket.json
 4d3a5d81b23f8e6da015e6dcc81044ff41b9a3ba assets/ratatouille/models/item/cake_mold.json
+74723e6a3e16289788ca76b29d64da0090c98eb2 assets/ratatouille/models/item/cake_mold_baked.json
+5b5cdab4d0ae082c64207d0e4d6034a1d7981db4 assets/ratatouille/models/item/cake_mold_filled.json
 723e946513c9565471b29056014ba9470e5588fe assets/ratatouille/models/item/chocolate_mold.json
 1ac7a21cc3fb6bc77357d5d6e810dc8dee895e98 assets/ratatouille/models/item/chocolate_mold_filled.json
 91136aab1dbaf77a8f099ce2d4eee444393ab0f5 assets/ratatouille/models/item/chocolate_mold_solid.json
@@ -25,6 +30,7 @@ a66b40d9cb003da3958febe65d95b763eefb7f8b assets/ratatouille/models/item/ice_crys
 9bca958035a024dbce36cde5b99192b710268d69 assets/ratatouille/models/item/oven_fan.json
 2e7f20f3ab8473dd0871e8b7f709b632383bd17a assets/ratatouille/models/item/raw_sausage.json
 2321c977404581bcbd79d48d643896ffd592fcbe assets/ratatouille/models/item/salt.json
+0cc722413be77645140efe110e20756afc8afe6f assets/ratatouille/models/item/salty_dough.json
 5dbefae87a30b539f07b56a9504ff3aef0d29e9a assets/ratatouille/models/item/sausage.json
 4ce398e1f378320ff76598f71698d4a81fdff6a4 assets/ratatouille/models/item/sausage_casing.json
 2673f50ead6328dccad9a2e4eba794817ce109c7 assets/ratatouille/models/item/sugar_bar.json

@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "ratatouille:cake_mold"
+    },
+    {
+      "amount": 500,
+      "fluid": "ratatouille_cake_batter"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:cake_mold_filled"
+    }
+  ]
+}
