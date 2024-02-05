@@ -11,6 +11,8 @@ import net.minecraft.world.level.material.MaterialColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinGenerator;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
@@ -58,6 +60,19 @@ public class CRBlocks {
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/oven_fan/item")))
+            .build()
+            .register();
+
+    @SuppressWarnings("removal")
+    public static final BlockEntry<SqueezeBasinBlock> SQUEEZE_BASIN = Ratatouille.REGISTRATE
+            .block("squeeze_basin", SqueezeBasinBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
+            .transform(pickaxeOnly())
+            .blockstate(new SqueezeBasinGenerator()::generate)
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item()
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/squeeze_basin/item")))
             .build()
             .register();
 

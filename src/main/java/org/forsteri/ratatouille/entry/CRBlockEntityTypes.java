@@ -7,6 +7,7 @@ import org.forsteri.ratatouille.content.oven.OvenRenderer;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanInstance;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanRenderer;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlockEntity;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
 import org.forsteri.ratatouille.content.thresher.ThresherInstance;
 import org.forsteri.ratatouille.content.thresher.ThresherRenderer;
@@ -29,6 +30,11 @@ public class CRBlockEntityTypes {
             .instance(() -> OvenFanInstance::new)
             .validBlock(CRBlocks.OVEN_FAN)
             .renderer(() -> OvenFanRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<SqueezeBasinBlockEntity> SQUEEZE_BASIN_ENTITY = Ratatouille.REGISTRATE
+            .blockEntity("squeeze_basin", SqueezeBasinBlockEntity::new)
+            .validBlock(CRBlocks.SQUEEZE_BASIN)
             .register();
     public static void register() {}
 }
