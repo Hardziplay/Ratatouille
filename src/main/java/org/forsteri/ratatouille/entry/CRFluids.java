@@ -2,13 +2,16 @@ package org.forsteri.ratatouille.entry;
 
 import com.mojang.math.Vector3f;
 import com.simibubi.create.AllFluids;
+import com.simibubi.create.AllTags;
 import com.simibubi.create.Create;
+import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.foundation.utility.Color;
 import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.FluidEntry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidStack;
@@ -28,7 +31,13 @@ public class CRFluids {
     public static final FluidEntry<ForgeFlowingFluid.Flowing> EGG_YOLK =
             Ratatouille.REGISTRATE
                     .standardFluid("egg_yolk", BaseFluidType.create(6430753, () -> {return 0.1f;}))
-                    .lang("egg yolk")
+                    .lang("Egg yolk")
+                    .register();
+
+    public static final FluidEntry<VirtualFluid> CAKE_BATTER =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("cake_batter")
+                    .lang("Cake Batter")
                     .register();
 
 
