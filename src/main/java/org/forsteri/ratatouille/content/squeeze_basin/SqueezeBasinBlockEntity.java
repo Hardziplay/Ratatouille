@@ -63,7 +63,6 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
     public void lazyTick() {
         super.lazyTick();
         if (!this.level.isClientSide) {
-            this.updateSpoutput();
             if (this.recipeBackupCheck-- <= 0) {
                 this.recipeBackupCheck = 20;
                 if (!this.isEmpty()) {
@@ -162,8 +161,6 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         } else {
             this.preferredSpoutput = face;
         }
-
-        this.updateSpoutput();
     }
 
     public void notifyChangeOfContents() {
@@ -230,38 +227,4 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         return false;
     }
 
-    private void updateSpoutput() {
-        BlockState blockState = this.getBlockState();
-        Direction currentFacing = (Direction)blockState.getValue(SqueezeBasinBlock.FACING);
-        Direction newFacing = Direction.DOWN;
-        Direction[] var4 = Iterate.horizontalDirections;
-        int slot = var4.length;
-
-        for(int var6 = 0; var6 < slot; ++var6) {
-            Direction test = var4[var6];
-            boolean canOutputTo = SqueezeBasinBlock.canOutputTo(this.level, this.worldPosition, test);
-            if (canOutputTo && !this.disabledSpoutputs.contains(test)) {
-                newFacing = test;
-            }
-        }
-
-        if (this.preferredSpoutput != null && SqueezeBasinBlock.canOutputTo(this.level, this.worldPosition, this.preferredSpoutput) && this.preferredSpoutput != Direction.UP) {
-            newFacing = this.preferredSpoutput;
-        }
-
-        if (newFacing != currentFacing) {
-            this.level.setBlockAndUpdate(this.worldPosition, (BlockState)blockState.setValue(SqueezeBasinBlock.FACING, newFacing));
-            if (!newFacing.getAxis().isVertical()) {
-                for(slot = 0; slot < this.outputInventory.getSlots(); ++slot) {
-                    ItemStack extractItem = this.outputInventory.extractItem(slot, 64, true);
-                    if (!extractItem.isEmpty() && this.acceptOutputs(ImmutableList.of(extractItem), Collections.emptyList(), true)) {
-                        this.acceptOutputs(ImmutableList.of(this.outputInventory.extractItem(slot, 64, false)), Collections.emptyList(), false);
-                    }
-                }
-
-                this.notifyChangeOfContents();
-                this.notifyUpdate();
-            }
-        }
-    }
 }
