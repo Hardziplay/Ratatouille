@@ -2,11 +2,13 @@
   "type": "create:mixing",
   "ingredients": [
     {
-      "item": "create:wheat_flour",
-      "count": 2
+      "item": "create:wheat_flour"
     },
     {
-      "item": "create:sugar"
+      "item": "create:wheat_flour"
+    },
+    {
+      "item": "minecraft:sugar"
     },
     {
       "amount": 250,
