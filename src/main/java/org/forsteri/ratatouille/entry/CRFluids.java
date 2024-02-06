@@ -25,20 +25,29 @@ public class CRFluids {
     public static final FluidEntry<ForgeFlowingFluid.Flowing> COCOA_LIQUOR =
             Ratatouille.REGISTRATE
             .standardFluid("cocoa_liquor", BaseFluidType.create(6430752, () -> {return 0.1f;}))
-            .lang("Cocoa liquor")
+            .lang("Cocoa Liquor")
             .register();
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> EGG_YOLK =
-            Ratatouille.REGISTRATE
-                    .standardFluid("egg_yolk", BaseFluidType.create(6430753, () -> {return 0.1f;}))
-                    .lang("Egg yolk")
-                    .register();
 
     public static final FluidEntry<VirtualFluid> CAKE_BATTER =
             Ratatouille.REGISTRATE
                     .virtualFluid("cake_batter")
                     .lang("Cake Batter")
                     .register();
+
+    public static final FluidEntry<VirtualFluid> MINCE_MEAT =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("mince_meat")
+                    .lang("Mince Meat")
+                    .register();
+
+    public static final FluidEntry<VirtualFluid> EGG_YOLK =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("egg_yolk")
+                    .lang("Egg Yolk")
+                    .register();
+
+
 
 
     public CRFluids() {}

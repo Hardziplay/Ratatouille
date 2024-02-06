@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smoking",
+  "cookingtime": 100,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "ratatouille:wet_copper_ingot"
+  },
+  "result":
+    {"item": "minecraft:copper_ingot" }
+
+}
