@@ -47,6 +47,12 @@ public class CRFluids {
                     .lang("Egg Yolk")
                     .register();
 
+    public static final FluidEntry<VirtualFluid> TOMATO_SAUCE =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("tomato_sauce")
+                    .lang("tomato sauce")
+                    .register();
+
 
 
 

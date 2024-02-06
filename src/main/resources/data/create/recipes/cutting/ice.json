@@ -1,0 +1,13 @@
+{
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "neapolitan:ice_cubes"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:ice_crystal"
+    }
+  ]
+}

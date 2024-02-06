@@ -1,0 +1,22 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "farmersdelight:tomato"
+    },
+    {
+      "item": "farmersdelight:tomato"
+    },
+    {
+      "amount": 500,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "results": [
+    {
+      "fluid": "ratatouille:tomato_sauce",
+      "amount": 1000
+    }
+  ],
+  "heatRequirement": "heated"
+}
