@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MaterialColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.oven.*;
@@ -73,6 +74,15 @@ public class CRBlocks {
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/squeeze_basin/item")))
+            .build()
+            .register();
+
+    public static final BlockEntry<Block> SUGAR_BLOCK = Ratatouille.REGISTRATE
+            .block("sugar_block", Block::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
+            .transform(pickaxeOnly())
+            .item()
             .build()
             .register();
 
