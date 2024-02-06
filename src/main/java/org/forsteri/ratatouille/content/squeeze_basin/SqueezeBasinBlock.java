@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -28,7 +29,6 @@ public class SqueezeBasinBlock extends Block implements IBE<SqueezeBasinBlockEnt
     public static final DirectionProperty FACING;
     public SqueezeBasinBlock(Properties pProperties) {
         super(pProperties);
-        this.registerDefaultState((BlockState)this.defaultBlockState().setValue(FACING, Direction.DOWN));
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_206840_1_) {
@@ -65,6 +65,11 @@ public class SqueezeBasinBlock extends Block implements IBE<SqueezeBasinBlockEnt
     @Override
     public BlockEntityType<? extends SqueezeBasinBlockEntity> getBlockEntityType() {
         return CRBlockEntityTypes.SQUEEZE_BASIN_ENTITY.get();
+    }
+
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Direction preferredFacing = preferredFacing = context.getHorizontalDirection().getOpposite();
+        return (BlockState)this.defaultBlockState().setValue(FACING, context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? preferredFacing : preferredFacing.getOpposite());
     }
 
     public static boolean canOutputTo(BlockGetter world, BlockPos basinPos, Direction direction) {
