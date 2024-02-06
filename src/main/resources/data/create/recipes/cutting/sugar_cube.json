@@ -1,0 +1,13 @@
+{
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "ratatouille:solid_sugar_block"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:sugar_cube"
+    }
+  ]
+}

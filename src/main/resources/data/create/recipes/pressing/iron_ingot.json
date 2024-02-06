@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "ratatouille:sugar_cube"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ]
+}
