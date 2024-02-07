@@ -30,8 +30,8 @@ jobs:
         distribution: 'oracle'
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
-    - name: Grant Permission
-      run: chmod +x gradlew
+    - name: Run data gen
+      run: ./gradlew runData
     - name: Run build with Gradle Wrapper
       run: ./gradlew build
     - name: Upload Artifacts
