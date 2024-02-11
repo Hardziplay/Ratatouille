@@ -22,12 +22,15 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.Direction.Axis;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,9 +46,9 @@ public class ThresherBlockEntity extends KineticBlockEntity {
 
     public ThresherBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-        inputInv = new ItemStackHandler(1);
-        outputInv = new ItemStackHandler(4);
-        capability = LazyOptional.of(ThresherInventoryHandler::new);
+        this.inputInv = new ItemStackHandler(1);
+        this.outputInv = new ItemStackHandler(4);
+        this.capability = LazyOptional.of(ThresherInventoryHandler::new);
     }
 
     @Override
@@ -59,24 +62,11 @@ public class ThresherBlockEntity extends KineticBlockEntity {
         super.tick();
         if (getSpeed() == 0.0F)
             return;
-        for (int i = 0; i < outputInv.getSlots(); i++)
-            if (outputInv.getStackInSlot(i).getCount() == outputInv.getSlotLimit(i))
-                return;
-        if (timer > 0) {
-            timer -= getProcessingSpeed();
-            if (level.isClientSide) {
-                spawnParticles();
-                return;
-            }
-            if (timer <= 0)
-                process();
-            return;
-        }
 
         if (canOutput()) {
             Direction direction = getEjectDirection();
-            for (int slot = 0; slot < outputInv.getSlots(); slot++) {
-                ItemStack stack = outputInv.getStackInSlot(slot);
+            for (int slot = 0; slot < this.outputInv.getSlots(); slot++) {
+                ItemStack stack = this.outputInv.getStackInSlot(slot);
                 if (!stack.isEmpty()) {
                     BlockEntity be = this.level.getBlockEntity(this.worldPosition.below().relative(direction));
                     InvManipulationBehaviour inserter = null;
@@ -88,12 +78,26 @@ public class ThresherBlockEntity extends KineticBlockEntity {
                     if (targetInv != null) {
                         if (ItemHandlerHelper.insertItemStacked(targetInv, stack, true).isEmpty()) {
                             ItemHandlerHelper.insertItemStacked(targetInv, stack.copy(), false);
-                            outputInv.setStackInSlot(0, ItemStack.EMPTY);
+                            this.outputInv.setStackInSlot(slot, ItemStack.EMPTY);
                             notifyUpdate();
                         }
                     }
                 }
             }
+        }
+
+        for (int i = 0; i < this.outputInv.getSlots(); i++)
+            if (this.outputInv.getStackInSlot(i).getCount() == this.outputInv.getSlotLimit(i))
+                return;
+        if (timer > 0) {
+            timer -= getProcessingSpeed();
+            if (level.isClientSide) {
+                spawnParticles();
+                return;
+            }
+            if (timer <= 0)
+                process();
+            return;
         }
 
         if (inputInv.getStackInSlot(0).isEmpty()) return;
@@ -144,8 +148,7 @@ public class ThresherBlockEntity extends KineticBlockEntity {
         this.lastRecipe.rollResults().forEach((stack) -> {
             ItemHandlerHelper.insertItemStacked(this.outputInv, stack, false);
         });
-        this.sendData();
-        this.setChanged();
+        notifyUpdate();
     }
 
     public void spawnParticles() {
@@ -224,28 +227,28 @@ public class ThresherBlockEntity extends KineticBlockEntity {
 
     private class ThresherInventoryHandler extends CombinedInvWrapper {
         public ThresherInventoryHandler() {
-            super(inputInv, outputInv);
+            super(new IItemHandlerModifiable[]{ThresherBlockEntity.this.inputInv, ThresherBlockEntity.this.outputInv});
         }
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
-            if (outputInv == getHandlerFromIndex(getIndexForSlot(slot)))
+            if (ThresherBlockEntity.this.outputInv == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
                 return false;
-            return canProcess(stack) && super.isItemValid(slot, stack);
+            return ThresherBlockEntity.this.canProcess(stack) && super.isItemValid(slot, stack);
         }
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (outputInv == getHandlerFromIndex(getIndexForSlot(slot)))
+            if (ThresherBlockEntity.this.outputInv == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
                 return stack;
-            if (!isItemValid(slot, stack))
+            if (!this.isItemValid(slot, stack))
                 return stack;
             return super.insertItem(slot, stack, simulate);
         }
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (inputInv == getHandlerFromIndex(getIndexForSlot(slot)))
+            if (ThresherBlockEntity.this.inputInv == this.getHandlerFromIndex(getIndexForSlot(slot)))
                 return ItemStack.EMPTY;
             return super.extractItem(slot, amount, simulate);
         }
