@@ -2,11 +2,8 @@ package org.forsteri.ratatouille.compat.jei;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
-import com.simibubi.create.compat.jei.DoubleItemIcon;
 import com.simibubi.create.compat.jei.EmptyBackground;
-import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
-import com.simibubi.create.foundation.config.ConfigBase;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
@@ -21,7 +18,6 @@ import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
@@ -57,7 +53,7 @@ public class RatatouilleJei implements IModPlugin {
     private void loadCategories() {
         this.allCategories.clear();
         CreateRecipeCategory<?>
-                milling = builder(ThreshingRecipe.class)
+                threshing = builder(ThreshingRecipe.class)
                 .addTypedRecipes(CRRecipeTypes.THRESHING)
                 .catalyst(CRBlocks.THRESHER::get)
                 .emptyBackground(177, 53)
@@ -88,18 +84,6 @@ public class RatatouilleJei implements IModPlugin {
         return new RatatouilleJei.CategoryBuilder(recipeClass);
     }
 
-    public static boolean doInputsMatch(Recipe<?> recipe1, Recipe<?> recipe2) {
-        if (!recipe1.getIngredients().isEmpty() && !recipe2.getIngredients().isEmpty()) {
-            ItemStack[] matchingStacks = ((Ingredient)recipe1.getIngredients().get(0)).getItems();
-            return matchingStacks.length == 0 ? false : ((Ingredient)recipe2.getIngredients().get(0)).test(matchingStacks[0]);
-        } else {
-            return false;
-        }
-    }
-
-    public static boolean doOutputsMatch(Recipe<?> recipe1, Recipe<?> recipe2) {
-        return ItemStack.isSame(recipe1.getResultItem(), recipe2.getResultItem());
-    }
 
     private class CategoryBuilder<T extends Recipe<?>> {
         private final Class<? extends T> recipeClass;
@@ -115,27 +99,9 @@ public class RatatouilleJei implements IModPlugin {
             this.recipeClass = recipeClass;
         }
 
-        public RatatouilleJei.CategoryBuilder<T> enableIf(Predicate<CRecipes> predicate) {
-            this.predicate = predicate;
-            return this;
-        }
-
-        public RatatouilleJei.CategoryBuilder<T> enableWhen(Function<CRecipes, ConfigBase.ConfigBool> configValue) {
-            this.predicate = (c) -> {
-                return (Boolean)((ConfigBase.ConfigBool)configValue.apply(c)).get();
-            };
-            return this;
-        }
-
         public RatatouilleJei.CategoryBuilder<T> addRecipeListConsumer(Consumer<List<T>> consumer) {
             this.recipeListConsumers.add(consumer);
             return this;
-        }
-
-        public RatatouilleJei.CategoryBuilder<T> addRecipes(Supplier<Collection<? extends T>> collection) {
-            return this.addRecipeListConsumer((recipes) -> {
-                recipes.addAll((Collection)collection.get());
-            });
         }
 
         public RatatouilleJei.CategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
@@ -160,22 +126,6 @@ public class RatatouilleJei implements IModPlugin {
 
         public RatatouilleJei.CategoryBuilder<T> icon(IDrawable icon) {
             this.icon = icon;
-            return this;
-        }
-
-        public RatatouilleJei.CategoryBuilder<T> itemIcon(ItemLike item) {
-            this.icon(new ItemIcon(() -> {
-                return new ItemStack(item);
-            }));
-            return this;
-        }
-
-        public RatatouilleJei.CategoryBuilder<T> doubleItemIcon(ItemLike item1, ItemLike item2) {
-            this.icon(new DoubleItemIcon(() -> {
-                return new ItemStack(item1);
-            }, () -> {
-                return new ItemStack(item2);
-            }));
             return this;
         }
 
