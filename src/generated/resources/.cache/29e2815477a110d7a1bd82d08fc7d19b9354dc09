@@ -1,16 +1,18 @@
-// 1.19.2	2024-02-06T15:03:37.7715097	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.19.2	2024-02-13T22:11:57.4096204	Registrate Provider for ratatouille [Recipes, Advancements, Loot tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+a56bd5b6725043499b605210ff32f3acf1024629 assets/ratatouille/blockstates/cake_batter.json
 2d746697cdbc0367f0b632b342fb2ffdbbe76046 assets/ratatouille/blockstates/cocoa_liquor.json
+a0d09034470deaebbbccd0472eb4d34d38855d15 assets/ratatouille/blockstates/egg_yolk.json
+240b112ef58236781e0bec9e53ed644608d5460a assets/ratatouille/blockstates/mince_meat.json
 668322c0152337430163a4b37c6e1c94a0f9ebd5 assets/ratatouille/blockstates/oven.json
 e8f712901d2b2939584d4479e3305179b2904682 assets/ratatouille/blockstates/oven_fan.json
-e0c34aec63b748eaad1e3ae90ceb0b03755de791 assets/ratatouille/blockstates/solid_sugar_block.json
 b43c7a636bb13dc70369b6aeab8409460d5951fe assets/ratatouille/blockstates/squeeze_basin.json
-7b9f9206befa6f8f35d76019684d447604d7c2ed assets/ratatouille/blockstates/sugar_block.json
 73f9eab0ba2b9cf32d65a8d2a6908c946753bdde assets/ratatouille/blockstates/thresher.json
-e44857a6153f2ac3fd0d5bb5de095f897c6d6b8d assets/ratatouille/lang/en_ud.json
-296064895d6c588f4e9f9f9e99f2d9a3d6881a98 assets/ratatouille/lang/en_us.json
+83fca5fabe8c36928aac61a16df2d272fbdb0946 assets/ratatouille/lang/en_ud.json
+66a7cd22f1112912c76887f785373fd0613dde46 assets/ratatouille/lang/en_us.json
+9cf0a17b64bf7c786d7e2d758df8d8b1886570b6 assets/ratatouille/models/block/cake_batter.json
 3dd93c72fb532ead0f0723c5119696d6871c2c3e assets/ratatouille/models/block/cocoa_liquor.json
-02fba049e72d693a5b96c2001737d8a0fe985dc2 assets/ratatouille/models/block/solid_sugar_block.json
-920393c092f3883335b83a2cbf8c4f7a4943eea1 assets/ratatouille/models/block/sugar_block.json
+3da1fb44cb8d0859a94823f0719ed451461f82f6 assets/ratatouille/models/block/egg_yolk.json
+4f29eae975b05ab7e82e072d9b93e41a490e8396 assets/ratatouille/models/block/mince_meat.json
 5b02ee9b4fd6c75769f0653b32aa028c1d8d8bee assets/ratatouille/models/item/cake_base.json
 4d3a5d81b23f8e6da015e6dcc81044ff41b9a3ba assets/ratatouille/models/item/cake_mold.json
 74723e6a3e16289788ca76b29d64da0090c98eb2 assets/ratatouille/models/item/cake_mold_baked.json
@@ -25,7 +27,6 @@ f1e6d7b01f04ed75f1d39e79bdc0793d8ca56f5b assets/ratatouille/models/item/cocoa_so
 2039070605d5d870d68f2e71bc2ceada658b5825 assets/ratatouille/models/item/dried_cocoa_beans.json
 9c4688651e342b7ab282c2c1ebb7c5cbdae939f3 assets/ratatouille/models/item/dried_cocoa_nibs.json
 58ecd2442fe032170dc4d4278cd9691212c70600 assets/ratatouille/models/item/egg_shell.json
-a66b40d9cb003da3958febe65d95b763eefb7f8b assets/ratatouille/models/item/ice_crystal.json
 03a57ff097cc5eeffa58dfbef29fb5ff680d5228 assets/ratatouille/models/item/oven.json
 9bca958035a024dbce36cde5b99192b710268d69 assets/ratatouille/models/item/oven_fan.json
 2e7f20f3ab8473dd0871e8b7f709b632383bd17a assets/ratatouille/models/item/raw_sausage.json
@@ -33,19 +34,11 @@ a66b40d9cb003da3958febe65d95b763eefb7f8b assets/ratatouille/models/item/ice_crys
 0cc722413be77645140efe110e20756afc8afe6f assets/ratatouille/models/item/salty_dough.json
 5dbefae87a30b539f07b56a9504ff3aef0d29e9a assets/ratatouille/models/item/sausage.json
 4ce398e1f378320ff76598f71698d4a81fdff6a4 assets/ratatouille/models/item/sausage_casing.json
-f9680e9254e2f8503c73bc19841a3c9b54976a1e assets/ratatouille/models/item/solid_sugar_block.json
 5aad83805a2ce66dff2e53913c3f82c8dd51552e assets/ratatouille/models/item/squeeze_basin.json
-e5321f63adee9407c20650cd349821e287a6b50d assets/ratatouille/models/item/sugar_block.json
-d3cf8deb7429cb0ad76200d0287165e90ba88364 assets/ratatouille/models/item/sugar_cube.json
 9e9409e4d1de4785f160beac2e686587e92ee327 assets/ratatouille/models/item/thresher.json
-6cfeab3dc0a97d360a41d51b56e1db500c4ce5f3 assets/ratatouille/models/item/vanilla_powder.json
-c0050ba5fce6f616d745a50424b9f3541952be0f assets/ratatouille/models/item/wet_copper_ingot.json
-c25e859c202391142c8cc6182705b47febd42bc2 assets/ratatouille/models/item/wet_gold_ingot.json
 7b804d6816ac1ecd274c99e23936e467d6becff4 assets/ratatouille/models/item/wheat_kernels.json
-34dc7c6e5fec2ec27582cb6d273335c1727e3ae2 data/minecraft/tags/blocks/mineable/pickaxe.json
+a77d926b5a2cb37f0d2346829d402f7f6f50d7bc data/minecraft/tags/blocks/mineable/pickaxe.json
 5699350508ed14e2e0301ee2c13c76c492224f0e data/ratatouille/loot_tables/blocks/oven.json
 59cf41378e0d5660e319036213633d8182d81b31 data/ratatouille/loot_tables/blocks/oven_fan.json
-64973d28d836313c1025d063dca3d49c7059add7 data/ratatouille/loot_tables/blocks/solid_sugar_block.json
 d59701da7fcf7089784a2afb3a934bedbc32a5c5 data/ratatouille/loot_tables/blocks/squeeze_basin.json
-be45f568f7254a7e6288032db8d5a848ceb7e437 data/ratatouille/loot_tables/blocks/sugar_block.json
 93aa704fa752ad442b37d307af4e58f834277ca0 data/ratatouille/loot_tables/blocks/thresher.json

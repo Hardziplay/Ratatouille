@@ -1,0 +1,16 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "create:iron_sheet"
+    },
+    {
+      "item": "create:iron_sheet"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:chocolate_mold"
+    }
+  ]
+}
