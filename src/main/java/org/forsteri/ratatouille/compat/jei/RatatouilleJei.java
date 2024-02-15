@@ -2,7 +2,9 @@ package org.forsteri.ratatouille.compat.jei;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
+import com.simibubi.create.compat.jei.DoubleItemIcon;
 import com.simibubi.create.compat.jei.EmptyBackground;
+import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.infrastructure.config.AllConfigs;
@@ -15,7 +17,6 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -32,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -43,6 +43,13 @@ public class RatatouilleJei implements IModPlugin {
     private final List<CreateRecipeCategory<?>> allCategories = new ArrayList();
     private IIngredientManager ingredientManager;
 
+    final CreateRecipeCategory<?> threshing = builder(ThreshingRecipe.class)
+            .addTypedRecipes(CRRecipeTypes.THRESHING::getType)
+            .catalyst(CRBlocks.THRESHER::get)
+            .itemIcon(CRBlocks.THRESHER.get())
+            .emptyBackground(177, 53)
+            .build("threshing", ThreshingCategory::new);
+
     public RatatouilleJei() {}
 
     @Override
@@ -50,118 +57,142 @@ public class RatatouilleJei implements IModPlugin {
         return ID;
     }
 
-    private void loadCategories() {
-        this.allCategories.clear();
-        CreateRecipeCategory<?>
-                threshing = builder(ThreshingRecipe.class)
-                .addTypedRecipes(CRRecipeTypes.THRESHING)
-                .catalyst(CRBlocks.THRESHER::get)
-                .emptyBackground(177, 53)
-                .build("threshing", ThreshingCategory::new);
-    }
-
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        this.loadCategories();
-        registration.addRecipeCategories(allCategories.toArray(IRecipeCategory[]::new));
-    }
-
-    @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        this.allCategories.forEach((c) -> {
-            c.registerCatalysts(registration);
-        });
+        allCategories.forEach(registration::addRecipeCategories);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        this.ingredientManager = registration.getIngredientManager();
-        this.allCategories.forEach((c) -> {
-            c.registerRecipes(registration);
-        });
-    }
-    private <T extends Recipe<?>> RatatouilleJei.CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
-        return new RatatouilleJei.CategoryBuilder(recipeClass);
+        ingredientManager = registration.getIngredientManager();
+        allCategories.forEach(c -> c.registerRecipes(registration));
     }
 
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        allCategories.forEach(c -> c.registerCatalysts(registration));
+    }
+
+    private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
+        return new CategoryBuilder<>(recipeClass);
+    }
 
     private class CategoryBuilder<T extends Recipe<?>> {
         private final Class<? extends T> recipeClass;
-        private Predicate<CRecipes> predicate = (cRecipes) -> {
-            return true;
-        };
+        private Predicate<CRecipes> predicate = cRecipes -> true;
+
         private IDrawable background;
         private IDrawable icon;
-        private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList();
-        private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList();
+
+        private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
+        private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
 
         public CategoryBuilder(Class<? extends T> recipeClass) {
             this.recipeClass = recipeClass;
         }
 
-        public RatatouilleJei.CategoryBuilder<T> addRecipeListConsumer(Consumer<List<T>> consumer) {
-            this.recipeListConsumers.add(consumer);
+        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<T>> consumer) {
+            recipeListConsumers.add(consumer);
             return this;
         }
 
-        public RatatouilleJei.CategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
-            Objects.requireNonNull(recipeTypeEntry);
-            return this.addTypedRecipes(recipeTypeEntry::getType);
+        public CategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
+            return addTypedRecipes(recipeTypeEntry::getType);
         }
 
-        public RatatouilleJei.CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<? extends T>> recipeType) {
-            return this.addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipes::add, recipeType.get()));
+        public CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<? extends T>> recipeType) {
+            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipes::add, recipeType.get()));
         }
 
-        public RatatouilleJei.CategoryBuilder<T> catalystStack(Supplier<ItemStack> supplier) {
-            this.catalysts.add(supplier);
-            return this;
+
+        public CategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<? extends T>> recipeType, Predicate<Recipe<?>> pred) {
+            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipe -> {
+                if (pred.test(recipe)) {
+                    recipes.add(recipe);
+                }
+            }, recipeType.get()));
         }
 
-        public RatatouilleJei.CategoryBuilder<T> catalyst(Supplier<ItemLike> supplier) {
-            return this.catalystStack(() -> {
-                return new ItemStack(((ItemLike)supplier.get()).asItem());
+        public CategoryBuilder<T> addTypedRecipesExcluding(Supplier<RecipeType<? extends T>> recipeType,
+                                                           Supplier<RecipeType<? extends T>> excluded) {
+            return addRecipeListConsumer(recipes -> {
+                List<Recipe<?>> excludedRecipes = CreateJEI.getTypedRecipes(excluded.get());
+                CreateJEI.<T>consumeTypedRecipes(recipe -> {
+                    for (Recipe<?> excludedRecipe : excludedRecipes) {
+                        if (CreateJEI.doInputsMatch(recipe, excludedRecipe)) {
+                            return;
+                        }
+                    }
+                    recipes.add(recipe);
+                }, recipeType.get());
             });
         }
 
-        public RatatouilleJei.CategoryBuilder<T> icon(IDrawable icon) {
+        public CategoryBuilder<T> removeRecipes(Supplier<RecipeType<? extends T>> recipeType) {
+            return addRecipeListConsumer(recipes -> {
+                List<Recipe<?>> excludedRecipes = CreateJEI.getTypedRecipes(recipeType.get());
+                recipes.removeIf(recipe -> {
+                    for (Recipe<?> excludedRecipe : excludedRecipes) {
+                        if (CreateJEI.doInputsMatch(recipe, excludedRecipe)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            });
+        }
+
+        public CategoryBuilder<T> catalystStack(Supplier<ItemStack> supplier) {
+            catalysts.add(supplier);
+            return this;
+        }
+
+        public CategoryBuilder<T> catalyst(Supplier<ItemLike> supplier) {
+            return catalystStack(() -> new ItemStack(supplier.get()
+                    .asItem()));
+        }
+
+        public CategoryBuilder<T> icon(IDrawable icon) {
             this.icon = icon;
             return this;
         }
 
-        public RatatouilleJei.CategoryBuilder<T> background(IDrawable background) {
+        public CategoryBuilder<T> itemIcon(ItemLike item) {
+            icon(new ItemIcon(() -> new ItemStack(item)));
+            return this;
+        }
+
+        public CategoryBuilder<T> doubleItemIcon(ItemLike item1, ItemLike item2) {
+            icon(new DoubleItemIcon(() -> new ItemStack(item1), () -> new ItemStack(item2)));
+            return this;
+        }
+
+        public CategoryBuilder<T> background(IDrawable background) {
             this.background = background;
             return this;
         }
 
-        public RatatouilleJei.CategoryBuilder<T> emptyBackground(int width, int height) {
-            this.background(new EmptyBackground(width, height));
+        public CategoryBuilder<T> emptyBackground(int width, int height) {
+            background(new EmptyBackground(width, height));
             return this;
         }
 
         public CreateRecipeCategory<T> build(String name, CreateRecipeCategory.Factory<T> factory) {
-            Supplier recipesSupplier;
-            if (this.predicate.test(AllConfigs.server().recipes)) {
+            Supplier<List<T>> recipesSupplier;
+            if (predicate.test(AllConfigs.server().recipes)) {
                 recipesSupplier = () -> {
-                    List<T> recipes = new ArrayList();
-                    Iterator var2 = this.recipeListConsumers.iterator();
-
-                    while(var2.hasNext()) {
-                        Consumer<List<T>> consumer = (Consumer)var2.next();
+                    List<T> recipes = new ArrayList<>();
+                    for (Consumer<List<T>> consumer : recipeListConsumers)
                         consumer.accept(recipes);
-                    }
-
                     return recipes;
                 };
             } else {
-                recipesSupplier = () -> {
-                    return Collections.emptyList();
-                };
+                recipesSupplier = () -> Collections.emptyList();
             }
 
             CreateRecipeCategory.Info<T> info = new CreateRecipeCategory.Info(new mezz.jei.api.recipe.RecipeType(Create.asResource(name), this.recipeClass), Lang.translateDirect("recipe." + name, new Object[0]), this.background, this.icon, recipesSupplier, this.catalysts);
             CreateRecipeCategory<T> category = factory.create(info);
-            RatatouilleJei.this.allCategories.add(category);
+            allCategories.add(category);
             return category;
         }
     }
