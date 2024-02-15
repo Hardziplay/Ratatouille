@@ -29,24 +29,21 @@ public class CRFluids {
             .register();
 
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> CAKE_BATTER =
+    public static final FluidEntry<VirtualFluid> CAKE_BATTER =
             Ratatouille.REGISTRATE
-                    .standardFluid("cake_batter")
-                    .noBucket()
+                    .virtualFluid("cake_batter")
                     .lang("Cake Batter")
                     .register();
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> MINCE_MEAT =
+    public static final FluidEntry<VirtualFluid> MINCE_MEAT =
             Ratatouille.REGISTRATE
-                    .standardFluid("mince_meat")
-                    .noBucket()
+                    .virtualFluid("mince_meat")
                     .lang("Mince Meat")
                     .register();
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> EGG_YOLK =
+    public static final FluidEntry<VirtualFluid> EGG_YOLK =
             Ratatouille.REGISTRATE
-                    .standardFluid("egg_yolk")
-                    .noBucket()
+                    .virtualFluid("egg_yolk")
                     .lang("Egg Yolk")
                     .register();
 
