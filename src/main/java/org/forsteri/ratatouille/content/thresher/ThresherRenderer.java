@@ -1,6 +1,13 @@
 package org.forsteri.ratatouille.content.thresher;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
+import com.simibubi.create.foundation.render.CachedBufferer;
+import com.simibubi.create.foundation.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -9,17 +16,42 @@ import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
+import org.forsteri.ratatouille.entry.CRPartialModels;
 
-public class ThresherRenderer extends SafeBlockEntityRenderer<ThresherBlockEntity> {
+public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEntity> {
     public ThresherRenderer(BlockEntityRendererProvider.Context context) {
+        super(context);
+    }
+
+    @Override
+    protected SuperByteBuffer getRotatedModel(ThresherBlockEntity be, BlockState state) {
+        return CachedBufferer.partialFacingVertical(CRPartialModels.THRESHER_BLADE, state, (Direction)state.getValue(ThresherBlock.HORIZONTAL_FACING));
     }
 
     @Override
     protected void renderSafe(ThresherBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
+        if (!Backend.canUseInstancing(be.getLevel())) {
+            VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
+            BlockPos pos = be.getBlockPos();
+            BlockState blockState = be.getBlockState();
+            Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise();
+
+            int lightColor = LevelRenderer.getLightColor(be.getLevel(), pos);
+            SuperByteBuffer thresher = CachedBufferer.partialFacing(CRPartialModels.THRESHER_BLADE, blockState, facing.getOpposite());
+
+
+            standardKineticRotationTransform(thresher, be, lightColor).renderInto(ms, vb);
+        }
         renderItems(be, partialTicks, ms, buffer, light, overlay);
     }
 

@@ -23,13 +23,10 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
         super(context);
     }
 
-    protected SuperByteBuffer getRotatedModel(OvenFanBlockEntity be, BlockState state) {
-        return CachedBufferer.partialFacingVertical(AllPartialModels.SHAFTLESS_COGWHEEL, state, (Direction)state.getValue(OvenFanBlock.HORIZONTAL_FACING));
-    }
-
     protected void renderSafe(OvenFanBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
         if (!Backend.canUseInstancing(be.getLevel())) {
-            Direction direction = (Direction)be.getBlockState().getValue(BlockStateProperties.FACING);
+            Direction direction = (Direction)be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
             VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
             int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
             int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
