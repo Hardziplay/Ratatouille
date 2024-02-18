@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.ModelFile;
 
+import static org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock.CASING;
+
 public class SqueezeBasinGenerator extends SpecialBlockStateGen {
     public SqueezeBasinGenerator() {}
     @Override
@@ -24,6 +26,8 @@ public class SqueezeBasinGenerator extends SpecialBlockStateGen {
 
     @Override
     public <T extends Block> ModelFile getModel(DataGenContext<Block, T> dataGenContext, RegistrateBlockstateProvider registrateBlockstateProvider, BlockState blockState) {
-        return AssetLookup.partialBaseModel(dataGenContext, registrateBlockstateProvider, new String[0]);
+        return blockState.getValue(CASING) ?
+                AssetLookup.partialBaseModel(dataGenContext, registrateBlockstateProvider, new String[]{"casing"}) :
+                AssetLookup.partialBaseModel(dataGenContext, registrateBlockstateProvider, new String[0]);
     }
 }

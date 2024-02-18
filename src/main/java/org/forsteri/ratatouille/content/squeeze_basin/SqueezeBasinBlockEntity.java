@@ -13,9 +13,11 @@ import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,9 +32,12 @@ import java.util.*;
 
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.forsteri.ratatouille.entry.CRItems;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+import static org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock.CASING;
 
 public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
     public SqueezeBasinInventory inputInventory = new SqueezeBasinInventory(9, this);
@@ -118,6 +123,9 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         super.destroy();
         ItemHelper.dropContents(this.level, this.worldPosition, this.inputInventory);
         ItemHelper.dropContents(this.level, this.worldPosition, this.outputInventory);
+        if (this.getBlockState().getValue(CASING))
+            Containers.dropItemStack(this.level, (double)this.worldPosition.getX(), (double)this.worldPosition.getY(), (double)this.worldPosition.getZ(), new ItemStack(CRItems.SAUSAGE_CASING.get(), 1));
+
         this.spoutputBuffer.forEach((is) -> {
             Block.popResource(this.level, this.worldPosition, is);
         });
