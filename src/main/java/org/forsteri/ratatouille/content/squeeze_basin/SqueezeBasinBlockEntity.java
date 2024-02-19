@@ -3,10 +3,16 @@ package org.forsteri.ratatouille.content.squeeze_basin;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
+import com.simibubi.create.content.kinetics.press.PressingBehaviour;
+import com.simibubi.create.content.processing.basin.BasinBlock;
+import com.simibubi.create.content.processing.basin.BasinInventory;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipulationBehaviour;
+import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -23,48 +29,45 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.*;
 
 import java.util.*;
 
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.forsteri.ratatouille.entry.CRItems;
+
+import javax.annotation.Nonnull;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 import static org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock.CASING;
 
 public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
-    public SqueezeBasinInventory inputInventory = new SqueezeBasinInventory(9, this);
+    public SqueezeBasinInventory inputInventory;
+    public SmartFluidTankBehaviour inputTank;
     protected SmartInventory outputInventory;
     protected LazyOptional<IItemHandlerModifiable> itemCapability;
+    protected LazyOptional<IFluidHandler> fluidCapability;
     private boolean contentsChanged;
-    List<Direction> disabledSpoutputs;
-    Direction preferredSpoutput;
     protected List<ItemStack> spoutputBuffer;
     int recipeBackupCheck;
 
     public SqueezeBasinBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        this.inputInventory.whenContentsChanged(($) -> {
-            this.contentsChanged = true;
-        });
-        this.outputInventory = (new SqueezeBasinInventory(9, this)).forbidInsertion().withMaxStackSize(64);
-        this.itemCapability = LazyOptional.of(() -> {
-            return new CombinedInvWrapper(new IItemHandlerModifiable[]{this.inputInventory, this.outputInventory});
-        });
+        this.inputInventory = (new SqueezeBasinInventory(9, this));
+        this.inputInventory.whenContentsChanged($ -> this.contentsChanged = true).withMaxStackSize(64);
+        this.outputInventory = (new SqueezeBasinInventory(1, this)).forbidInsertion().withMaxStackSize(1);
+        this.itemCapability = LazyOptional.of(() -> new CombinedInvWrapper(inputInventory, outputInventory));
         this.contentsChanged = true;
-        this.disabledSpoutputs = new ArrayList();
-        this.preferredSpoutput = null;
         this.spoutputBuffer = new ArrayList();
         this.recipeBackupCheck = 20;
     }
 
+    @Override
     public void lazyTick() {
         super.lazyTick();
         if (!this.level.isClientSide) {
@@ -77,6 +80,45 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if (!spoutputBuffer.isEmpty() && !level.isClientSide)
+            tryClearingSpoutputOverflow();
+        if (!contentsChanged)
+            return;
+        contentsChanged = false;
+        getOperator().ifPresent((be) -> {be.pressingBehaviour.start(PressingBehaviour.Mode.BASIN);});
+    }
+
+
+    private void tryClearingSpoutputOverflow() {
+        BlockState blockState = getBlockState();
+        if (!(blockState.getBlock() instanceof SqueezeBasinBlock))
+            return;
+        Direction direction = blockState.getValue(HORIZONTAL_FACING);
+        BlockEntity be = this.level.getBlockEntity(this.worldPosition.below().relative(direction));
+        InvManipulationBehaviour inserter = null;
+        if (be != null) {
+            inserter = BlockEntityBehaviour.get(this.level, be.getBlockPos(), InvManipulationBehaviour.TYPE);
+        }
+        IItemHandler targetInv = be == null ? null
+                : be.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite())
+                .orElse(inserter == null ? null : inserter.getInventory());
+
+        for (Iterator<ItemStack> iterator = spoutputBuffer.iterator(); iterator.hasNext();) {
+            ItemStack itemStack = iterator.next();
+            if (targetInv != null) {
+                if (ItemHandlerHelper.insertItemStacked(targetInv, itemStack, true).isEmpty()) {
+                    ItemHandlerHelper.insertItemStacked(targetInv, itemStack.copy(), false);
+                    iterator.remove();
+                    notifyChangeOfContents();
+                    sendData();
+                }
+            }
+        }
+    }
+
     public boolean isEmpty() {
         return this.inputInventory.isEmpty() && this.outputInventory.isEmpty();
     }
@@ -84,22 +126,20 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         behaviours.add(new DirectBeltInputBehaviour(this));
+        this.inputTank = (new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, true)).whenFluidUpdates(() -> {
+            this.contentsChanged = true;
+        });
+        behaviours.add(this.inputTank);
+        fluidCapability = LazyOptional.of(() -> {
+            LazyOptional<? extends IFluidHandler> inputCap = inputTank.getCapability();
+            return new CombinedTankWrapper(inputCap.orElse(null));
+        });
     }
 
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         this.inputInventory.deserializeNBT(compound.getCompound("InputItems"));
         this.outputInventory.deserializeNBT(compound.getCompound("OutputItems"));
-        this.preferredSpoutput = null;
-        if (compound.contains("PreferredSpoutput")) {
-            this.preferredSpoutput = (Direction)NBTHelper.readEnum(compound, "PreferredSpoutput", Direction.class);
-        }
-
-        this.disabledSpoutputs.clear();
-        ListTag disabledList = compound.getList("DisabledSpoutput", 8);
-        disabledList.forEach((d) -> {
-            this.disabledSpoutputs.add(Direction.valueOf(((StringTag)d).getAsString()));
-        });
         this.spoutputBuffer = NBTHelper.readItemList(compound.getList("Overflow", 10));
     }
 
@@ -107,15 +147,6 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         super.write(compound, clientPacket);
         compound.put("InputItems", this.inputInventory.serializeNBT());
         compound.put("OutputItems", this.outputInventory.serializeNBT());
-        if (this.preferredSpoutput != null) {
-            NBTHelper.writeEnum(compound, "PreferredSpoutput", this.preferredSpoutput);
-        }
-
-        ListTag disabledList = new ListTag();
-        this.disabledSpoutputs.forEach((d) -> {
-            disabledList.add(StringTag.valueOf(d.name()));
-        });
-        compound.put("DisabledSpoutput", disabledList);
         compound.put("Overflow", NBTHelper.writeItemList(this.spoutputBuffer));
     }
 
@@ -145,6 +176,17 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
     public void invalidate() {
         super.invalidate();
         this.itemCapability.invalidate();
+        fluidCapability.invalidate();
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER)
+            return itemCapability.cast();
+        if (cap == ForgeCapabilities.FLUID_HANDLER)
+            return fluidCapability.cast();
+        return super.getCapability(cap, side);
     }
 
     private Optional<MechanicalPressBlockEntity> getOperator() {
@@ -153,21 +195,6 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         } else {
             BlockEntity be = this.level.getBlockEntity(this.worldPosition.above(2));
             return be instanceof MechanicalPressBlockEntity ? Optional.of((MechanicalPressBlockEntity)be) : Optional.empty();
-        }
-    }
-
-    public void onWrenched(Direction face) {
-        BlockState blockState = this.getBlockState();
-        Direction currentFacing = (Direction) blockState.getValue(SqueezeBasinBlock.FACING);
-        this.disabledSpoutputs.remove(face);
-        if (currentFacing == face) {
-            if (this.preferredSpoutput == face) {
-                this.preferredSpoutput = null;
-            }
-
-            this.disabledSpoutputs.add(face);
-        } else {
-            this.preferredSpoutput = face;
         }
     }
 
