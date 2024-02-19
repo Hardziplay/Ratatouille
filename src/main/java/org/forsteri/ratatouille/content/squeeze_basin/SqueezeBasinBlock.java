@@ -20,6 +20,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,8 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-public class SqueezeBasinBlock extends Block implements IBE<SqueezeBasinBlockEntity>, IWrenchable {
-    public static final DirectionProperty FACING;
+public class SqueezeBasinBlock extends HorizontalDirectionalBlock implements IBE<SqueezeBasinBlockEntity>, IWrenchable {
     public static final BooleanProperty CASING = BooleanProperty.create("casing");
 
     public SqueezeBasinBlock(Properties pProperties) {
@@ -63,17 +63,6 @@ public class SqueezeBasinBlock extends Block implements IBE<SqueezeBasinBlockEnt
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         BlockEntity blockEntity = world.getBlockEntity(pos.above());
         return !(blockEntity instanceof MechanicalPressBlockEntity);
-    }
-
-    @Override
-    public InteractionResult onWrenched(BlockState state, UseOnContext context) {
-        if (!context.getLevel().isClientSide) {
-            this.withBlockEntityDo(context.getLevel(), context.getClickedPos(), (bte) -> {
-                bte.onWrenched(context.getClickedFace());
-            });
-        }
-
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -118,9 +107,5 @@ public class SqueezeBasinBlock extends Block implements IBE<SqueezeBasinBlockEnt
 
         DirectBeltInputBehaviour directBeltInputBehaviour = (DirectBeltInputBehaviour) BlockEntityBehaviour.get(world, output, DirectBeltInputBehaviour.TYPE);
         return directBeltInputBehaviour != null ? directBeltInputBehaviour.canInsertFromSide(direction) : false;
-    }
-
-    static {
-        FACING = BlockStateProperties.FACING_HOPPER;
     }
 }
