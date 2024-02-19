@@ -18,6 +18,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,8 @@ import java.util.function.Supplier;
 
 public enum CRRecipeTypes implements IRecipeTypeInfo {
 
-    THRESHING(ThreshingRecipe::new);
+    THRESHING(ThreshingRecipe::new),
+    SQUEEZING(SqueezingRecipe::new);
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
     private final @Nullable RegistryObject<RecipeType<?>> typeObject;
