@@ -52,10 +52,7 @@ public class SqueezeBasinInstance extends BlockEntityInstance<SqueezeBasinBlockE
             PressingBehaviour pressingBehaviour = be.getOperator().get().getPressingBehaviour();
             float offset = pressingBehaviour.getRenderedHeadOffset(AnimationTickHolder.getPartialTicks())
                     * pressingBehaviour.mode.headOffset - 1;
-            if (offset <= 0) {
-                return 0.001F;
-            }
-            return offset;
+            return Math.max(0, offset);
         }
     }
 

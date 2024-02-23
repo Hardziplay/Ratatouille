@@ -7,10 +7,17 @@ import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import net.minecraft.core.Direction;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
 import org.forsteri.ratatouille.entry.CRBlocks;
 import org.forsteri.ratatouille.entry.CRPartialModels;
 
 public class AnimatedSqueeze extends AnimatedKinetics {
+    private boolean useCasing = false;
+
+    public void setUseCasing(boolean useCasing) {
+        this.useCasing = useCasing;
+    }
+
     @Override
     public void draw(PoseStack matrixStack, int xOffset, int yOffset) {
         matrixStack.pushPose();
@@ -33,7 +40,7 @@ public class AnimatedSqueeze extends AnimatedKinetics {
                 .scale(scale)
                 .render(matrixStack);
 
-        blockElement(CRBlocks.SQUEEZE_BASIN.getDefaultState())
+        blockElement(CRBlocks.SQUEEZE_BASIN.getDefaultState().setValue(SqueezeBasinBlock.CASING, useCasing))
                 .atLocal(0, 1.65, 0)
                 .scale(scale)
                 .render(matrixStack);
@@ -60,10 +67,7 @@ public class AnimatedSqueeze extends AnimatedKinetics {
     }
 
     private float getAnimatedCoverOffset() {
-        float offset = getAnimatedHeadOffset() - 1;
-        if (offset <= 0) {
-            return 0.001F;
-        }
-        return offset;
+        float offset = getAnimatedHeadOffset() - 1F;
+        return Math.min(-1.65F, offset);
     }
 }

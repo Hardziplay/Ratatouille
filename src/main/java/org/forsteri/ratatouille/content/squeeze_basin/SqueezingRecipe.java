@@ -49,6 +49,15 @@ public class SqueezingRecipe extends ProcessingRecipe<SmartInventory> {
         return useCasing;
     }
 
+    public boolean useCasing() {
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient.test(CRItems.SAUSAGE_CASING.asStack())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean match(@NotNull SqueezeBasinBlockEntity be, boolean hasCasing) {
         if (be.getOperator().isEmpty())
             return false;
@@ -59,13 +68,7 @@ public class SqueezingRecipe extends ProcessingRecipe<SmartInventory> {
         if (be.inputInventory == null || inputTank == null)
             return false;
 
-        boolean useCasing = false;
-        for (Ingredient ingredient : ingredients) {
-            if (ingredient.test(CRItems.SAUSAGE_CASING.asStack())) {
-                useCasing = true;
-                break;
-            }
-        }
+        boolean useCasing = useCasing();
         if (useCasing != hasCasing)
             return false;
         if (useCasing && ingredients.size() == 1) {

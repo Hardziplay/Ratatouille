@@ -136,13 +136,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         }
 
 
-        boolean useCasing = false;
-        for (Ingredient ingredient : this.lastRecipe.getIngredients()) {
-            if (ingredient.test(CRItems.SAUSAGE_CASING.asStack())) {
-                useCasing = true;
-                break;
-            }
-        }
+        boolean useCasing = this.lastRecipe.useCasing();
         if (useCasing != getBlockState().getValue(CASING))
             return;
 

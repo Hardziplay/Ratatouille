@@ -58,7 +58,7 @@ public class RatatouilleJei implements IModPlugin {
             .catalyst(AllBlocks.MECHANICAL_PRESS::get)
             .catalyst(CRBlocks.SQUEEZE_BASIN::get)
             .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), CRBlocks.SQUEEZE_BASIN.get())
-            .emptyBackground(177, 53)
+            .emptyBackground(177, 103)
             .build("squeezing", SqueezingCategory::new);
 
     public RatatouilleJei() {}
