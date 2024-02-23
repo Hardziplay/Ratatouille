@@ -16,7 +16,7 @@ public class SqueezingRecipeGen extends ProcessingRecipeGen{
 
         RAW_PASTA = this.create("raw_pasta", b -> b.require(CRItems.SALTY_DOUGH.get())
                 .duration(200)
-                .output(Items.BEDROCK));
+                .output(vectorwing.farmersdelight.common.registry.ModItems.RAW_PASTA.get()));
 
     public SqueezingRecipeGen(DataGenerator generator) {
         super(generator);
