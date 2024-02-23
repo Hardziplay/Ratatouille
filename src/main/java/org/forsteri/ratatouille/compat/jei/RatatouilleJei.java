@@ -1,5 +1,6 @@
 package org.forsteri.ratatouille.compat.jei;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
 import com.simibubi.create.compat.jei.DoubleItemIcon;
@@ -23,7 +24,9 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.compat.jei.category.SqueezingCategory;
 import org.forsteri.ratatouille.compat.jei.category.ThreshingCategory;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.entry.CRBlocks;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
@@ -49,6 +52,14 @@ public class RatatouilleJei implements IModPlugin {
             .itemIcon(CRBlocks.THRESHER.get())
             .emptyBackground(177, 53)
             .build("threshing", ThreshingCategory::new);
+
+    final CreateRecipeCategory<?> squeezing = builder(SqueezingRecipe.class)
+            .addTypedRecipes(CRRecipeTypes.SQUEEZING::getType)
+            .catalyst(AllBlocks.MECHANICAL_PRESS::get)
+            .catalyst(CRBlocks.SQUEEZE_BASIN::get)
+            .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), CRBlocks.SQUEEZE_BASIN.get())
+            .emptyBackground(177, 53)
+            .build("squeezing", SqueezingCategory::new);
 
     public RatatouilleJei() {}
 
