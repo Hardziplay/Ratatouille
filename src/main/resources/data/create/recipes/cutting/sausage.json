@@ -2,7 +2,7 @@
   "type": "create:cutting",
   "ingredients": [
     {
-      "item": "create:slime_ball"
+      "item": "minecraft:slime_ball"
     }
   ],
   "results": [
