@@ -1,9 +1,11 @@
 package org.forsteri.ratatouille.content.squeeze_basin;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
+import com.simibubi.create.content.kinetics.press.MechanicalPressBlock;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.fluid.FluidHelper;
@@ -17,9 +19,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -49,7 +54,17 @@ public class SqueezeBasinBlock extends HorizontalDirectionalBlock implements IBE
         ItemStack heldItem = pPlayer.getItemInHand(pHand);
         return this.onBlockEntityUse(pLevel, pPos, (be) -> {
             if (!heldItem.isEmpty()) {
-                if (heldItem.is(CRItems.SAUSAGE_CASING.get()) && !pState.getValue(CASING)) {
+                if (heldItem.is(AllBlocks.MECHANICAL_PRESS.get().asItem())) {
+                    BlockPos presserPos = pPos.above(2);
+                    if (pLevel.getBlockState(presserPos).getBlock() instanceof AirBlock) {
+                        pLevel.setBlockAndUpdate(presserPos, AllBlocks.MECHANICAL_PRESS.get().getStateForPlacement(new BlockPlaceContext(new UseOnContext(pPlayer, pHand, pHit.withPosition(presserPos)))));
+                        if (!pPlayer.isCreative())
+                            heldItem.shrink(1);
+                        return InteractionResult.SUCCESS;
+                    } else {
+                        return InteractionResult.FAIL;
+                    }
+                } else if (heldItem.is(CRItems.SAUSAGE_CASING.get()) && !pState.getValue(CASING)) {
                     heldItem.shrink(1);
                     pLevel.setBlockAndUpdate(pPos, pState.setValue(CASING, true));
                     return InteractionResult.SUCCESS;
