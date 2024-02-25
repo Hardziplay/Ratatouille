@@ -22,11 +22,6 @@ public class SqueezingRecipe extends ProcessingRecipe<SmartInventory> {
     }
 
     @Override
-    protected boolean canSpecifyDuration() {
-        return true;
-    }
-
-    @Override
     protected int getMaxFluidInputCount() {
         return 1;
     }

@@ -11,11 +11,9 @@ public class SqueezingRecipeGen extends ProcessingRecipeGen{
     GeneratedRecipe
         RAW_SAUSAGE = this.create("raw_sausage", b -> b.require(CRFluids.MINCE_MEAT.get(), 1000)
             .require(CRItems.SAUSAGE_CASING.get())
-            .duration(200)
             .output(CRItems.RAW_SAUSAGE.get())),
 
         RAW_PASTA = this.create("raw_pasta", b -> b.require(CRItems.SALTY_DOUGH.get())
-                .duration(200)
                 .output(vectorwing.farmersdelight.common.registry.ModItems.RAW_PASTA.get()));
 
     public SqueezingRecipeGen(DataGenerator generator) {

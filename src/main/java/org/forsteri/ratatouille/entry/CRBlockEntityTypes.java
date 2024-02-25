@@ -1,7 +1,11 @@
 package org.forsteri.ratatouille.entry;
 
+import com.simibubi.create.content.kinetics.press.PressInstance;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.demoulder.DemolderInstance;
+import org.forsteri.ratatouille.content.demoulder.MechanicalDemolderBlock;
+import org.forsteri.ratatouille.content.demoulder.MechanicalDemolderBlockEntity;
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import org.forsteri.ratatouille.content.oven.OvenRenderer;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
@@ -38,5 +42,12 @@ public class CRBlockEntityTypes {
             .instance(() -> SqueezeBasinInstance::new)
             .validBlock(CRBlocks.SQUEEZE_BASIN)
             .register();
+
+    public static final BlockEntityEntry<MechanicalDemolderBlockEntity> MECHANICAL_DEMOLDER_ENTITY = Ratatouille.REGISTRATE
+            .blockEntity("mechanical_demolder", MechanicalDemolderBlockEntity::new)
+            .instance(() -> DemolderInstance::new)
+            .validBlock(CRBlocks.MECHANICAL_DEMOLDER)
+            .register();
+
     public static void register() {}
 }

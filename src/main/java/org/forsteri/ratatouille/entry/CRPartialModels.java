@@ -9,6 +9,8 @@ public class CRPartialModels {
     public static final PartialModel THRESHER_BLADE = of("block/thresher/partial");
     public static final PartialModel OVEN_FAN_BLADE = of("block/oven_fan/partial");
     public static final PartialModel SQUEEZE_BASIN_COVER = of("block/squeeze_basin/partial");
+    public static final PartialModel MECHANICAL_DEMOLDER_HEAD = of("block/mechanical_demolder/head");
+
     private static PartialModel of(@SuppressWarnings("SameParameterValue") String path) {
         return new PartialModel(new ResourceLocation(Ratatouille.MOD_ID, path));
     }

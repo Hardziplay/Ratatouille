@@ -46,7 +46,6 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
     protected LazyOptional<IFluidHandler> fluidCapability;
     private boolean contentsChanged;
     int recipeBackupCheck;
-    public int timer;
     public SqueezingRecipe lastRecipe;
 
     public SqueezeBasinBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -79,36 +78,27 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
             tryClearingSpoutputOverflow();
         if (contentsChanged)
             contentsChanged = false;
-        if (getOperator().isEmpty() || getProcessingSpeed() == 0.0F)
+        if (getOperator().isEmpty() || getProcessingSpeed() == 0.0F || level.isClientSide)
             return;
-
         if (!outputInventory.isEmpty())
             return;
 
-        if (timer > 0) {
-            timer -= (int) getProcessingSpeed();
-            if (level.isClientSide) {
-                return;
-            }
-            if (timer <= 0)
-                process();
+        PressingBehaviour behaviour = getOperator().get().getPressingBehaviour();
+        if (behaviour.runningTicks == PressingBehaviour.CYCLE / 2)
+            process();
+        if (behaviour.running)
             return;
-        }
 
         if (inputInventory.getStackInSlot(0).isEmpty() && inputTank.isEmpty()) return;
         if (lastRecipe == null || !lastRecipe.match(this, getBlockState().getValue(CASING))) {
             Optional<SqueezingRecipe> recipe = CRRecipeTypes.SQUEEZING.find(inputInventory, level);
-            if (recipe.isEmpty()) {
-                timer = 100;
-            } else {
+            if (!recipe.isEmpty()) {
                 lastRecipe = (SqueezingRecipe) recipe.get();
-                timer = lastRecipe.getProcessingDuration();
                 if (lastRecipe.match(this, getBlockState().getValue(CASING)))
                     getOperator().ifPresent(be -> be.pressingBehaviour.start(PressingBehaviour.Mode.BASIN));
             }
             sendData();
         } else {
-            timer = lastRecipe.getProcessingDuration();
             if (lastRecipe.match(this, getBlockState().getValue(CASING)))
                 getOperator().ifPresent(be -> be.pressingBehaviour.start(PressingBehaviour.Mode.BASIN));
             sendData();
@@ -199,14 +189,12 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
 
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        this.timer = compound.getInt("Timer");
         this.inputInventory.deserializeNBT(compound.getCompound("InputItems"));
         this.outputInventory.deserializeNBT(compound.getCompound("OutputItems"));
     }
 
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
-        compound.putInt("Timer", this.timer);
         compound.put("InputItems", this.inputInventory.serializeNBT());
         compound.put("OutputItems", this.outputInventory.serializeNBT());
     }

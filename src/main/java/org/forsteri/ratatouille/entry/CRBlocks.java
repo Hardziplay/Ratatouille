@@ -1,5 +1,7 @@
 package org.forsteri.ratatouille.entry;
 
+import com.simibubi.create.content.kinetics.BlockStressDefaults;
+import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -10,11 +12,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.MaterialColor;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.demoulder.MechanicalDemolderBlock;
+import org.forsteri.ratatouille.content.demoulder.MechanicalDemolderBlockEntity;
 import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinGenerator;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;
+
+import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 public class CRBlocks {
@@ -75,6 +81,19 @@ public class CRBlocks {
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/squeeze_basin/item")))
             .build()
+            .register();
+
+    @SuppressWarnings("removal")
+    public static final BlockEntry<MechanicalDemolderBlock> MECHANICAL_DEMOLDER = Ratatouille.REGISTRATE
+            .block("mechanical_demolder", MechanicalDemolderBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.noOcclusion().color(MaterialColor.PODZOL))
+            .transform(pickaxeOnly())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .transform(BlockStressDefaults.setImpact(8.0))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item(AssemblyOperatorBlockItem::new)
+            .transform(customItemModel())
             .register();
 
     //public static final BlockEntry<Block> SUGAR_BLOCK = Ratatouille.REGISTRATE
