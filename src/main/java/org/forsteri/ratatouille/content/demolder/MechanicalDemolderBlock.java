@@ -1,12 +1,10 @@
-package org.forsteri.ratatouille.content.demoulder;
+package org.forsteri.ratatouille.content.demolder;
 
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
-import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -14,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 

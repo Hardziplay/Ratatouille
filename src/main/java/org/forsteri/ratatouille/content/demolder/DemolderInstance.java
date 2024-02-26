@@ -1,4 +1,4 @@
-package org.forsteri.ratatouille.content.demoulder;
+package org.forsteri.ratatouille.content.demolder;
 
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.DynamicInstance;

@@ -1,11 +1,9 @@
 package org.forsteri.ratatouille.entry;
 
-import com.simibubi.create.content.kinetics.press.PressInstance;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.content.demoulder.DemolderInstance;
-import org.forsteri.ratatouille.content.demoulder.MechanicalDemolderBlock;
-import org.forsteri.ratatouille.content.demoulder.MechanicalDemolderBlockEntity;
+import org.forsteri.ratatouille.content.demolder.DemolderInstance;
+import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlockEntity;
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import org.forsteri.ratatouille.content.oven.OvenRenderer;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
