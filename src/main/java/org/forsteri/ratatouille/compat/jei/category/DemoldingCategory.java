@@ -10,6 +10,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedDemolder;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
+import org.forsteri.ratatouille.entry.CRTags;
 
 import java.util.List;
 
@@ -30,10 +31,18 @@ public class DemoldingCategory extends CreateRecipeCategory<DemoldingRecipe> {
         List<ProcessingOutput> results = recipe.getRollableResults();
         int i = 0;
         for (ProcessingOutput output : results) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 50)
-                    .setBackground(getRenderedSlot(output), -1, -1)
-                    .addItemStack(output.getStack())
-                    .addTooltipCallback(addStochasticTooltip(output));
+            if (output.getStack().is(CRTags.MOLD)) {
+                builder.addSlot(RecipeIngredientRole.OUTPUT, 104, 1)
+                        .setBackground(getRenderedSlot(output), -1, -1)
+                        .addItemStack(output.getStack())
+                        .addTooltipCallback(addStochasticTooltip(output));
+            } else {
+                builder.addSlot(RecipeIngredientRole.OUTPUT, 131, 50)
+                        .setBackground(getRenderedSlot(output), -1, -1)
+                        .addItemStack(output.getStack())
+                        .addTooltipCallback(addStochasticTooltip(output));
+
+            }
             i++;
         }
     }
