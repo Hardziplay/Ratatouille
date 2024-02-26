@@ -40,6 +40,7 @@ public class Ratatouille {
         CRFluids.register();
         CRCreativeModeTabs.register();
         CRBlockEntityTypes.register();
+        CRTags.register();
         CRRecipeTypes.register(modEventBus);
         modEventBus.addListener(EventPriority.LOWEST, RataouilleDataGen::gatherData);
     }

@@ -1,32 +1,46 @@
 package org.forsteri.ratatouille.content.demolder;
 
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
+import org.forsteri.ratatouille.entry.CRRecipeTypes;
+import org.forsteri.ratatouille.entry.CRTags;
 
 import java.util.List;
 import java.util.Optional;
 
 public class MechanicalDemolderBlockEntity extends KineticBlockEntity  implements PressingBehaviour.PressingBehaviourSpecifics {
 
+    public ItemStackHandler outputInv;
+    public LazyOptional<IItemHandler> capability;
     public PressingBehaviour demoldingBehaviour;
 
     public MechanicalDemolderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        this.outputInv = new ItemStackHandler(1);
+        this.capability = LazyOptional.of(MechanicalDemolderBlockEntity.DemolderInventoryHandler::new);
     }
 
     @Override
@@ -48,19 +62,23 @@ public class MechanicalDemolderBlockEntity extends KineticBlockEntity  implement
 
     private static final RecipeWrapper demoldingInv = new RecipeWrapper(new ItemStackHandler(1));
 
-    public Optional<PressingRecipe> getRecipe(ItemStack item) {
-        Optional<PressingRecipe> assemblyRecipe =
-                SequencedAssemblyRecipe.getRecipe(level, item, AllRecipeTypes.PRESSING.getType(), PressingRecipe.class);
+    public Optional<DemoldingRecipe> getRecipe(ItemStack item) {
+        Optional<DemoldingRecipe> assemblyRecipe =
+                SequencedAssemblyRecipe.getRecipe(level, item, CRRecipeTypes.DEMOLDING.getType(), DemoldingRecipe.class);
         if (assemblyRecipe.isPresent())
             return assemblyRecipe;
 
         demoldingInv.setItem(0, item);
-        return AllRecipeTypes.PRESSING.find(demoldingInv, level);
+        return CRRecipeTypes.DEMOLDING.find(demoldingInv, level);
     }
 
     @Override
     public boolean tryProcessOnBelt(TransportedItemStack input, List<ItemStack> outputList, boolean simulate) {
-        Optional<PressingRecipe> recipe = getRecipe(input.stack);
+        for (int i = 0; i < this.outputInv.getSlots(); i++)
+            if (this.outputInv.getStackInSlot(i).getCount() == this.outputInv.getSlotLimit(i))
+                return false;
+
+        Optional<DemoldingRecipe> recipe = getRecipe(input.stack);
         if (!recipe.isPresent())
             return false;
         if (simulate)
@@ -69,8 +87,47 @@ public class MechanicalDemolderBlockEntity extends KineticBlockEntity  implement
         List<ItemStack> outputs = RecipeApplier.applyRecipeOn(
                 canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
 
-        outputList.addAll(outputs);
+        for (ItemStack itemStack : outputs) {
+            if (!itemStack.is(CRTags.MOLD)) {
+                outputList.add(itemStack);
+            } else {
+                if (outputInv.insertItem(0, itemStack.copy(), true).isEmpty()) {
+                    outputInv.insertItem(0, itemStack.copy(), false);
+                    return true;
+                } else {
+                    return false;
+                }
+
+            }
+        }
         return true;
+    }
+
+    public void invalidate() {
+        super.invalidate();
+        this.capability.invalidate();
+    }
+
+    public void destroy() {
+        super.destroy();
+        ItemHelper.dropContents(this.level, this.worldPosition, this.outputInv);
+    }
+
+    public void write(CompoundTag compound, boolean clientPacket) {
+        compound.put("OutputInventory", this.outputInv.serializeNBT());
+        super.write(compound, clientPacket);
+    }
+
+    protected void read(CompoundTag compound, boolean clientPacket) {
+        this.outputInv.deserializeNBT(compound.getCompound("OutputInventory"));
+        super.read(compound, clientPacket);
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (isItemHandlerCap(cap))
+            return capability.cast();
+        return super.getCapability(cap, side);
     }
 
     @Override
@@ -101,5 +158,26 @@ public class MechanicalDemolderBlockEntity extends KineticBlockEntity  implement
     @Override
     public boolean canProcessInBulk() {
         return false;
+    }
+
+    private class DemolderInventoryHandler extends CombinedInvWrapper {
+        public DemolderInventoryHandler() {
+            super(new IItemHandlerModifiable[]{MechanicalDemolderBlockEntity.this.outputInv});
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return false;
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            return stack;
+        }
+
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return super.extractItem(slot, amount, simulate);
+        }
     }
 }

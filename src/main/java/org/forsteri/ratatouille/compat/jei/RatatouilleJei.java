@@ -1,12 +1,15 @@
 package org.forsteri.ratatouille.compat.jei;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
 import com.simibubi.create.compat.jei.DoubleItemIcon;
 import com.simibubi.create.compat.jei.EmptyBackground;
 import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+import com.simibubi.create.compat.jei.category.PressingCategory;
+import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
@@ -24,11 +27,14 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.compat.jei.category.DemoldingCategory;
 import org.forsteri.ratatouille.compat.jei.category.SqueezingCategory;
 import org.forsteri.ratatouille.compat.jei.category.ThreshingCategory;
+import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.entry.CRBlocks;
+import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +66,12 @@ public class RatatouilleJei implements IModPlugin {
             .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), CRBlocks.SQUEEZE_BASIN.get())
             .emptyBackground(177, 103)
             .build("squeezing", SqueezingCategory::new);
+
+    final CreateRecipeCategory<?> demolding = builder(DemoldingRecipe.class)
+            .addTypedRecipes(CRRecipeTypes.DEMOLDING::getType)
+            .catalyst(CRBlocks.MECHANICAL_DEMOLDER::get)
+            .emptyBackground(177, 70)
+            .build("demolding", DemoldingCategory::new);
 
     public RatatouilleJei() {}
 
