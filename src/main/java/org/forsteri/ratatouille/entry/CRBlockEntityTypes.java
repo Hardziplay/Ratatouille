@@ -4,6 +4,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.demolder.DemolderInstance;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlockEntity;
+import org.forsteri.ratatouille.content.demolder.MechanicalDemolderRenderer;
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import org.forsteri.ratatouille.content.oven.OvenRenderer;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
@@ -45,6 +46,7 @@ public class CRBlockEntityTypes {
             .blockEntity("mechanical_demolder", MechanicalDemolderBlockEntity::new)
             .instance(() -> DemolderInstance::new)
             .validBlock(CRBlocks.MECHANICAL_DEMOLDER)
+            .renderer(() -> MechanicalDemolderRenderer::new)
             .register();
 
     public static void register() {}

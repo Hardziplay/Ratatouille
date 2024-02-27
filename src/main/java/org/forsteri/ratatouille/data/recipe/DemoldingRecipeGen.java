@@ -14,7 +14,7 @@ public class DemoldingRecipeGen extends ProcessingRecipeGen{
                     .output(CRItems.CHOCOLATE_MOLD.get())
         ),
         CAKE_BASE = this.create(
-            CRItems.CAKE_MOLD_filled::get,
+            CRItems.CAKE_MOLD_BAKED::get,
             b -> b.output(CRItems.CAKE_BASE.get())
                     .output(CRItems.CAKE_MOLD.get())
         );
