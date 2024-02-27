@@ -15,7 +15,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 
-public class MechanicalDemolderBlock  extends HorizontalKineticBlock implements IBE<MechanicalDemolderBlockEntity> {
+public class MechanicalDemolderBlock extends HorizontalKineticBlock implements IBE<MechanicalDemolderBlockEntity> {
 
     public MechanicalDemolderBlock(Properties properties) {
         super(properties);

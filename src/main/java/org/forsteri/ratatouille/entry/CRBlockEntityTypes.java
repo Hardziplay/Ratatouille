@@ -5,6 +5,8 @@ import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.demolder.DemolderInstance;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlockEntity;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderRenderer;
+import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlockEntity;
+import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerRenderer;
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import org.forsteri.ratatouille.content.oven.OvenRenderer;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
@@ -47,6 +49,12 @@ public class CRBlockEntityTypes {
             .instance(() -> DemolderInstance::new)
             .validBlock(CRBlocks.MECHANICAL_DEMOLDER)
             .renderer(() -> MechanicalDemolderRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<IrrigationTowerBlockEntity> IRRIGATION_TOWER_BLOCK_ENTITY = Ratatouille.REGISTRATE
+            .blockEntity("irrigation_tower", IrrigationTowerBlockEntity::new)
+            .validBlock(CRBlocks.IRRIGATION_TOWER_BLOCK)
+            .renderer(() -> IrrigationTowerRenderer::new)
             .register();
 
     public static void register() {}

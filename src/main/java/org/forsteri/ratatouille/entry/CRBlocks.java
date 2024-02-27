@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.MaterialColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
+import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
 import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
@@ -92,6 +93,19 @@ public class CRBlocks {
             .addLayer(() -> RenderType::cutoutMipped)
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
+            .register();
+
+    @SuppressWarnings("removal")
+    public static final BlockEntry<IrrigationTowerBlock> IRRIGATION_TOWER_BLOCK = Ratatouille.REGISTRATE
+            .block("irrigation_tower", IrrigationTowerBlock::new)
+            .initialProperties(SharedProperties::copperMetal)
+            .properties(p -> p.noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
+            .transform(pickaxeOnly())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item()
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/irrigation_tower/item")))
+            .build()
             .register();
 
     //public static final BlockEntry<Block> SUGAR_BLOCK = Ratatouille.REGISTRATE
