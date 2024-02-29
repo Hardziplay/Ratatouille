@@ -54,7 +54,7 @@ public class IrrigationTowerRenderer extends SafeBlockEntityRenderer<IrrigationT
         }
 
         float zMin = tankHullWidth + 2/16F;
-        float zMax = zMin + be.getWidth() - 2 * tankHullWidth - 3/16F;
+        float zMax = zMin + be.getWidth() - 2 * tankHullWidth - 4/16F;
 
         ms.pushPose();
         ms.translate(0, clampedLevel - totalHeight, 0);
