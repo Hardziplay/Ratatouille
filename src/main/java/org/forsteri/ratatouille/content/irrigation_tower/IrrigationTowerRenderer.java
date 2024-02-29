@@ -45,7 +45,7 @@ public class IrrigationTowerRenderer extends SafeBlockEntityRenderer<IrrigationT
 
         float xMin = tankHullWidth;
         float xMax = xMin + be.getWidth() - 2 * tankHullWidth;
-        float yMin = totalHeight + capHeight + minPuddleHeight - clampedLevel + 1/16F;
+        float yMin = totalHeight + capHeight + minPuddleHeight - clampedLevel + 3/16F;
         float yMax = yMin + clampedLevel  + 6/16F;
 
         if (top) {
