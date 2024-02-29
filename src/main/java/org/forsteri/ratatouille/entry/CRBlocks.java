@@ -15,6 +15,8 @@ import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
 import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
+import org.forsteri.ratatouille.content.spreader.SpreaderBlock;
+import org.forsteri.ratatouille.content.spreader.SpreaderBlockEntity;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinGenerator;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;
@@ -105,6 +107,20 @@ public class CRBlocks {
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/irrigation_tower/item")))
+            .build()
+            .register();
+
+    @SuppressWarnings("removal")
+    public static final BlockEntry<SpreaderBlock> SPREADER_BLOCK = Ratatouille.REGISTRATE
+            .block("spreader", SpreaderBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.noOcclusion().color(MaterialColor.PODZOL))
+            .transform(pickaxeOnly())
+            .transform(BlockStressDefaults.setImpact(2.0))
+            .blockstate(BlockStateGen.directionalBlockProvider(true))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item()
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/spreader/item")))
             .build()
             .register();
 

@@ -12,6 +12,9 @@ import org.forsteri.ratatouille.content.oven.OvenRenderer;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanInstance;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanRenderer;
+import org.forsteri.ratatouille.content.spreader.SpreaderBlockEntity;
+import org.forsteri.ratatouille.content.spreader.SpreaderInstance;
+import org.forsteri.ratatouille.content.spreader.SpreaderRenderer;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlockEntity;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinInstance;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
@@ -55,6 +58,13 @@ public class CRBlockEntityTypes {
             .blockEntity("irrigation_tower", IrrigationTowerBlockEntity::new)
             .validBlock(CRBlocks.IRRIGATION_TOWER_BLOCK)
             .renderer(() -> IrrigationTowerRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<SpreaderBlockEntity> SPREADER_BLOCK_ENTITY = Ratatouille.REGISTRATE
+            .blockEntity("spreader", SpreaderBlockEntity::new)
+            .instance(() -> SpreaderInstance::new)
+            .validBlock(CRBlocks.SPREADER_BLOCK)
+            .renderer(() -> SpreaderRenderer::new)
             .register();
 
     public static void register() {}
