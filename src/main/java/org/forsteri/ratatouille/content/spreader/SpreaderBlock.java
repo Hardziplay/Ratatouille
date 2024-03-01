@@ -1,20 +1,41 @@
 package org.forsteri.ratatouille.content.spreader;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.Create;
+import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
+import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.content.logistics.chute.AbstractChuteBlock;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
+import org.forsteri.ratatouille.entry.CRItems;
+import org.jetbrains.annotations.NotNull;
 
 public class SpreaderBlock extends DirectionalKineticBlock implements IBE<SpreaderBlockEntity> {
     public SpreaderBlock(Properties properties) {
@@ -27,6 +48,36 @@ public class SpreaderBlock extends DirectionalKineticBlock implements IBE<Spread
         super.onPlace(state, worldIn, pos, oldState, isMoving);
         blockUpdate(state, worldIn, pos);
     }
+
+//    @Override
+//    public @NotNull InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+//        ItemStack heldItem = pPlayer.getItemInHand(pHand);
+//        return this.onBlockEntityUse(pLevel, pPos, (be) -> {
+//            if (!heldItem.isEmpty()) {
+//                if (GenericItemEmptying.canItemBeEmptied(pLevel, heldItem)
+//                        || GenericItemFilling.canItemBeFilled(pLevel, heldItem))
+//                    return InteractionResult.SUCCESS;
+//                return InteractionResult.PASS;
+//            } else {
+//                IItemHandlerModifiable inv = (IItemHandlerModifiable)be.capability.orElse(new ItemStackHandler(1));
+//                boolean success = false;
+//
+//                for(int slot = 0; slot < inv.getSlots(); ++slot) {
+//                    ItemStack stackInSlot = inv.getStackInSlot(slot);
+//                    if (!stackInSlot.isEmpty()) {
+//                        pPlayer.getInventory().placeItemBackInInventory(stackInSlot);
+//                        inv.setStackInSlot(slot, ItemStack.EMPTY);
+//                        success = true;
+//                    }
+//                }
+//
+//                if (success) {
+//                    pLevel.playSound((Player)null, pPos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, 1.0F + Create.RANDOM.nextFloat());
+//                }
+//                return InteractionResult.SUCCESS;
+//            }
+//        });
+//    }
 
     @Override
     public void updateIndirectNeighbourShapes(BlockState stateIn, LevelAccessor worldIn, BlockPos pos, int flags, int count) {

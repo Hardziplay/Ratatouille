@@ -4,21 +4,45 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
+import com.simibubi.create.content.kinetics.fan.NozzleBlockEntity;
 import com.simibubi.create.content.logistics.chute.ChuteBlockEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.GrassBlock;
+import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
+import java.util.ArrayList;
+
+import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
+
 public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurrentSource {
+    public int timer;
+    public ItemStackHandler inventory;
+    public LazyOptional<IItemHandler> capability;
     public AirCurrent airCurrent;
     protected int airCurrentUpdateCooldown;
     protected int entitySearchCooldown;
@@ -28,6 +52,14 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         super(type, pos, state);
         airCurrent = new AirCurrent(this);
         updateAirFlow = true;
+        timer = 1000;
+        this.inventory = new ItemStackHandler(1);
+        this.capability = LazyOptional.of(SpreaderBlockEntity.SpreaderInventoryHandler::new);
+    }
+
+    public void invalidate() {
+        super.invalidate();
+        this.capability.invalidate();
     }
 
     @Override
@@ -35,11 +67,27 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         super.read(compound, clientPacket);
         if (clientPacket)
             airCurrent.rebuild();
+        this.timer = compound.getInt("Timer");
+        this.inventory.deserializeNBT(compound.getCompound("Inventory"));
     }
 
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
+        compound.putInt("Timer", this.timer);
+        compound.put("Inventory", this.inventory.serializeNBT());
+    }
+
+    @Override
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
+        if (isItemHandlerCap(cap))
+            return capability.cast();
+        return super.getCapability(cap, side);
+    }
+
+    public void destroy() {
+        super.destroy();
+        ItemHelper.dropContents(this.level, this.worldPosition, this.inventory);
     }
 
     @Override
@@ -61,7 +109,7 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
     @Override
     public Direction getAirflowOriginSide() {
         return this.getBlockState()
-                .getValue(EncasedFanBlock.FACING);
+                .getValue(FACING);
     }
 
     @Override
@@ -93,7 +141,7 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
     }
 
     public void updateChute() {
-        Direction direction = getBlockState().getValue(EncasedFanBlock.FACING);
+        Direction direction = getBlockState().getValue(FACING);
         if (!direction.getAxis()
                 .isVertical())
             return;
@@ -111,6 +159,35 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         updateAirFlow = true;
     }
 
+    public int getProcessingSpeed() {
+        return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
+    }
+
+    public int getProcessingLevel() {
+        int speed = getProcessingSpeed();
+        if (1 <= speed && speed < 4) {
+            return 2;
+        } else if (4 <= speed && speed < 8) {
+            return 3;
+        } else if (8 <= speed && speed < 12) {
+            return 4;
+        } else {
+            return 5;
+        }
+    }
+
+    public void addCorpBuffer(ArrayList<BlockPos> corps, BlockPos corpPos) {
+        BlockState corpState = level.getBlockState(corpPos);
+        if (!(corpState.getBlock() instanceof AirBlock)
+            && !(corpState.getBlock() instanceof GrassBlock)
+            && !(corpState.getBlock() instanceof TallGrassBlock)
+            && corpState.getBlock() instanceof BonemealableBlock growable
+            && growable.isValidBonemealTarget(level, corpPos, corpState, false)
+        ) {
+            corps.add(corpPos);
+        }
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -125,8 +202,6 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         if (updateAirFlow) {
             updateAirFlow = false;
             airCurrent.rebuild();
-            if (airCurrent.maxDistance > 0)
-                award(AllAdvancements.ENCASED_FAN);
             sendData();
         }
 
@@ -139,5 +214,57 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         }
 
         airCurrent.tick();
+
+        if (!level.isClientSide && !inventory.getStackInSlot(0).isEmpty() && level.getServer() != null) {
+            if (timer > 0) {
+                timer -= getProcessingSpeed();
+            } else {
+                timer = 1000;
+                inventory.getStackInSlot(0).shrink(1);
+                ArrayList<BlockPos> corps = new ArrayList<>();
+                BlockPos nozzlePos = getBlockPos().relative(getBlockState().getValue(FACING));
+
+                if (level.getBlockEntity(nozzlePos) instanceof NozzleBlockEntity) {
+                    float range = getMaxDistance() / 2;
+                    for (BlockPos corpPos : BlockPos.betweenClosed(nozzlePos.offset(-range, -range, -range), nozzlePos.offset(range, range, range))) {
+                        addCorpBuffer(corps, new BlockPos(corpPos));
+                    }
+                } else {
+                    for (int i = 1; i < Mth.floor(airCurrent.maxDistance); i++) {
+                        BlockPos corpPos = getBlockPos().relative(airCurrent.direction, i);
+                        addCorpBuffer(corps, corpPos);
+                    }
+                }
+
+                if (!corps.isEmpty()) {
+                    int count = getProcessingLevel();
+                    while (count > 0) {
+                        BlockPos corpPos = corps.get(level.random.nextInt(0, corps.size()));
+                        BlockState corpState = level.getBlockState(corpPos);
+                        if (corpState.getBlock() instanceof BonemealableBlock growable
+                                && growable.isValidBonemealTarget(level, corpPos, corpState, false)
+                                && ForgeHooks.onCropsGrowPre(level, corpPos, corpState, true)
+                        ) {
+                            growable.performBonemeal(level.getServer().overworld(), level.random, corpPos, corpState);
+                            level.levelEvent(2005, corpPos, 0);
+                            ForgeHooks.onCropsGrowPost(level, corpPos, corpState);
+                        }
+                        count--;
+                    }
+                }
+            }
+        }
+    }
+
+    private class SpreaderInventoryHandler extends CombinedInvWrapper {
+        public SpreaderInventoryHandler() {
+            super(new IItemHandlerModifiable[]{SpreaderBlockEntity.this.inventory});
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return stack.is(Items.BONE_MEAL);
+        }
+
     }
 }
