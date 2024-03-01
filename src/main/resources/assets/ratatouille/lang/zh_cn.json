@@ -1,9 +1,12 @@
 {
   "block.ratatouille.cocoa_liquor": "可可原浆",
   "block.ratatouille.oven": "烤箱",
-  "block.ratatouille.oven_fan": "烤箱用风扇",
+  "block.ratatouille.oven_fan": "烤箱用鼓风机",
   "block.ratatouille.squeeze_basin": "挤压盆",
   "block.ratatouille.thresher": "脱粒机",
+  "block.ratatouille.mechanical_demolder": "动力脱模机",
+  "block.ratatouille.irrigation_tower": "灌溉塔",
+  "block.ratatouille.spreader": "催熟机",
   "fluid.ratatouille.cake_batter": "蛋糕糊",
   "fluid.ratatouille.cocoa_liquor": "可可原浆",
   "fluid.ratatouille.egg_yolk": "蛋黄",
