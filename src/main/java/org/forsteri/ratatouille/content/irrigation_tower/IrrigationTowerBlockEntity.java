@@ -48,7 +48,7 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
         for (BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-8, 0, -8), pPos.offset(8, 1, 8))) {
             if (pLevel.getBlockEntity(blockpos.above()) instanceof IrrigationTowerBlockEntity be) {
                 if (!be.getTankInventory().drain(1000, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
-                    be.getTankInventory().drain(1000, IFluidHandler.FluidAction.EXECUTE);
+//                    be.getTankInventory().drain(1000, IFluidHandler.FluidAction.EXECUTE);
                     cir.setReturnValue(true);
                     cir.cancel();
                 }
