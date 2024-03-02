@@ -1,6 +1,7 @@
 package org.forsteri.ratatouille.compat.jei;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
@@ -15,6 +16,7 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -23,10 +25,13 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.ItemLike;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.compat.jei.category.BakingCategory;
 import org.forsteri.ratatouille.compat.jei.category.DemoldingCategory;
 import org.forsteri.ratatouille.compat.jei.category.SqueezingCategory;
 import org.forsteri.ratatouille.compat.jei.category.ThreshingCategory;
@@ -38,6 +43,7 @@ import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
+import vectorwing.farmersdelight.data.Recipes;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
@@ -72,6 +78,13 @@ public class RatatouilleJei implements IModPlugin {
             .catalyst(CRBlocks.MECHANICAL_DEMOLDER::get)
             .emptyBackground(177, 70)
             .build("demolding", DemoldingCategory::new);
+
+    final CreateRecipeCategory<?> baking = builder(SmokingRecipe.class)
+            .addTypedRecipes(() -> RecipeType.SMOKING)
+            .catalyst(CRBlocks.OVEN::get)
+            .doubleItemIcon(CRBlocks.OVEN.get(), Items.CAMPFIRE)
+            .emptyBackground(178, 72)
+            .build("baking", BakingCategory::new);
 
     public RatatouilleJei() {}
 
