@@ -58,10 +58,9 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
             assert level != null;
 
-            ItemStack returnValue = super.insertItem(slot, stack, true);
+            ItemStack returnValue = super.insertItem(slot, stack, simulate);
 
-            if (!simulate && returnValue.isEmpty()) {
-                super.insertItem(slot, stack, false);
+            if (!simulate && returnValue.getCount() != stack.getCount()) {
                 level.getRecipeManager().getRecipeFor(RecipeType.SMOKING, RECIPE_WRAPPER, level).ifPresent(recipe -> {
                     tickTillFinishCooking = recipe.getCookingTime() * ((getStackInSlot(slot).getCount() - 1) / 16 + 1);
                     lastRecipe = recipe;
