@@ -31,7 +31,7 @@ public class IrrigationTowerRenderer extends SafeBlockEntityRenderer<IrrigationT
         float level = fluidLevel.getValue(partialTicks);
         if (level < 1 / (512f * totalHeight))
             return;
-        float clampedLevel = Mth.clamp(level * totalHeight, 0, totalHeight) * 8;
+        float clampedLevel = Mth.clamp(level * 8 * totalHeight, 0, totalHeight);
 
         FluidTank tank = (FluidTank) be.getTankInventory();
         FluidStack fluidStack = tank.getFluid();
