@@ -272,13 +272,17 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         radius = width;
     }
 
+    public int getTotalOvenSize() {
+        return radius * radius * height;
+    }
+
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         OvenBlockEntity controllerBE = getControllerBE();
         if (controllerBE == null)
             return false;
 
-        return controllerBE.bakeData.addToGoggleTooltip(tooltip, isPlayerSneaking);
+        return controllerBE.bakeData.addToGoggleTooltip(tooltip, isPlayerSneaking, controllerBE.getTotalOvenSize());
     }
 
 
