@@ -46,7 +46,7 @@ public class Lang {
     }
 
     public static LangBuilder builder() {
-        return new LangBuilder("create");
+        return new LangBuilder(Ratatouille.MOD_ID);
     }
 
     public static LangBuilder builder(String namespace) {

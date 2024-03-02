@@ -2,11 +2,9 @@ package org.forsteri.ratatouille.content.squeeze_basin;
 
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
@@ -14,10 +12,13 @@ import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipul
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.LangBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -27,12 +28,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.*;
 import java.util.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
+import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -280,5 +284,55 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         }
         return true;
     }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        Lang.translate("gui.goggles.squeeze_basin_contents")
+                .forGoggles(tooltip);
+
+        IItemHandlerModifiable items = itemCapability.orElse(new ItemStackHandler());
+        IFluidHandler fluids = fluidCapability.orElse(new FluidTank(0));
+        boolean isEmpty = true;
+
+        for (int i = 0; i < items.getSlots(); i++) {
+            ItemStack stackInSlot = items.getStackInSlot(i);
+            if (stackInSlot.isEmpty())
+                continue;
+            Lang.text("")
+                    .add(Components.translatable(stackInSlot.getDescriptionId())
+                            .withStyle(ChatFormatting.GRAY))
+                    .add(Lang.text(" x" + stackInSlot.getCount())
+                            .style(ChatFormatting.GREEN))
+                    .forGoggles(tooltip, 1);
+            isEmpty = false;
+        }
+
+        LangBuilder mb = Lang.translate("generic.unit.millibuckets");
+        for (int i = 0; i < fluids.getTanks(); i++) {
+            FluidStack fluidStack = fluids.getFluidInTank(i);
+            if (fluidStack.isEmpty())
+                continue;
+            Lang.text("")
+                    .add(Lang.fluidName(fluidStack)
+                            .add(Lang.text(" "))
+                            .style(ChatFormatting.GRAY)
+                            .add(Lang.number(fluidStack.getAmount())
+                                    .add(mb)
+                                    .style(ChatFormatting.BLUE)))
+                    .forGoggles(tooltip, 1);
+            isEmpty = false;
+        }
+
+        Lang.text("")
+                .add(Components.translatable(CRItems.SAUSAGE_CASING.get().getDescriptionId())
+                        .withStyle(ChatFormatting.GRAY))
+                .forGoggles(tooltip, 1);
+
+        if (isEmpty)
+            tooltip.remove(0);
+
+        return true;
+    }
+
 
 }
