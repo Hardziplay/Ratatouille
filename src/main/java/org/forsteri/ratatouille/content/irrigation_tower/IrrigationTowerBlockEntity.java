@@ -41,7 +41,7 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
 
     @Override
     protected SmartFluidTank createInventory() {
-        return new IrrigationSmartFluidTank(getCapacityMultiplier(), this::onFluidStackChanged);
+        return new IrrigationSmartFluidTank(1000, this::onFluidStackChanged);
     }
 
     public static void isNearWater(LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
