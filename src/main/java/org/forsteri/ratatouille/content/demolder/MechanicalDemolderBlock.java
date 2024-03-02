@@ -58,6 +58,11 @@ public class MechanicalDemolderBlock extends HorizontalKineticBlock implements I
     }
 
     @Override
+    public SpeedLevel getMinimumRequiredSpeedLevel() {
+        return SpeedLevel.MEDIUM;
+    }
+
+    @Override
     public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
         return false;
     }
