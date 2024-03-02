@@ -5,10 +5,13 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "ratatouille.refmap.json",
   "mixins": [
+    "AirCurrentMixin",
     "FarmBlockMixin",
+    "NozzleBlockEntityMixin",
     "RichSoilFarmlandBlockMixin"
   ],
   "client": [
+    "AirFlowParticleMixin"
   ],
   "injectors": {
     "defaultRequire": 1
