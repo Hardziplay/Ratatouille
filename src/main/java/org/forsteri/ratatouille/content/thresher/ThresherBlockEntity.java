@@ -13,7 +13,10 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Containers;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +38,7 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 
 public class ThresherBlockEntity extends KineticBlockEntity {
@@ -82,6 +86,18 @@ public class ThresherBlockEntity extends KineticBlockEntity {
                             notifyUpdate();
                         }
                     }
+                }
+            }
+        } else if (level.getBlockState(getBlockPos().relative(getEjectDirection())).getBlock() instanceof AirBlock) {
+            for (int slot = 0; slot < this.outputInv.getSlots(); slot++) {
+                ItemStack stack = this.outputInv.getStackInSlot(slot);
+                if (!stack.isEmpty()) {
+                    Vec3 neighbour = VecHelper.getCenterOf(getBlockPos().relative(getEjectDirection()));
+                    ItemEntity itementity = new ItemEntity(level, neighbour.x, Mth.floor(neighbour.y) + 1/16F, neighbour.z, stack.split(level.random.nextInt(21) + 10));
+                    itementity.setDeltaMovement(Vec3.ZERO);
+                    level.addFreshEntity(itementity);
+                    this.outputInv.setStackInSlot(slot, ItemStack.EMPTY);
+                    notifyUpdate();
                 }
             }
         }
