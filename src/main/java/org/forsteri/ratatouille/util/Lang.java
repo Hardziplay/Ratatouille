@@ -16,8 +16,6 @@ import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.compat.jei.RatatouilleJei;
 
 public class Lang {
-    public Lang() {
-    }
 
     public static MutableComponent translateDirect(String key, Object... args) {
         return Components.translatable( Ratatouille.MOD_ID + "." + key, resolveBuilders(args));
@@ -78,13 +76,9 @@ public class Lang {
     }
 
     public static Object[] resolveBuilders(Object[] args) {
-        for(int i = 0; i < args.length; ++i) {
-            Object var3 = args[i];
-            if (var3 instanceof LangBuilder cb) {
+        for (int i = 0; i < args.length; i++)
+            if (args[i] instanceof LangBuilder cb)
                 args[i] = cb.component();
-            }
-        }
-
         return args;
     }
 }
