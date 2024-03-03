@@ -135,9 +135,8 @@ public class CRBlocks {
     public static final BlockEntry<FrozenBlock> FROZEN_BLOCK = Ratatouille.REGISTRATE
             .block("frozen_block", FrozenBlock::new)
             .initialProperties(SharedProperties::softMetal)
-            .properties((p) -> BlockBehaviour.Properties.of(Material.ICE_SOLID).strength(2.8F).friction(0.989F).sound(SoundType.GLASS))
+            .properties((p) -> BlockBehaviour.Properties.of(Material.ICE_SOLID).strength(2.8F).friction(0.989F).sound(SoundType.GLASS).randomTicks())
             .transform(pickaxeOnly())
-
             .blockstate(simpleCubeAll("frozen_block"))
             .item()
             .build()
