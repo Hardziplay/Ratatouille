@@ -108,7 +108,7 @@ public class CRBlocks {
     public static final BlockEntry<IrrigationTowerBlock> IRRIGATION_TOWER_BLOCK = Ratatouille.REGISTRATE
             .block("irrigation_tower", IrrigationTowerBlock::new)
             .initialProperties(SharedProperties::copperMetal)
-            .properties(p -> p.noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
+            .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
             .transform(pickaxeOnly())
             .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .addLayer(() -> RenderType::cutoutMipped)
