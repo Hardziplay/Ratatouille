@@ -38,24 +38,12 @@ public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEn
 
     @Override
     protected SuperByteBuffer getRotatedModel(ThresherBlockEntity be, BlockState state) {
-        return CachedBufferer.partialFacingVertical(CRPartialModels.THRESHER_BLADE, state, (Direction)state.getValue(ThresherBlock.HORIZONTAL_FACING));
+        return CachedBufferer.partialFacingVertical(CRPartialModels.THRESHER_BLADE, state, state.getValue(ThresherBlock.HORIZONTAL_FACING));
     }
 
     @Override
     protected void renderSafe(ThresherBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
-        if (!Backend.canUseInstancing(be.getLevel())) {
-            VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
-            BlockPos pos = be.getBlockPos();
-            BlockState blockState = be.getBlockState();
-            Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise();
-
-            int lightColor = LevelRenderer.getLightColor(be.getLevel(), pos);
-            SuperByteBuffer thresher = CachedBufferer.partialFacing(CRPartialModels.THRESHER_BLADE, blockState, facing.getOpposite());
-
-
-            standardKineticRotationTransform(thresher, be, lightColor).renderInto(ms, vb);
-        }
         renderItems(be, partialTicks, ms, buffer, light, overlay);
     }
 
