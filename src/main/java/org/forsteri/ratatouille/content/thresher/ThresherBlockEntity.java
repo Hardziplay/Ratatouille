@@ -123,14 +123,13 @@ public class ThresherBlockEntity extends KineticBlockEntity {
             if (recipe.isEmpty()) {
                 timer = 100;
             } else {
-                lastRecipe = (ThreshingRecipe) recipe.get();
+                lastRecipe = recipe.get();
                 timer = lastRecipe.getProcessingDuration();
             }
-            sendData();
         } else {
             timer = lastRecipe.getProcessingDuration();
-            sendData();
         }
+        notifyUpdate();
     }
 
     public Direction getEjectDirection() {
@@ -155,7 +154,7 @@ public class ThresherBlockEntity extends KineticBlockEntity {
                 return;
             }
 
-            this.lastRecipe = (ThreshingRecipe) recipe.get();
+            this.lastRecipe =  recipe.get();
         }
 
         ItemStack stackInSlot = this.inputInv.getStackInSlot(0);
