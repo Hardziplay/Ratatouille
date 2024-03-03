@@ -41,6 +41,7 @@ public class Ratatouille {
         CRCreativeModeTabs.register();
         CRBlockEntityTypes.register();
         CRTags.register();
+//        CRPonders.register();
         CRRecipeTypes.register(modEventBus);
         CRParticleTypes.register(modEventBus);
 
