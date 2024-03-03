@@ -23,9 +23,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
 import org.forsteri.ratatouille.entry.CRPartialModels;
+import org.forsteri.ratatouille.entry.CRRecipeTypes;
+
+import java.util.Optional;
 
 public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEntity> {
     public ThresherRenderer(BlockEntityRendererProvider.Context context) {
@@ -57,6 +61,15 @@ public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEn
 
     protected void renderItems(ThresherBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                                int light, int overlay) {
+        RecipeWrapper inventoryIn = new RecipeWrapper(be.inputInv);
+        if (be.lastRecipe == null || !be.lastRecipe.matches(inventoryIn, be.getLevel())) {
+            Optional<ThreshingRecipe> recipe = CRRecipeTypes.THRESHING.find(inventoryIn, be.getLevel());
+            if (recipe.isEmpty()) {
+                return;
+            }
+
+            be.lastRecipe =  recipe.get();
+        }
         if (be.lastRecipe != null) {
             for (int slot = 0; slot < be.inputInv.getSlots(); slot++) {
                 ItemStack stack = be.inputInv.getStackInSlot(slot);

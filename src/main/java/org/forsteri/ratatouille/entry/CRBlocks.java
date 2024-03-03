@@ -9,9 +9,13 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
+import org.forsteri.ratatouille.content.frozen_block.FrozenBlock;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
 import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
@@ -21,6 +25,7 @@ import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinGenerator;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;
 
+import static com.simibubi.create.foundation.data.BlockStateGen.simpleCubeAll;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
@@ -123,6 +128,17 @@ public class CRBlocks {
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/spreader/item")))
+            .build()
+            .register();
+
+    @SuppressWarnings("removal")
+    public static final BlockEntry<FrozenBlock> FROZEN_BLOCK = Ratatouille.REGISTRATE
+            .block("frozen_block", FrozenBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties((p) -> BlockBehaviour.Properties.of(Material.ICE_SOLID).strength(2.8F).friction(0.989F).sound(SoundType.GLASS).randomTicks())
+            .transform(pickaxeOnly())
+            .blockstate(simpleCubeAll("frozen_block"))
+            .item()
             .build()
             .register();
 
