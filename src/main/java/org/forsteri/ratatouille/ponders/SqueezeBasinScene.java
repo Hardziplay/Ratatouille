@@ -56,6 +56,9 @@ public class SqueezeBasinScene {
         BlockPos inputDepotPos = util.grid.at(3, 1, 1);
         BlockPos inputFunnelPos = util.grid.at(3, 2, 1);
         BlockPos outputDepotPos = util.grid.at(2, 1, 2);
+        scene.world.modifyBlockEntity(inputDepotPos, DepotBlockEntity.class, (be) -> {
+            be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(new TransportedItemStack(CRItems.SALTY_DOUGH.asStack()));
+        });
         scene.world.showSection(util.select.fromTo(inputDepotPos, inputFunnelPos), Direction.SOUTH);
         scene.idle(5);
         scene.world.showSection(util.select.position(outputDepotPos), Direction.EAST);
@@ -65,7 +68,13 @@ public class SqueezeBasinScene {
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(outputDepotPos));
-        scene.idle(15);
+        scene.idle(10);
+        scene.world.modifyBlockEntity(inputDepotPos, DepotBlockEntity.class, (be) -> {
+            be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(new TransportedItemStack(ItemStack.EMPTY));
+        });
+        scene.world.flapFunnel(inputFunnelPos, false);
+        scene.world.modifyBlockEntity(pressPos, MechanicalPressBlockEntity.class, MechanicalPressBlockEntity::startProcessingBasin);
+        scene.idle(30);
         scene.world.modifyBlockEntity(outputDepotPos, DepotBlockEntity.class, (be) -> {
             be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(new TransportedItemStack(new ItemStack(ModItems.RAW_PASTA.get())));
         });
@@ -95,10 +104,12 @@ public class SqueezeBasinScene {
             nbt.put("VisualizedFluids",
                     NBTHelper.writeCompoundList(ImmutableList.of(IntAttached.with(1, new FluidStack(CRFluids.MINCE_MEAT.get(), 1000))), ia -> ia.getValue().writeToNBT(new CompoundTag())));
         });
+        scene.world.modifyBlock(squeezeBasinPos, s -> s.setValue(SqueezeBasinBlock.CASING, true), false);
         scene.world.modifyBlockEntity(mixerPos, MechanicalMixerBlockEntity.class, MechanicalMixerBlockEntity::startProcessingBasin);
         scene.idle(80);
         scene.world.modifyBlockEntity(pressPos, MechanicalPressBlockEntity.class, MechanicalPressBlockEntity::startProcessingBasin);
         scene.idle(30);
+        scene.world.modifyBlock(squeezeBasinPos, s -> s.setValue(SqueezeBasinBlock.CASING, false), false);
         scene.world.modifyBlockEntity(outputDepotPos, DepotBlockEntity.class, (be) -> {
             be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(new TransportedItemStack(CRItems.RAW_SAUSAGE.asStack()));
         });
