@@ -2,7 +2,6 @@ package org.forsteri.ratatouille.content.oven;
 
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.BoilerHeaters;
-import com.simibubi.create.content.kinetics.BlockStressValues;
 import com.simibubi.create.foundation.utility.Components;
 import joptsimple.internal.Strings;
 import net.minecraft.ChatFormatting;
@@ -192,6 +191,19 @@ public class BakeData {
 
     }
 
+    @NotNull
+    public MutableComponent getLevelComponent() {
+        int ovenLevel = Math.min(fanLevel, Math.min(sizeLevel, tempLevel));
+
+        if (ovenLevel == 0) {
+            return Lang.translateDirect("oven.idle");
+        } else if (ovenLevel == 8) {
+            return Lang.translateDirect("oven.max_lvl");
+        } else {
+            return Lang.translateDirect("oven.lvl").append(String.valueOf(ovenLevel));
+        }
+    }
+
     private MutableComponent bars(int level, ChatFormatting format) {
         return Components.literal(Strings.repeat('|', level))
                 .withStyle(format);
@@ -202,8 +214,12 @@ public class BakeData {
 //        tooltip.add(Component.nullToEmpty("Fan level: " + fanLevel));
 //        tooltip.add(Component.nullToEmpty("Size level: " + sizeLevel));
 //        tooltip.add(Component.nullToEmpty("Temp level: " + tempLevel));
+        Component indent = Components.literal(IHaveGoggleInformation.spacing);
         Component indent2 = Components.literal(IHaveGoggleInformation.spacing + " ");
 
+        tooltip.add(indent.plainCopy()
+                .append(
+                        Lang.translateDirect("oven.status").append(getLevelComponent().withStyle(ChatFormatting.GREEN))));
         tooltip.add(indent2.plainCopy()
                 .append(getSizeComponent(true, false)));
         tooltip.add(indent2.plainCopy()
@@ -211,7 +227,6 @@ public class BakeData {
         tooltip.add(indent2.plainCopy()
                 .append(getHeatComponent(true, false)));
 
-        tooltip.add(Components.immutableEmpty());
 
         return true;
     }
