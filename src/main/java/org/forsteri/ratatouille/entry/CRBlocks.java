@@ -126,15 +126,6 @@ public class CRBlocks {
             .build()
             .register();
 
-    //public static final BlockEntry<Block> SUGAR_BLOCK = Ratatouille.REGISTRATE
-            //.block("sugar_block", Block::new)
-            //.initialProperties(SharedProperties::stone)
-            //.properties(p -> p.noOcclusion().color(MaterialColor.STONE))
-            //.transform(pickaxeOnly())
-            //.item()
-            //.build()
-            //.register();
-
 
     public static void register() {}
 }
