@@ -34,6 +34,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.*;
 import java.util.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.util.Lang;
@@ -57,7 +58,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         this.inputInventory = (new SqueezeBasinInventory(1, this));
         this.inputInventory.whenContentsChanged($ -> this.contentsChanged = true).withMaxStackSize(64);
         this.outputInventory = (new SqueezeBasinInventory(1, this)).forbidInsertion().withMaxStackSize(1);
-        this.itemCapability = LazyOptional.of(() -> new CombinedInvWrapper(inputInventory, outputInventory));
+        this.itemCapability = LazyOptional.of(SqueezeBasinInventoryHandler::new);
         this.contentsChanged = true;
         this.recipeBackupCheck = 20;
     }
@@ -334,5 +335,33 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         return true;
     }
 
+    private class SqueezeBasinInventoryHandler extends CombinedInvWrapper {
+        public SqueezeBasinInventoryHandler() {
+            super(new IItemHandlerModifiable[]{SqueezeBasinBlockEntity.this.inputInventory, SqueezeBasinBlockEntity.this.outputInventory});
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            if (SqueezeBasinBlockEntity.this.outputInventory == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
+                return false;
+            return super.isItemValid(slot, stack);
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (SqueezeBasinBlockEntity.this.outputInventory == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
+                return stack;
+            if (!this.isItemValid(slot, stack))
+                return stack;
+            return super.insertItem(slot, stack, simulate);
+        }
+
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (SqueezeBasinBlockEntity.this.inputInventory == this.getHandlerFromIndex(getIndexForSlot(slot)))
+                return ItemStack.EMPTY;
+            return super.extractItem(slot, amount, simulate);
+        }
+    }
 
 }

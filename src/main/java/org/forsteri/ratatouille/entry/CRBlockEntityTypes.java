@@ -17,6 +17,7 @@ import org.forsteri.ratatouille.content.spreader.SpreaderInstance;
 import org.forsteri.ratatouille.content.spreader.SpreaderRenderer;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlockEntity;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinInstance;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinRenderer;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
 import org.forsteri.ratatouille.content.thresher.ThresherInstance;
 import org.forsteri.ratatouille.content.thresher.ThresherRenderer;
@@ -45,6 +46,7 @@ public class CRBlockEntityTypes {
             .blockEntity("squeeze_basin", SqueezeBasinBlockEntity::new)
             .instance(() -> SqueezeBasinInstance::new)
             .validBlock(CRBlocks.SQUEEZE_BASIN)
+            .renderer(() -> SqueezeBasinRenderer::new)
             .register();
 
     public static final BlockEntityEntry<MechanicalDemolderBlockEntity> MECHANICAL_DEMOLDER_ENTITY = Ratatouille.REGISTRATE
