@@ -8,6 +8,7 @@ license="${mod_license}"
    displayName="${mod_name}" 
    authors="${mod_authors}" #optional
    description='''${mod_description}'''
+   credits="Forge, Registrate, Jei, Create, Farmer's Delight, Create Crafts & Addition, Cultural Delight"
 
 [[dependencies.${mod_id}]] #optional
    modId="forge"

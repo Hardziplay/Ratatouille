@@ -28,6 +28,7 @@ public class Ratatouille {
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::onClientSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -41,7 +42,6 @@ public class Ratatouille {
         CRCreativeModeTabs.register();
         CRBlockEntityTypes.register();
         CRTags.register();
-//        CRPonders.register();
         CRRecipeTypes.register(modEventBus);
         CRParticleTypes.register(modEventBus);
 
@@ -51,6 +51,10 @@ public class Ratatouille {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
 
+    }
+
+    private void onClientSetup(final FMLClientSetupEvent event) {
+        event.enqueueWork(CRPonders::register);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -63,10 +67,7 @@ public class Ratatouille {
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
 
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
 
-        }
     }
 
     public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(Ratatouille.MOD_ID);
