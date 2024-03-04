@@ -19,7 +19,7 @@ import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlockEnt
 
 public class IrrigationTowerScene {
     public static void irrigationTower(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("thresher", "Usage of thresher");
+        scene.title("irrigation_tower", "Usage of thresher");
         scene.configureBasePlate(0, 0, 5);
         scene.world.showSection(util.select.layer(0), Direction.UP);
 
