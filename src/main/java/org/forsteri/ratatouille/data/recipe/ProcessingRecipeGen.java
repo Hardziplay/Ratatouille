@@ -27,6 +27,7 @@ public abstract class ProcessingRecipeGen extends RataouilleRecipeProvider{
         GENERATORS.add(new ThreshingRecipeGen(gen));
         GENERATORS.add(new SqueezingRecipeGen(gen));
         GENERATORS.add(new DemoldingRecipeGen(gen));
+        GENERATORS.add(new FreezingRecipeGen(gen));
 
         gen.addProvider(true, new DataProvider() {
             @Override

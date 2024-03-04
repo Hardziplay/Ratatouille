@@ -31,11 +31,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.ItemLike;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.compat.jei.category.BakingCategory;
-import org.forsteri.ratatouille.compat.jei.category.DemoldingCategory;
-import org.forsteri.ratatouille.compat.jei.category.SqueezingCategory;
-import org.forsteri.ratatouille.compat.jei.category.ThreshingCategory;
+import org.forsteri.ratatouille.compat.jei.category.*;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
+import org.forsteri.ratatouille.content.frozen_block.FreezingRecipe;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.entry.CRBlocks;
@@ -85,6 +83,13 @@ public class RatatouilleJei implements IModPlugin {
             .doubleItemIcon(CRBlocks.OVEN.get(), Items.CAMPFIRE)
             .emptyBackground(178, 72)
             .build("baking", BakingCategory::new);
+
+    final CreateRecipeCategory<?> freezing = builder(FreezingRecipe.class)
+            .addTypedRecipes(CRRecipeTypes.FREEZING::getType)
+            .catalyst(CRBlocks.FROZEN_BLOCK::get)
+            .itemIcon(CRBlocks.FROZEN_BLOCK.get())
+            .emptyBackground(178, 72)
+            .build("freezing", FreezingCategory::new);
 
     public RatatouilleJei() {}
 

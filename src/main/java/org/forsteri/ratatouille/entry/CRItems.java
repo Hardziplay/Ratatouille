@@ -3,6 +3,7 @@ package org.forsteri.ratatouille.entry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.Item;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.chocolate_mold_filled.ChocolateMoldFilledItem;
 
 public class CRItems {
     static {
@@ -22,9 +23,9 @@ public class CRItems {
     public static final ItemEntry<Item> DRIED_COCOA_BEANS = Ratatouille.REGISTRATE.item("dried_cocoa_beans", Item::new).register();
     public static final ItemEntry<Item> DRIED_COCOA_NIBS = Ratatouille.REGISTRATE.item("dried_cocoa_nibs", Item::new).register();
     public static final ItemEntry<Item> COCOA_SOLIDS = Ratatouille.REGISTRATE.item("cocoa_solids", Item::new).register();
-    public static final ItemEntry<Item> CHOCOLATE_MOLD_filled = Ratatouille.REGISTRATE.item("chocolate_mold_filled", Item::new).register();
+    public static final ItemEntry<ChocolateMoldFilledItem> CHOCOLATE_MOLD_FILLED = Ratatouille.REGISTRATE.item("chocolate_mold_filled", ChocolateMoldFilledItem::new).register();
     public static final ItemEntry<Item> CHOCOLATE_MOLD_SOLID = Ratatouille.REGISTRATE.item("chocolate_mold_solid", Item::new).register();
-    public static final ItemEntry<Item> CAKE_MOLD_filled = Ratatouille.REGISTRATE.item("cake_mold_filled", Item::new).register();
+    public static final ItemEntry<Item> CAKE_MOLD_FILLED = Ratatouille.REGISTRATE.item("cake_mold_filled", Item::new).register();
     public static final ItemEntry<Item> CAKE_MOLD_BAKED = Ratatouille.REGISTRATE.item("cake_mold_baked", Item::new).register();
     public static final ItemEntry<Item> EGG_SHELL = Ratatouille.REGISTRATE.item("egg_shell", Item::new).register();
     public static final ItemEntry<Item> WHEAT_KERNELS = Ratatouille.REGISTRATE.item("wheat_kernels", Item::new).register();
