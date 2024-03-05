@@ -1,9 +1,12 @@
 package org.forsteri.ratatouille.data.recipe;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
+import com.simibubi.create.foundation.utility.FilesHelper;
 import com.simibubi.create.infrastructure.ponder.AllPonderTags;
 import com.simibubi.create.infrastructure.ponder.GeneralText;
 import com.simibubi.create.infrastructure.ponder.PonderIndex;
@@ -15,6 +18,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.entry.CRPonders;
 
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class RataouilleDataGen {
@@ -25,11 +29,26 @@ public class RataouilleDataGen {
         DataGenerator generator = event.getGenerator();
         Ratatouille.REGISTRATE.addDataGenerator(ProviderType.LANG, provider -> {
             BiConsumer<String, String> langConsumer = provider::add;
+            provideDefaultLang("en_us", langConsumer);
             providePonderLang(langConsumer);
         });
 
         if (event.includeServer()) {
             ProcessingRecipeGen.registerAll(generator);
+        }
+    }
+
+    private static void provideDefaultLang(String fileName, BiConsumer<String, String> consumer) {
+        String path = "assets/ratatouille/lang/default/" + fileName + ".json";
+        JsonElement jsonElement = FilesHelper.loadJsonResource(path);
+        if (jsonElement == null) {
+            throw new IllegalStateException(String.format("Could not find default lang file: %s", path));
+        }
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue().getAsString();
+            consumer.accept(key, value);
         }
     }
 
