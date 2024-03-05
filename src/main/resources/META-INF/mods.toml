@@ -7,6 +7,7 @@ license="${mod_license}"
    version="${mod_version}" 
    displayName="${mod_name}" 
    authors="${mod_authors}" #optional
+   logoFile="logo.png"
    description='''${mod_description}'''
    credits="Forge, Registrate, Jei, Create, Farmer's Delight, Create Crafts & Addition, Cultural Delight"
 
