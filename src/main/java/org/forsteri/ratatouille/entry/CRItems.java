@@ -1,6 +1,7 @@
 package org.forsteri.ratatouille.entry;
 
 import com.tterrag.registrate.util.entry.ItemEntry;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.chocolate_mold_filled.ChocolateMoldFilledItem;
@@ -13,7 +14,9 @@ public class CRItems {
     }
 
     public static final ItemEntry<Item> SAUSAGE_CASING = Ratatouille.REGISTRATE.item("sausage_casing", Item::new).register();
-    public static final ItemEntry<Item> SAUSAGE = Ratatouille.REGISTRATE.item("sausage", Item::new).register();
+    public static final ItemEntry<Item> SAUSAGE = Ratatouille.REGISTRATE.item("sausage", Item::new).properties(p -> p.food(new FoodProperties.Builder().nutrition(6)
+            .saturationMod(0.6F)
+            .build())).register();
     public static final ItemEntry<Item> RAW_SAUSAGE = Ratatouille.REGISTRATE.item("raw_sausage", Item::new).register();
     public static final ItemEntry<Item> SALT = Ratatouille.REGISTRATE.item("salt", Item::new).register();
     public static final ItemEntry<Item> CAKE_MOLD = Ratatouille.REGISTRATE.item("cake_mold", Item::new).register();
@@ -30,7 +33,9 @@ public class CRItems {
     public static final ItemEntry<Item> EGG_SHELL = Ratatouille.REGISTRATE.item("egg_shell", Item::new).register();
     public static final ItemEntry<Item> WHEAT_KERNELS = Ratatouille.REGISTRATE.item("wheat_kernels", Item::new).register();
     public static final ItemEntry<Item> SALTY_DOUGH = Ratatouille.REGISTRATE.item("salty_dough", Item::new).register();
-    public static final ItemEntry<Item> CAKE_BASE = Ratatouille.REGISTRATE.item("cake_base", Item::new).register();
+    public static final ItemEntry<Item> CAKE_BASE = Ratatouille.REGISTRATE.item("cake_base", Item::new).properties(p -> p.food(new FoodProperties.Builder().nutrition(10)
+            .saturationMod(0.5F)
+            .build())).register();
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
     //public static final ItemEntry<Item> SUGAR_CUBE = Ratatouille.REGISTRATE.item("sugar_cube", Item::new).register();
