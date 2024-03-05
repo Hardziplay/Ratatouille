@@ -1,5 +1,6 @@
 {
   "ratatouille.oven.status": "Oven Status : ",
+  "ratatouille.oven.idle": "idle%1$s",
   "ratatouille.oven.lvl": "Lvl%1$s",
   "ratatouille.oven.size": "Size",
   "ratatouille.oven.fan": "Air",
