@@ -3,10 +3,20 @@ package org.forsteri.ratatouille.content.oven_fan;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
+import com.simibubi.create.content.trains.display.FlapDisplayBlock;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.placement.IPlacementHelper;
+import com.simibubi.create.foundation.placement.PlacementHelpers;
+import com.simibubi.create.foundation.placement.PlacementOffset;
 import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
@@ -15,14 +25,33 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
+import org.forsteri.ratatouille.entry.CRBlocks;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, IWrenchable, IBE<OvenFanBlockEntity> {
     public OvenFanBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pPlayer.isShiftKeyDown())
+            return InteractionResult.PASS;
+
+        ItemStack heldItem = pPlayer.getItemInHand(pHand);
+        IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
+        if (placementHelper.matchesItem(heldItem))
+            return placementHelper.getOffset(pPlayer, pLevel, pState, pPos, pHit)
+                    .placeInWorld(pLevel, (BlockItem) heldItem.getItem(), pPlayer, pHand, pHit);
+
+        return InteractionResult.SUCCESS;
     }
 
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
@@ -88,6 +117,36 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
             case SOUTH -> Shapes.create(0, 0, 3/16F, 1, 1, 1);
             case UP, DOWN -> Shapes.block();
         };
+    }
+
+    private static final int placementHelperId = PlacementHelpers.register(new OvenFanBlock.PlacementHelper());
+
+    @MethodsReturnNonnullByDefault
+    private static class PlacementHelper implements IPlacementHelper {
+        @Override
+        public Predicate<ItemStack> getItemPredicate() {
+            return CRBlocks.OVEN_FAN::isIn;
+        }
+
+        @Override
+        public Predicate<BlockState> getStatePredicate() {
+            return CRBlocks.OVEN_FAN::has;
+        }
+
+        @Override
+        public PlacementOffset getOffset(Player player, Level world, BlockState state, BlockPos pos,
+                                         BlockHitResult ray) {
+            List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
+                    state.getValue(OvenFanBlock.HORIZONTAL_FACING)
+                            .getAxis(),
+                    dir -> world.getBlockState(pos.relative(dir))
+                            .getMaterial()
+                            .isReplaceable());
+
+            return directions.isEmpty() ? PlacementOffset.fail()
+                    : PlacementOffset.success(pos.relative(directions.get(0)), s ->
+                            s.setValue(HORIZONTAL_FACING, state.getValue(OvenFanBlock.HORIZONTAL_FACING)));
+        }
     }
 
 }
