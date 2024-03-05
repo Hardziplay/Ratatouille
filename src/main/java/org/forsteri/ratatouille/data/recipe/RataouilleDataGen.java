@@ -54,12 +54,7 @@ public class RataouilleDataGen {
 
     private static void providePonderLang(BiConsumer<String, String> consumer) {
         CRPonders.register();
-        PonderIndex.register();
-
-        SharedText.gatherText();
         PonderLocalization.generateSceneLang();
-
-        GeneralText.provideLang(consumer);
         PonderLocalization.provideLang(Ratatouille.MOD_ID, consumer);
     }
 }
