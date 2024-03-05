@@ -5,7 +5,10 @@ import com.mojang.math.Vector3f;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -14,11 +17,15 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.block.Blocks;
+import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedOven;
 import org.forsteri.ratatouille.entry.CRBlocks;
 
 public class BakingCategory extends CreateRecipeCategory<SmokingRecipe> {
 
     protected static final int SCALE = 24;
+
+    private final AnimatedOven oven = new AnimatedOven();
+    private final AnimatedBlazeBurner heater = new AnimatedBlazeBurner();
 
     public BakingCategory(Info<SmokingRecipe> info) {
         super(info);
@@ -49,14 +56,13 @@ public class BakingCategory extends CreateRecipeCategory<SmokingRecipe> {
     public void draw(SmokingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         renderWidgets(stack, recipe, mouseX, mouseY);
         stack.pushPose();
-        stack.translate(56, 33, 0);
-        stack.mulPose(Vector3f.XP.rotationDegrees(-12.5f));
-        stack.mulPose(Vector3f.YP.rotationDegrees(22.5f));
-        GuiGameElement.of(CRBlocks.OVEN.getDefaultState())
-                .scale(SCALE)
-                .atLocal(0, 0, 2)
-                .lighting(AnimatedKinetics.DEFAULT_LIGHTING)
-                .render(stack);
+        stack.translate(75, -15, 0);
+        stack.pushPose();
+        stack.translate(0, 20, -7);
+        heater.withHeat(HeatCondition.HEATED.visualizeAsBlazeBurner())
+                .draw(stack);
+        stack.popPose();
+        oven.draw(stack);
         stack.popPose();
     }
 }
