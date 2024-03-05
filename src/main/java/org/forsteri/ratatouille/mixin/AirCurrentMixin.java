@@ -20,7 +20,7 @@ public class AirCurrentMixin {
     public IAirCurrentSource source;
 
     @Inject(method = "tickAffectedEntities", at=@At("HEAD"), cancellable = true)
-    private void tickAffectedEntities(Level world, Direction facing, CallbackInfo  cir) {
+    private void tickAffectedEntities(Level world, CallbackInfo  cir) {
         if (source instanceof SpreaderBlockEntity)
             cir.cancel();
     }
