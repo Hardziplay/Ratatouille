@@ -1,0 +1,17 @@
+{
+  "ratatouille.oven.status": "Oven Status : ",
+  "ratatouille.oven.idle": "idle%1$s",
+  "ratatouille.oven.lvl": "Lvl%1$s",
+  "ratatouille.oven.size": "Size",
+  "ratatouille.oven.fan": "Air",
+  "ratatouille.oven.heat": "Heat",
+  "ratatouille.oven.size_dots": "......",
+  "ratatouille.oven.fan_dots": "......",
+  "ratatouille.oven.heat_dots": "......",
+  "ratatouille.recipe.squeezing": "Squeezing",
+  "ratatouille.recipe.threshing": "Threshing",
+  "ratatouille.recipe.baking": "Bulk Baking",
+  "ratatouille.recipe.sausage_casing_requirement": "Sausage Casing Requirement",
+  "ratatouille.recipe.demolding": "Demolding",
+  "ratatouille.recipe.freezing": "Freezing"
+}

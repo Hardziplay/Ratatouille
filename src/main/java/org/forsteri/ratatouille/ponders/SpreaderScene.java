@@ -42,7 +42,7 @@ public class SpreaderScene {
         }
     }
     public static void spreader(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("spreader", "Usage of spreader");
+        scene.title("spreader", "Accelerate Crop Growth with the Spreader");
         scene.configureBasePlate(0, 0, 5);
         scene.world.showSection(util.select.layer(0), Direction.UP);
         scene.world.showSection(util.select.fromTo(0, 1, 1, 1, 1, 3), Direction.UP);
@@ -57,7 +57,7 @@ public class SpreaderScene {
         scene.world.showSection(util.select.fromTo(5, 1, 1, 3, 1, 2), Direction.DOWN);
         scene.idle(10);
         scene.overlay.showText(60)
-                .text("Spreader can ripen a certain range of crops")
+                .text("The spreader rapidly ripens crops within its designated range")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(spreaderPos));
@@ -65,7 +65,7 @@ public class SpreaderScene {
 
         scene.world.modifyBlockEntity(depotPos, DepotBlockEntity.class, (be) -> {be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(new TransportedItemStack(new ItemStack(Items.BONE_MEAL)));});
         scene.overlay.showText(60)
-                .text("Each ripening consumes one bone meal")
+                .text("Each grown action consumes one bone meal")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(spreaderPos));
@@ -80,7 +80,7 @@ public class SpreaderScene {
         scene.world.showSection(util.select.fromTo(nozzlePos, nozzlePos), Direction.DOWN);
         scene.world.modifyKineticSpeed(util.select.everywhere(), f -> 256f);
         scene.overlay.showText(60)
-                .text("By increasing the speed and placing a nozzle, the range of ripening can be greatly increased")
+                .text("By adjusting speed and attach nozzle, you can significantly expand the ripening area")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(spreaderPos));

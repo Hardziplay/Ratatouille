@@ -1,0 +1,15 @@
+{
+  "type": "ratatouille:threshing",
+  "ingredients": [
+    {
+      "item": "minecraft:wool"
+    }
+  ],
+  "processingTime": 200,
+  "results": [
+    {
+      "item": "minecraft:wool",
+      "count": 2
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " Y ",
+    "YXY",
+    " Y "
+  ],
+  "key": {
+    "Y": {
+      "item": "minecraft:blue_ice"
+    },
+    "X": {
+      "item": "minecraft:powder_snow_bucket"
+    }
+  },
+  "result": {
+    "item": "ratatouille:frozen_block",
+    "count": 1
+  }
+}

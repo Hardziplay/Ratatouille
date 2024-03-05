@@ -18,7 +18,7 @@ import java.util.List;
 
 public class OvenScene {
     public static void oven(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("oven", "Setting up oven");
+        scene.title("oven", "Efficient Food Baking with the Oven");
         scene.configureBasePlate(0, 0, 7);
         scene.setSceneOffsetY(-1);
         scene.scaleSceneView(.9f);
@@ -42,7 +42,7 @@ public class OvenScene {
         scene.idle(10);
         scene.overlay.showText(50)
                 .attachKeyFrame()
-                .text("The oven is heated by blazer")
+                .text("The oven heated by blaze burner")
                 .pointAt(util.vector.centerOf(util.grid.at(3, 1, 3)))
                 .placeNearTarget();
         scene.idle(60);
@@ -58,13 +58,13 @@ public class OvenScene {
 
         scene.overlay.showText(50)
                 .attachKeyFrame()
-                .text("Oven-specific fans provide airflow")
+                .text("Oven fans ensure sufficient air within the oven")
                 .pointAt(util.vector.centerOf(util.grid.at(5, 2, 3)))
                 .placeNearTarget();
         scene.idle(60);
         scene.overlay.showText(50)
                 .attachKeyFrame()
-                .text("With enough heat, airflow, and inventory...")
+                .text("With sufficient heat, air, and stocked inventory...")
                 .pointAt(util.vector.centerOf(util.grid.at(3, 2, 3)))
                 .placeNearTarget();
         scene.idle(60);
@@ -77,7 +77,7 @@ public class OvenScene {
         scene.world.showSection(util.select.fromTo(0, 1, 4, 2, 2, 4), Direction.DOWN);
         scene.overlay.showText(70)
                 .attachKeyFrame()
-                .text("It can bake all foods, efficiently!")
+                .text("...It can efficiently bake all types of food!")
                 .pointAt(util.vector.centerOf(util.grid.at(3, 2, 3)))
                 .placeNearTarget();
 
@@ -114,7 +114,7 @@ public class OvenScene {
 
         scene.overlay.showText(40)
                 .attachKeyFrame()
-                .text("Higher efficiency requires more space, heat, and air flow")
+                .text("Higher efficiency demands more space, heat, and airflow")
                 .pointAt(util.vector.centerOf(util.grid.at(3, 3, 3)))
                 .placeNearTarget();
         for (int i = 0; i < 4; i++) {
@@ -138,7 +138,7 @@ public class OvenScene {
         }
         scene.overlay.showText(40)
                 .attachKeyFrame()
-                .text("Goggle can be used to view the current level of the oven.")
+                .text("Use goggles to monitor the current oven level")
                 .pointAt(util.vector.centerOf(util.grid.at(3, 3, 3)))
                 .placeNearTarget();
         scene.idle(50);
