@@ -16,7 +16,7 @@ import org.forsteri.ratatouille.entry.CRItems;
 
 public class ThresherScene {
     public static void thresher(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("thresher", "Usage of thresher");
+        scene.title("thresher", "Efficient Grain Processing with the Thresher");
         scene.configureBasePlate(0, 0, 5);
         scene.world.showSection(util.select.layer(0), Direction.UP);
         scene.world.showSection(util.select.fromTo(2, 1, 3, 2, 2, 5), Direction.UP);
@@ -24,14 +24,14 @@ public class ThresherScene {
         BlockPos thresherPos = util.grid.at(2, 2, 2);
         scene.world.showSection(util.select.fromTo(thresherPos, thresherPos), Direction.DOWN);
         scene.overlay.showText(50)
-                .text("Threshers can be used to process crops")
+                .text("Threshers are versatile machines used for processing various crops")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(thresherPos));
         scene.idle(60);
 
         scene.overlay.showText(50)
-                .text("The product will slide out of the side with the output slot")
+                .text("Processed grain conveniently slides out from the side through the output slot")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(thresherPos));
@@ -50,7 +50,7 @@ public class ThresherScene {
         scene.world.showSection(util.select.fromTo(funnelPos, funnelPos), Direction.WEST);
         scene.idle(5);
         scene.overlay.showText(50)
-                .text("Can work with belt")
+                .text("The thresher operates effectively with mechanical belt")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(thresherPos));

@@ -30,7 +30,7 @@ import static com.simibubi.create.content.processing.basin.BasinBlockEntity.OUTP
 
 public class SqueezeBasinScene {
     public static void squeezeBasin(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("squeeze_basin", "Squeezing");
+        scene.title("squeeze_basin", "Process Items Efficiently Using the Squeeze Basin");
         scene.configureBasePlate(0, 0, 5);
         scene.world.showSection(util.select.fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
 
@@ -41,7 +41,7 @@ public class SqueezeBasinScene {
         scene.world.showSection(util.select.position(squeezeBasinPos), Direction.DOWN);
 
         scene.overlay.showText(50)
-                .text("Squeeze basin are used for squeezing and filling tasks")
+                .text("Squeeze basins handle squeezing and filling tasks")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(squeezeBasinPos));
@@ -64,7 +64,7 @@ public class SqueezeBasinScene {
         scene.world.showSection(util.select.position(outputDepotPos), Direction.EAST);
         scene.idle(5);
         scene.overlay.showText(50)
-                .text("The product will try to output below the side with port")
+                .text("Output products typically emerge from the side with a port")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(outputDepotPos));
@@ -115,7 +115,7 @@ public class SqueezeBasinScene {
         });
         scene.idle(40);
         scene.overlay.showText(40)
-                .text("However, when processing some recipes, it may be necessary to fill the output port with items")
+                .text("For specific recipes, consider filling the output port with items")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.blockSurface(squeezeBasinPos, Direction.WEST));
@@ -145,7 +145,7 @@ public class SqueezeBasinScene {
         scene.world.showSection(util.select.fromTo(1, 0, 5, 1, 2, 5), Direction.NORTH);
         scene.idle(5);
         scene.overlay.showText(40)
-                .text("Deployer can be more efficient at this time")
+                .text("Deployers can improve efficiency")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.centerOf(deployerPos));

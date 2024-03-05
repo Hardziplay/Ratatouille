@@ -19,7 +19,7 @@ import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlockEnt
 
 public class IrrigationTowerScene {
     public static void irrigationTower(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("irrigation_tower", "Usage of thresher");
+        scene.title("irrigation_tower", "Use irrigation towers to keep farmland moist");
         scene.configureBasePlate(0, 0, 5);
         scene.world.showSection(util.select.layer(0), Direction.UP);
 
@@ -28,14 +28,14 @@ public class IrrigationTowerScene {
         scene.world.showSection(util.select.fromTo(towerPos, towerPos), Direction.DOWN);
 
         scene.overlay.showText(50)
-                .text("Irrigation towers keep range farmland moist")
+                .text("Irrigation towers maintain optimal moisture levels for farmland within their range")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(towerPos));
         scene.idle(60);
 
         scene.overlay.showText(50)
-                .text("Tanks need to be filled with water")
+                .text("The tank need to be filled with water")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector.topOf(towerPos));
