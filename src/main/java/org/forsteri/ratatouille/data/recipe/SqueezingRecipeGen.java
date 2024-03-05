@@ -1,5 +1,6 @@
 package org.forsteri.ratatouille.data.recipe;
 
+import com.ncpbails.culturaldelights.CulturalDelights;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.minecraft.data.DataGenerator;
 import org.forsteri.ratatouille.entry.CRFluids;
@@ -13,7 +14,7 @@ public class SqueezingRecipeGen extends ProcessingRecipeGen{
             .output(CRItems.RAW_SAUSAGE.get())),
 
         RAW_PASTA = this.create("raw_pasta", b -> b.require(CRItems.SALTY_DOUGH.get())
-                .output(vectorwing.farmersdelight.common.registry.ModItems.RAW_PASTA.get()));
+                .output(vectorwing.farmersdelight.common.registry.ModItems.RAW_PASTA.get()).whenModLoaded(CulturalDelights.MOD_ID));
 
     public SqueezingRecipeGen(DataGenerator generator) {
         super(generator);
