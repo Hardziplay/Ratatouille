@@ -20,7 +20,7 @@ public class AnimatedThresher extends AnimatedKinetics {
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(-22.5F));
         matrixStack.mulPose(Vector3f.YP.rotationDegrees(22.5F));
         blockElement(CRPartialModels.THRESHER_BLADE)
-                .rotateBlock(getCurrentAngle() * 2, 90, 180)
+                .rotateBlock(getCurrentAngle() * 2, 0, 180)
                 .scale(scale)
                 .render(matrixStack);
         matrixStack.popPose();
