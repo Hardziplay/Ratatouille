@@ -43,10 +43,6 @@ public class CRFluids {
                     .lang("Egg Yolk")
                     .register();
 
-
-
-
-    public CRFluids() {}
     public static void register() {}
 
     private static class BaseFluidType extends AllFluids.TintedFluidType {
@@ -67,7 +63,7 @@ public class CRFluids {
         }
 
         protected int getTintColor(FluidStack stack) {
-            return -1;
+            return NO_TINT;
         }
 
         public int getTintColor(FluidState state, BlockAndTintGetter world, BlockPos pos) {
@@ -79,7 +75,7 @@ public class CRFluids {
         }
 
         protected float getFogDistanceModifier() {
-            return (Float)this.fogDistance.get();
+            return this.fogDistance.get();
         }
     }
 

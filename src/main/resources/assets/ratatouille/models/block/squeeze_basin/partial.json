@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"4": "ratatouille:blocks/squeeze_basin/fluid_tank_top",
-		"particle": "ratatouille:blocks/squeeze_basin/fluid_tank"
+		"4": "ratatouille:block/squeeze_basin/fluid_tank_top",
+		"particle": "ratatouille:block/squeeze_basin/fluid_tank"
 	},
 	"elements": [
 		{

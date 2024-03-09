@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "ratatouille:blocks/spreader/fan_side",
-		"1": "ratatouille:blocks/spreader/gearbox",
-		"2": "ratatouille:blocks/spreader/fan_casing",
+		"0": "ratatouille:block/spreader/fan_side",
+		"1": "ratatouille:block/spreader/gearbox",
+		"2": "ratatouille:block/spreader/fan_casing",
 		"particle": "create:block/fan_side"
 	},
 	"elements": [

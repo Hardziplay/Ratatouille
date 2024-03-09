@@ -2,13 +2,13 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"1": "ratatouille:blocks/irrigation_tower/fluid_tank",
-		"4": "ratatouille:blocks/irrigation_tower/pipes",
-		"5": "ratatouille:blocks/irrigation_tower/fluid_tank_window_single",
-		"7": "ratatouille:blocks/irrigation_tower/copper_plating",
-		"8": "ratatouille:blocks/irrigation_tower/copper_underside",
-		"9": "ratatouille:blocks/irrigation_tower/legs",
-		"particle": "ratatouille:blocks/irrigation_tower/fluid_tank"
+		"1": "ratatouille:block/irrigation_tower/fluid_tank",
+		"4": "ratatouille:block/irrigation_tower/pipes",
+		"5": "ratatouille:block/irrigation_tower/fluid_tank_window_single",
+		"7": "ratatouille:block/irrigation_tower/copper_plating",
+		"8": "ratatouille:block/irrigation_tower/copper_underside",
+		"9": "ratatouille:block/irrigation_tower/legs",
+		"particle": "ratatouille:block/irrigation_tower/fluid_tank"
 	},
 	"elements": [
 		{

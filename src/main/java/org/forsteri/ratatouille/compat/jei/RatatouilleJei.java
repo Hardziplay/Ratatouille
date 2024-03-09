@@ -56,41 +56,6 @@ public class RatatouilleJei implements IModPlugin {
     private final List<CreateRecipeCategory<?>> allCategories = new ArrayList();
     private IIngredientManager ingredientManager;
 
-    final CreateRecipeCategory<?> threshing = builder(ThreshingRecipe.class)
-            .addTypedRecipes(CRRecipeTypes.THRESHING::getType)
-            .catalyst(CRBlocks.THRESHER::get)
-            .itemIcon(CRBlocks.THRESHER.get())
-            .emptyBackground(177, 53)
-            .build("threshing", ThreshingCategory::new);
-
-    final CreateRecipeCategory<?> squeezing = builder(SqueezingRecipe.class)
-            .addTypedRecipes(CRRecipeTypes.SQUEEZING::getType)
-            .catalyst(AllBlocks.MECHANICAL_PRESS::get)
-            .catalyst(CRBlocks.SQUEEZE_BASIN::get)
-            .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), CRBlocks.SQUEEZE_BASIN.get())
-            .emptyBackground(177, 103)
-            .build("squeezing", SqueezingCategory::new);
-
-    final CreateRecipeCategory<?> demolding = builder(DemoldingRecipe.class)
-            .addTypedRecipes(CRRecipeTypes.DEMOLDING::getType)
-            .catalyst(CRBlocks.MECHANICAL_DEMOLDER::get)
-            .emptyBackground(177, 70)
-            .build("demolding", DemoldingCategory::new);
-
-    final CreateRecipeCategory<?> baking = builder(SmokingRecipe.class)
-            .addTypedRecipes(() -> RecipeType.SMOKING)
-            .catalyst(CRBlocks.OVEN::get)
-            .doubleItemIcon(CRBlocks.OVEN.get(), Items.CAMPFIRE)
-            .emptyBackground(178, 72)
-            .build("baking", BakingCategory::new);
-
-    final CreateRecipeCategory<?> freezing = builder(FreezingRecipe.class)
-            .addTypedRecipes(CRRecipeTypes.FREEZING::getType)
-            .catalyst(CRBlocks.FROZEN_BLOCK::get)
-            .itemIcon(CRBlocks.FROZEN_BLOCK.get())
-            .emptyBackground(178, 72)
-            .build("freezing", FreezingCategory::new);
-
     public RatatouilleJei() {}
 
     @Override
@@ -100,6 +65,41 @@ public class RatatouilleJei implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        allCategories.clear();
+        final CreateRecipeCategory<?> threshing = builder(ThreshingRecipe.class)
+                .addTypedRecipes(CRRecipeTypes.THRESHING::getType)
+                .catalyst(CRBlocks.THRESHER::get)
+                .itemIcon(CRBlocks.THRESHER.get())
+                .emptyBackground(177, 53)
+                .build("threshing", ThreshingCategory::new);
+
+        final CreateRecipeCategory<?> squeezing = builder(SqueezingRecipe.class)
+                .addTypedRecipes(CRRecipeTypes.SQUEEZING::getType)
+                .catalyst(AllBlocks.MECHANICAL_PRESS::get)
+                .catalyst(CRBlocks.SQUEEZE_BASIN::get)
+                .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), CRBlocks.SQUEEZE_BASIN.get())
+                .emptyBackground(177, 103)
+                .build("squeezing", SqueezingCategory::new);
+
+        final CreateRecipeCategory<?> demolding = builder(DemoldingRecipe.class)
+                .addTypedRecipes(CRRecipeTypes.DEMOLDING::getType)
+                .catalyst(CRBlocks.MECHANICAL_DEMOLDER::get)
+                .emptyBackground(177, 70)
+                .build("demolding", DemoldingCategory::new);
+
+        final CreateRecipeCategory<?> baking = builder(SmokingRecipe.class)
+                .addTypedRecipes(() -> RecipeType.SMOKING)
+                .catalyst(CRBlocks.OVEN::get)
+                .doubleItemIcon(CRBlocks.OVEN.get(), Items.CAMPFIRE)
+                .emptyBackground(178, 72)
+                .build("baking", BakingCategory::new);
+
+        final CreateRecipeCategory<?> freezing = builder(FreezingRecipe.class)
+                .addTypedRecipes(CRRecipeTypes.FREEZING::getType)
+                .catalyst(CRBlocks.FROZEN_BLOCK::get)
+                .itemIcon(CRBlocks.FROZEN_BLOCK.get())
+                .emptyBackground(178, 72)
+                .build("freezing", FreezingCategory::new);
         allCategories.forEach(registration::addRecipeCategories);
     }
 

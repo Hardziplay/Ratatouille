@@ -3,13 +3,13 @@
 	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
-		"2": "ratatouille:blocks/squeeze_basin/fluid_tank",
-		"3": "ratatouille:blocks/squeeze_basin/fluid_tank_inner",
-		"4": "ratatouille:blocks/squeeze_basin/fluid_tank_top",
-		"6": "ratatouille:blocks/squeeze_basin/mouth",
-		"7": "ratatouille:blocks/squeeze_basin/mouth_face",
-		"8": "ratatouille:blocks/squeeze_basin/bottom",
-		"particle": "ratatouille:blocks/squeeze_basin/fluid_tank"
+		"2": "ratatouille:block/squeeze_basin/fluid_tank",
+		"3": "ratatouille:block/squeeze_basin/fluid_tank_inner",
+		"4": "ratatouille:block/squeeze_basin/fluid_tank_top",
+		"6": "ratatouille:block/squeeze_basin/mouth",
+		"7": "ratatouille:block/squeeze_basin/mouth_face",
+		"8": "ratatouille:block/squeeze_basin/bottom",
+		"particle": "ratatouille:block/squeeze_basin/fluid_tank"
 	},
 	"elements": [
 		{

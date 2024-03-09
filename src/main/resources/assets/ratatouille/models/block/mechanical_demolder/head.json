@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"5": "ratatouille:blocks/mechanical_demolder/mechanical_press_pole",
-		"6": "ratatouille:blocks/mechanical_demolder/sticker",
-		"particle": "ratatouille:blocks/mechanical_demolder/andesite_casing_short"
+		"5": "ratatouille:block/mechanical_demolder/mechanical_press_pole",
+		"6": "ratatouille:block/mechanical_demolder/sticker",
+		"particle": "ratatouille:block/mechanical_demolder/andesite_casing_short"
 	},
 	"elements": [
 		{

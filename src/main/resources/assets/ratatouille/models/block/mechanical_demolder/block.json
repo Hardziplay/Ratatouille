@@ -1,12 +1,12 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "ratatouille:blocks/mechanical_demolder/andesite_casing_short",
-		"1": "ratatouille:blocks/mechanical_demolder/demolder_bottom",
-		"2": "ratatouille:blocks/mechanical_demolder/gearbox_top",
-		"3": "ratatouille:blocks/mechanical_demolder/gearbox",
-		"4": "ratatouille:blocks/mechanical_demolder/demolder_inner",
-		"particle": "ratatouille:blocks/mechanical_demolder/andesite_casing_short"
+		"0": "ratatouille:block/mechanical_demolder/andesite_casing_short",
+		"1": "ratatouille:block/mechanical_demolder/demolder_bottom",
+		"2": "ratatouille:block/mechanical_demolder/gearbox_top",
+		"3": "ratatouille:block/mechanical_demolder/gearbox",
+		"4": "ratatouille:block/mechanical_demolder/demolder_inner",
+		"particle": "ratatouille:block/mechanical_demolder/andesite_casing_short"
 	},
 	"elements": [
 		{

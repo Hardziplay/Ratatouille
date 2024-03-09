@@ -2,14 +2,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "ratatouille:blocks/oven_fan/andesite_casing",
-		"1": "ratatouille:blocks/oven_fan/andesite_casing_very_short",
-		"2": "ratatouille:blocks/oven_fan/andesite_casing2",
-		"4": "ratatouille:blocks/oven_fan/fan_casing",
-		"5": "ratatouille:blocks/oven_fan/fan_side",
-		"6": "ratatouille:blocks/oven_fan/fan_side2",
-		"7": "ratatouille:blocks/oven_fan/fans_black",
-		"particle": "ratatouille:blocks/oven_fan/andesite_casing"
+		"0": "ratatouille:block/oven_fan/andesite_casing",
+		"1": "ratatouille:block/oven_fan/andesite_casing_very_short",
+		"2": "ratatouille:block/oven_fan/andesite_casing2",
+		"4": "ratatouille:block/oven_fan/fan_casing",
+		"5": "ratatouille:block/oven_fan/fan_side",
+		"6": "ratatouille:block/oven_fan/fan_side2",
+		"7": "ratatouille:block/oven_fan/fans_black",
+		"particle": "ratatouille:block/oven_fan/andesite_casing"
 	},
 	"elements": [
 		{
