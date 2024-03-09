@@ -1,5 +1,6 @@
 package org.forsteri.ratatouille.content.thresher;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
@@ -13,13 +14,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import com.jozufozu.flywheel.backend.Backend;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -66,7 +68,7 @@ public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEn
                 float processPercent = (float) (duration - timer) / duration * 0.5F;
                 if (!stack.isEmpty()) {
                     ms.pushPose();
-                    ItemStack resultStack = be.lastRecipe.getResultItem();
+                    ItemStack resultStack = be.lastRecipe.getResultItem(RegistryAccess.EMPTY);
                     Direction ejectDirection = be.getEjectDirection();
                     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
                     ms.scale(0.5F, 0.5F, 0.5F);
@@ -75,24 +77,24 @@ public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEn
                     switch (ejectDirection) {
                         case NORTH -> {
                             ms.translate(1, deltaY, deltaM);
-                            ms.mulPose(Vector3f.XP.rotationDegrees(66));
+                            ms.mulPose(Axis.XP.rotationDegrees(66));
                         }
                         case SOUTH -> {
                             ms.translate(1, deltaY, 2 - deltaM);
-                            ms.mulPose(Vector3f.XN.rotationDegrees(66));
+                            ms.mulPose(Axis.XN.rotationDegrees(66));
                         }
                         case WEST -> {
                             ms.translate(deltaM, deltaY,1);
-                            ms.mulPose(Vector3f.YP.rotationDegrees(90));
-                            ms.mulPose(Vector3f.XP.rotationDegrees(66));
+                            ms.mulPose(Axis.YP.rotationDegrees(90));
+                            ms.mulPose(Axis.XP.rotationDegrees(66));
                         }
                         case EAST -> {
                             ms.translate(2 - deltaM, deltaY,1);
-                            ms.mulPose(Vector3f.YP.rotationDegrees(-90));
-                            ms.mulPose(Vector3f.XP.rotationDegrees(66));
+                            ms.mulPose(Axis.YP.rotationDegrees(-90));
+                            ms.mulPose(Axis.XP.rotationDegrees(66));
                         }
                     }
-                    itemRenderer.renderStatic(resultStack, ItemTransforms.TransformType.FIXED, light, overlay, ms, buffer, 0);
+                    itemRenderer.renderStatic(resultStack, ItemDisplayContext.FIXED, light, overlay, ms, buffer, be.getLevel(), 0);
                     ms.popPose();
                     break;
                 }

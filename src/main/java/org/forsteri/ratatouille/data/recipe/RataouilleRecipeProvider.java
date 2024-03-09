@@ -1,6 +1,7 @@
 package org.forsteri.ratatouille.data.recipe;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 
@@ -11,13 +12,13 @@ import java.util.function.Consumer;
 public abstract class RataouilleRecipeProvider extends RecipeProvider {
     protected final List<GeneratedRecipe> all = new ArrayList<>();
 
-    public RataouilleRecipeProvider(DataGenerator generator) {
+    public RataouilleRecipeProvider(PackOutput generator) {
         super(generator);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> p_176532_) {
-        all.forEach(c -> c.register(p_176532_));
+    protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
+        all.forEach(c -> c.register(pWriter));
     }
 
     protected GeneratedRecipe register(GeneratedRecipe recipe) {

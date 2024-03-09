@@ -225,7 +225,7 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
                 BlockPos nozzlePos = getBlockPos().relative(getBlockState().getValue(FACING));
 
                 if (level.getBlockEntity(nozzlePos) instanceof NozzleBlockEntity) {
-                    float range = getMaxDistance() / 2;
+                    int range = (int) (getMaxDistance() / 2);
                     for (BlockPos corpPos : BlockPos.betweenClosed(nozzlePos.offset(-range, -range, -range), nozzlePos.offset(range, range, range))) {
                         addCorpBuffer(corps, new BlockPos(corpPos));
                     }

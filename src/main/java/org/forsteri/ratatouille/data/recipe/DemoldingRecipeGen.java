@@ -2,6 +2,7 @@ package org.forsteri.ratatouille.data.recipe;
 
 import com.simibubi.create.AllItems;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
@@ -18,7 +19,7 @@ public class DemoldingRecipeGen extends ProcessingRecipeGen{
             b -> b.output(CRItems.CAKE_BASE.get())
                     .output(CRItems.CAKE_MOLD.get())
         );
-    public DemoldingRecipeGen(DataGenerator generator) {
+    public DemoldingRecipeGen(PackOutput generator) {
         super(generator);
     }
 

@@ -8,10 +8,13 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.forsteri.ratatouille.Ratatouille;
+
+import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,11 +26,11 @@ public abstract class ProcessingRecipeGen extends RataouilleRecipeProvider{
     protected static final int BUCKET = 1000;
     protected static final int BOTTLE = 250;
 
-    public static void registerAll(DataGenerator gen) {
-        GENERATORS.add(new ThreshingRecipeGen(gen));
-        GENERATORS.add(new SqueezingRecipeGen(gen));
-        GENERATORS.add(new DemoldingRecipeGen(gen));
-        GENERATORS.add(new FreezingRecipeGen(gen));
+    public static void registerAll(DataGenerator gen, PackOutput output) {
+        GENERATORS.add(new ThreshingRecipeGen(output));
+        GENERATORS.add(new SqueezingRecipeGen(output));
+        GENERATORS.add(new DemoldingRecipeGen(output));
+        GENERATORS.add(new FreezingRecipeGen(output));
 
         gen.addProvider(true, new DataProvider() {
             @Override
@@ -36,19 +39,15 @@ public abstract class ProcessingRecipeGen extends RataouilleRecipeProvider{
             }
 
             @Override
-            public void run(CachedOutput dc) throws IOException {
-                GENERATORS.forEach(g -> {
-                    try {
-                        g.run(dc);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+            public CompletableFuture<?> run(CachedOutput dc) {
+                return CompletableFuture.allOf(GENERATORS.stream()
+                        .map(gen -> gen.run(dc))
+                        .toArray(CompletableFuture[]::new));
             }
         });
     }
 
-    public ProcessingRecipeGen(DataGenerator generator) {
+    public ProcessingRecipeGen(PackOutput generator) {
         super(generator);
     }
 
@@ -96,10 +95,5 @@ public abstract class ProcessingRecipeGen extends RataouilleRecipeProvider{
             String var10000 = registryName.getPath();
             return new ResourceLocation(Ratatouille.MOD_ID, var10000 + suffix);
         };
-    }
-
-    @Override
-    public String getName() {
-        return "Ratatouille's Processing Recipes: " + getRecipeType().getId().getPath();
     }
 }

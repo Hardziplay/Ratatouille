@@ -11,8 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
 import org.forsteri.ratatouille.content.frozen_block.FrozenBlock;
@@ -32,9 +31,7 @@ import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 public class CRBlocks {
 
     static {
-        Ratatouille.REGISTRATE.creativeModeTab(() -> {
-            return CRCreativeModeTabs.BASE_CREATIVE_TAB;
-        });
+        Ratatouille.REGISTRATE.setCreativeTab(CRCreativeModeTabs.BASE_CREATIVE_TAB);
     }
     @SuppressWarnings("removal")
     public static final BlockEntry<OvenBlock> OVEN = Ratatouille.REGISTRATE
@@ -68,7 +65,7 @@ public class CRBlocks {
     public static final BlockEntry<OvenFanBlock> OVEN_FAN = Ratatouille.REGISTRATE
             .block("oven_fan", OvenFanBlock::new)
             .initialProperties(SharedProperties::stone)
-            .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
+            .properties(p -> p.noOcclusion().mapColor(MapColor.STONE))
             .transform(pickaxeOnly())
             .transform(BlockStressDefaults.setImpact(2.0))
             .blockstate(BlockStateGen.horizontalBlockProvider(true))
@@ -82,7 +79,7 @@ public class CRBlocks {
     public static final BlockEntry<SqueezeBasinBlock> SQUEEZE_BASIN = Ratatouille.REGISTRATE
             .block("squeeze_basin", SqueezeBasinBlock::new)
             .initialProperties(SharedProperties::stone)
-            .properties(p -> p.noOcclusion().color(MaterialColor.STONE))
+            .properties(p -> p.noOcclusion().mapColor(MapColor.STONE))
             .transform(pickaxeOnly())
             .blockstate(new SqueezeBasinGenerator()::generate)
             .addLayer(() -> RenderType::cutoutMipped)
@@ -95,7 +92,7 @@ public class CRBlocks {
     public static final BlockEntry<MechanicalDemolderBlock> MECHANICAL_DEMOLDER = Ratatouille.REGISTRATE
             .block("mechanical_demolder", MechanicalDemolderBlock::new)
             .initialProperties(SharedProperties::stone)
-            .properties(p -> p.noOcclusion().color(MaterialColor.PODZOL))
+            .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL))
             .transform(pickaxeOnly())
             .transform(BlockStressDefaults.setImpact(8.0))
             .blockstate(BlockStateGen.horizontalBlockProvider(true))
@@ -121,7 +118,7 @@ public class CRBlocks {
     public static final BlockEntry<SpreaderBlock> SPREADER_BLOCK = Ratatouille.REGISTRATE
             .block("spreader", SpreaderBlock::new)
             .initialProperties(SharedProperties::stone)
-            .properties(p -> p.noOcclusion().color(MaterialColor.PODZOL))
+            .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL))
             .transform(pickaxeOnly())
             .transform(BlockStressDefaults.setImpact(2.0))
             .blockstate(BlockStateGen.directionalBlockProvider(true))
@@ -135,7 +132,7 @@ public class CRBlocks {
     public static final BlockEntry<FrozenBlock> FROZEN_BLOCK = Ratatouille.REGISTRATE
             .block("frozen_block", FrozenBlock::new)
             .initialProperties(SharedProperties::softMetal)
-            .properties((p) -> BlockBehaviour.Properties.of(Material.ICE_SOLID).strength(2.8F).friction(0.989F).sound(SoundType.GLASS).randomTicks())
+            .properties((p) -> BlockBehaviour.Properties.of().mapColor(MapColor.ICE).strength(2.8F).friction(0.989F).sound(SoundType.GLASS).randomTicks())
             .transform(pickaxeOnly())
             .blockstate(simpleCubeAll("frozen_block"))
             .item()

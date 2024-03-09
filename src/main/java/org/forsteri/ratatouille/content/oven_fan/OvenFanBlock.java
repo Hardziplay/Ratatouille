@@ -139,9 +139,7 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
             List<Direction> directions = IPlacementHelper.orderedByDistanceExceptAxis(pos, ray.getLocation(),
                     state.getValue(OvenFanBlock.HORIZONTAL_FACING)
                             .getAxis(),
-                    dir -> world.getBlockState(pos.relative(dir))
-                            .getMaterial()
-                            .isReplaceable());
+                    dir -> world.getBlockState(pos.relative(dir)).canBeReplaced());
 
             return directions.isEmpty() ? PlacementOffset.fail()
                     : PlacementOffset.success(pos.relative(directions.get(0)), s ->

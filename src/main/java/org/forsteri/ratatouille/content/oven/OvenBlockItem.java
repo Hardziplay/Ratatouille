@@ -99,8 +99,7 @@ public class OvenBlockItem extends BlockItem {
                 BlockState blockState = world.getBlockState(offsetPos);
                 if (blockState.getBlock() instanceof OvenBlock)
                     continue;
-                if (!blockState.getMaterial()
-                        .isReplaceable())
+                if (!blockState.canBeReplaced())
                     return;
                 tanksToPlace++;
             }

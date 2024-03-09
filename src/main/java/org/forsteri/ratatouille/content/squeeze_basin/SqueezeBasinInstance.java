@@ -5,17 +5,13 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.oriented.OrientedData;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-import com.simibubi.create.AllPartialModels;
+import com.mojang.math.Axis;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlock;
-import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.forsteri.ratatouille.entry.CRPartialModels;
+import org.joml.Quaternionf;
 
 public class SqueezeBasinInstance extends BlockEntityInstance<SqueezeBasinBlockEntity> implements DynamicInstance {
     private final OrientedData cover;
@@ -26,7 +22,7 @@ public class SqueezeBasinInstance extends BlockEntityInstance<SqueezeBasinBlockE
                 .getModel(CRPartialModels.SQUEEZE_BASIN_COVER, blockState)
                 .createInstance();
 
-        Quaternion q = Vector3f.YP
+        Quaternionf q = Axis.YP
                 .rotationDegrees(AngleHelper.horizontalAngle(blockState.getValue(MechanicalPressBlock.HORIZONTAL_FACING)));
 
         cover.setRotation(q);

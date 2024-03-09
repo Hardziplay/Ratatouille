@@ -1,24 +1,18 @@
 package org.forsteri.ratatouille.compat.jei.category;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
-import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.crafting.SmokingRecipe;
-import net.minecraft.world.level.block.Blocks;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedOven;
-import org.forsteri.ratatouille.entry.CRBlocks;
 
 public class BakingCategory extends CreateRecipeCategory<SmokingRecipe> {
 
@@ -40,29 +34,30 @@ public class BakingCategory extends CreateRecipeCategory<SmokingRecipe> {
         iRecipeLayoutBuilder
                 .addSlot(RecipeIngredientRole.OUTPUT, 141, 48)
                 .setBackground(getRenderedSlot(), -1, -1)
-                .addItemStack(smokingRecipe.getResultItem());
+                .addItemStack(smokingRecipe.getResultItem(RegistryAccess.EMPTY));
     }
 
     protected AllGuiTextures getBlockShadow() {
         return AllGuiTextures.JEI_LIGHT;
     }
 
-    protected void renderWidgets(PoseStack matrixStack, SmokingRecipe recipe, double mouseX, double mouseY) {
-        getBlockShadow().render(matrixStack, 65, 39);
-        AllGuiTextures.JEI_LONG_ARROW.render(matrixStack, 54, 51);
+    protected void renderWidgets(GuiGraphics graphics, SmokingRecipe recipe, double mouseX, double mouseY) {
+        getBlockShadow().render(graphics, 65, 39);
+        AllGuiTextures.JEI_LONG_ARROW.render(graphics, 54, 51);
     }
 
     @Override
-    public void draw(SmokingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        renderWidgets(stack, recipe, mouseX, mouseY);
+    public void draw(SmokingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        PoseStack stack = graphics.pose();
+        renderWidgets(graphics, recipe, mouseX, mouseY);
         stack.pushPose();
         stack.translate(75, -15, 0);
         stack.pushPose();
         stack.translate(0, 20, -7);
         heater.withHeat(HeatCondition.HEATED.visualizeAsBlazeBurner())
-                .draw(stack);
+                .draw(graphics);
         stack.popPose();
-        oven.draw(stack);
+        oven.draw(graphics);
         stack.popPose();
     }
 }

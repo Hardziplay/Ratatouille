@@ -13,6 +13,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
@@ -93,13 +94,13 @@ public class SqueezingCategory extends CreateRecipeCategory<SqueezingRecipe> {
     }
 
     @Override
-    public void draw(SqueezingRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
+    public void draw(SqueezingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         int vRows = (1 + recipe.getFluidResults().size() + recipe.getRollableResults().size()) / 2;
         if (vRows <= 2)
-            AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 136, -19 * (vRows - 1) + 32);
+            AllGuiTextures.JEI_DOWN_ARROW.render(graphics, 136, -19 * (vRows - 1) + 32);
         squeeze.setUseCasing(recipe.useCasing());
-        squeeze.draw(matrixStack, getBackground().getWidth() / 2 + 3, 34);
+        squeeze.draw(graphics, getBackground().getWidth() / 2 + 3, 34);
         if (recipe.useCasing())
-            Minecraft.getInstance().font.draw(matrixStack, Lang.translateDirect("recipe.sausage_casing_requirement"), 9, 86, 0xffffff);
+            graphics.drawString(Minecraft.getInstance().font, Lang.translateDirect("recipe.sausage_casing_requirement"), 9, 86, 0xffffff, false);
     }
 }

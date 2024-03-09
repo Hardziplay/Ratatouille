@@ -13,6 +13,7 @@ import com.simibubi.create.infrastructure.ponder.PonderIndex;
 import com.simibubi.create.infrastructure.ponder.SharedText;
 import com.tterrag.registrate.providers.ProviderType;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import org.forsteri.ratatouille.Ratatouille;
@@ -27,6 +28,7 @@ public class RataouilleDataGen {
 
     public static void gatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
+        PackOutput output = generator.getPackOutput();
         Ratatouille.REGISTRATE.addDataGenerator(ProviderType.LANG, provider -> {
             BiConsumer<String, String> langConsumer = provider::add;
             provideDefaultLang("en_us", langConsumer);
@@ -34,7 +36,7 @@ public class RataouilleDataGen {
         });
 
         if (event.includeServer()) {
-            ProcessingRecipeGen.registerAll(generator);
+            ProcessingRecipeGen.registerAll(generator, output);
         }
     }
 

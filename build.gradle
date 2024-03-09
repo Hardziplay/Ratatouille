@@ -161,7 +161,7 @@ dependencies {
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     implementation fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_version}")
-    implementation fg.deobf("curse.maven:cultural_delight-574622:${cultural_delight_version}")
+//    implementation fg.deobf("curse.maven:cultural_delight-574622:${cultural_delight_version}")
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge

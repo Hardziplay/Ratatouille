@@ -8,6 +8,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.gui.GuiGraphics;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedThresher;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 
@@ -45,9 +46,9 @@ public class ThreshingCategory  extends CreateRecipeCategory<ThreshingRecipe> {
     }
 
     @Override
-    public void draw(ThreshingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        AllGuiTextures.JEI_ARROW.render(matrixStack, 85, 32);
-        AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 43, 4);
-        thresher.draw(matrixStack, 48, 27);
+    public void draw(ThreshingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        AllGuiTextures.JEI_ARROW.render(graphics, 85, 32);
+        AllGuiTextures.JEI_DOWN_ARROW.render(graphics, 43, 4);
+        thresher.draw(graphics, 48, 27);
     }
 }

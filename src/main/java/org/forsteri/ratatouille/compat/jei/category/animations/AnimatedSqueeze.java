@@ -1,11 +1,12 @@
 package org.forsteri.ratatouille.compat.jei.category.animations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
 import org.forsteri.ratatouille.entry.CRBlocks;
@@ -19,36 +20,37 @@ public class AnimatedSqueeze extends AnimatedKinetics {
     }
 
     @Override
-    public void draw(PoseStack matrixStack, int xOffset, int yOffset) {
+    public void draw(GuiGraphics graphics, int xOffset, int yOffset) {
+        PoseStack matrixStack = graphics.pose();
         matrixStack.pushPose();
         matrixStack.translate(xOffset, yOffset, 200);
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-15.5f));
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(22.5f));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(-15.5f));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(22.5f));
         int scale = 23;
 
         blockElement(shaft(Direction.Axis.Z))
                 .rotateBlock(0, 0, getCurrentAngle())
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(AllBlocks.MECHANICAL_PRESS.getDefaultState())
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(AllPartialModels.MECHANICAL_PRESS_HEAD)
                 .atLocal(0, -getAnimatedHeadOffset(), 0)
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(CRBlocks.SQUEEZE_BASIN.getDefaultState().setValue(SqueezeBasinBlock.CASING, useCasing))
                 .atLocal(0, 1.65, 0)
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(CRPartialModels.SQUEEZE_BASIN_COVER)
                 .atLocal(0, -getAnimatedCoverOffset(), 0)
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         matrixStack.popPose();
     }

@@ -8,6 +8,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.gui.GuiGraphics;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedDemolder;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.entry.CRTags;
@@ -48,11 +49,11 @@ public class DemoldingCategory extends CreateRecipeCategory<DemoldingRecipe> {
     }
 
     @Override
-    public void draw(DemoldingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        AllGuiTextures.JEI_SHADOW.render(matrixStack, 61, 41);
-        AllGuiTextures.JEI_LONG_ARROW.render(matrixStack, 52, 54);
+    public void draw(DemoldingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        AllGuiTextures.JEI_SHADOW.render(graphics, 61, 41);
+        AllGuiTextures.JEI_LONG_ARROW.render(graphics, 52, 54);
 
-        demolder.draw(matrixStack, getBackground().getWidth() / 2 - 17, 22);
+        demolder.draw(graphics, getBackground().getWidth() / 2 - 17, 22);
     }
 
 }

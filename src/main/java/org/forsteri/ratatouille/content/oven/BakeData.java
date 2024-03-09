@@ -7,6 +7,7 @@ import joptsimple.internal.Strings;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -54,7 +55,7 @@ public class BakeData {
                     if (inventory.tickTillFinishCooking <= 0) {
                         if (inventory.lastRecipe == null)
                             continue;
-                        ItemStack resultStack = inventory.lastRecipe.getResultItem().copy();
+                        ItemStack resultStack = inventory.lastRecipe.getResultItem(RegistryAccess.EMPTY).copy();
                         resultStack.setCount(inventory.getStackInSlot(0).getCount());
                         inventory.setStackInSlot(0, resultStack);
                     }

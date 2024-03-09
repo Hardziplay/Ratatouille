@@ -43,7 +43,7 @@ public class ChocolateMoldFilledItem extends Item {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, @NotNull ItemEntity entity) {
-        Level level = entity.getLevel();
+        Level level = entity.level();
         CompoundTag itemData = entity.getItem()
                 .getOrCreateTag();
         if (itemData.getInt("CollectingChillness") >= MAX_CHILLNESS) {

@@ -26,6 +26,12 @@ license="${mod_license}"
 [[dependencies.${mod_id}]]
    modId="create"
    mandatory=true
-   versionRange="[0.5.1.e,)"
+   versionRange="[0.5.1.f,)"
    ordering="NONE"
    side="BOTH"
+[[dependencies.${mod_id}]]
+modId="farmersdelight"
+mandatory=true
+versionRange="[1.2.3,)"
+ordering="NONE"
+side="BOTH"
