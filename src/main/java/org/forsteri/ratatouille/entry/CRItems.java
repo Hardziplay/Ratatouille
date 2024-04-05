@@ -1,9 +1,15 @@
 package org.forsteri.ratatouille.entry;
 
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.chef_hat.ChefHatItem;
+import org.forsteri.ratatouille.content.chef_hat.ChefHatModel;
+import org.forsteri.ratatouille.content.chef_hat.ChefHatWithGogglesItem;
+import org.forsteri.ratatouille.content.chef_hat.ChefHatWithGogglesModel;
 import org.forsteri.ratatouille.content.chocolate_mold_filled.ChocolateMoldFilledItem;
 
 public class CRItems {
@@ -36,6 +42,16 @@ public class CRItems {
     public static final ItemEntry<Item> CAKE_BASE = Ratatouille.REGISTRATE.item("cake_base", Item::new).properties(p -> p.food(new FoodProperties.Builder().nutrition(10)
             .saturationMod(0.5F)
             .build())).register();
+    public static final ItemEntry<ChefHatItem> CHEF_HAT = Ratatouille.REGISTRATE.item("chef_hat", ChefHatItem::new)
+            .properties(p -> p.stacksTo(1))
+            .onRegister(CreateRegistrate.itemModel(() -> ChefHatModel::new))
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/chef_hat")))
+            .register();
+    public static final ItemEntry<ChefHatWithGogglesItem> CHEF_HAT_WITH_GOGGLES = Ratatouille.REGISTRATE.item("chef_hat_with_goggles", ChefHatWithGogglesItem::new)
+            .properties(p -> p.stacksTo(1))
+            .onRegister(CreateRegistrate.itemModel(() -> ChefHatWithGogglesModel::new))
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/chef_hat_with_goggles")))
+            .register();
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
     //public static final ItemEntry<Item> SUGAR_CUBE = Ratatouille.REGISTRATE.item("sugar_cube", Item::new).register();
