@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " Y ",
+    " X "
+  ],
+  "key": {
+    "Y": {
+      "item": "minecraft:white_wool"
+    },
+    "X": {
+      "tag": "forge:tools/knives"
+    }
+  },
+  "result": {
+    "item": "ratatouille:chef_hat",
+    "count": 1
+  }
+}
