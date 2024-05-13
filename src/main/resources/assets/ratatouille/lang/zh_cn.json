@@ -33,6 +33,8 @@
   "item.ratatouille.sausage": "香肠",
   "item.ratatouille.sausage_casing": "肠衣",
   "item.ratatouille.wheat_kernels": "小麦粒",
+  "item.ratatouille.chef_hat": "厨师帽",
+  "item.ratatouille.chef_hat_with_goggles": "带护目镜的厨师帽",
   "ratatouille.oven.status": "烤箱状态 : ",
   "ratatouille.oven.idle": "待机 ",
   "ratatouille.oven.lvl": "等级 ",
