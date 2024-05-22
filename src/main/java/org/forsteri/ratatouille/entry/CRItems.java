@@ -45,12 +45,10 @@ public class CRItems {
     public static final ItemEntry<ChefHatItem> CHEF_HAT = Ratatouille.REGISTRATE.item("chef_hat", ChefHatItem::new)
             .properties(p -> p.stacksTo(1))
             .onRegister(CreateRegistrate.itemModel(() -> ChefHatModel::new))
-            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/chef_hat")))
             .register();
     public static final ItemEntry<ChefHatWithGogglesItem> CHEF_HAT_WITH_GOGGLES = Ratatouille.REGISTRATE.item("chef_hat_with_goggles", ChefHatWithGogglesItem::new)
             .properties(p -> p.stacksTo(1))
             .onRegister(CreateRegistrate.itemModel(() -> ChefHatWithGogglesModel::new))
-            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/chef_hat_with_goggles")))
             .register();
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
