@@ -1,5 +1,6 @@
 package org.forsteri.ratatouille.content.oven;
 
+import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.fluids.tank.FluidTankCTBehaviour;
 import com.simibubi.create.content.fluids.tank.FluidTankGenerator;
@@ -29,6 +30,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class OvenModel extends CTModel {
+    public static OvenModel standard(BakedModel originalModel) {
+        return new OvenModel(originalModel,
+                CRSpriteShifts.OVEN_SPRITE, CRSpriteShifts.OVEN_SPRITE_TOP, CRSpriteShifts.OVEN_SPRITE_TOP_INNER, CRSpriteShifts.OVEN_SPRITE_BOTTOM, CRSpriteShifts.OVEN_SPRITE_BOTTOM_INNER, CRSpriteShifts.OVEN_SPRITE_SHIFT_2x2);
+    }
     public OvenModel(BakedModel originalModel, CTSpriteShiftEntry side, CTSpriteShiftEntry top,
                            CTSpriteShiftEntry topInner, CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
         super(originalModel, new OvenCTBehavior(side, top, topInner, bottom, bottomInner, shift2x2));

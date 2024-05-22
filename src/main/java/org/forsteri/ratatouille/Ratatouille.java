@@ -1,5 +1,6 @@
 package org.forsteri.ratatouille;
 
+import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -7,6 +8,7 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -44,8 +46,7 @@ public class Ratatouille {
         CRTags.register();
         CRRecipeTypes.register(modEventBus);
         CRParticleTypes.register(modEventBus);
-
-        modEventBus.addListener(CRParticleTypes::registerFactories);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(CRParticleTypes::registerFactories));
         modEventBus.addListener(EventPriority.LOWEST, RataouilleDataGen::gatherData);
     }
 
