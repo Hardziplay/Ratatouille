@@ -5,6 +5,7 @@
       "item": "ratatouille:wheat_kernels"
     }
   ],
+  "processingTime": 200,
   "results": [
     {
       "item": "create:wheat_flour",
