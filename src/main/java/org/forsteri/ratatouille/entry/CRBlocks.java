@@ -40,8 +40,7 @@ public class CRBlocks {
             .properties(p -> p.lightLevel(state -> 1).isRedstoneConductor((p1, p2, p3) -> true).noOcclusion())
             .transform(pickaxeOnly())
             .blockstate(new OvenModel.OvenGenerator()::generate)
-            .onRegister(CreateRegistrate.blockModel(() -> originalModel -> new OvenModel(originalModel,
-                    CRSpriteShifts.OVEN_SPRITE, CRSpriteShifts.OVEN_SPRITE_TOP, CRSpriteShifts.OVEN_SPRITE_TOP_INNER, CRSpriteShifts.OVEN_SPRITE_BOTTOM, CRSpriteShifts.OVEN_SPRITE_BOTTOM_INNER, CRSpriteShifts.OVEN_SPRITE_SHIFT_2x2)))
+            .onRegister(CreateRegistrate.blockModel(() -> OvenModel::standard))
             .addLayer(() -> RenderType::cutoutMipped)
             .item(OvenBlockItem::new)
             .build()
