@@ -31,6 +31,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -264,6 +265,13 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
             return stack.is(Items.BONE_MEAL);
+        }
+
+        @Override
+        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+            if (!this.isItemValid(slot, stack))
+                return stack;
+            return super.insertItem(slot, stack, simulate);
         }
 
     }
