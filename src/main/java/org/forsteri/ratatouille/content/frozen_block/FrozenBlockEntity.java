@@ -15,8 +15,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
-import plus.dragons.createcentralkitchen.foundation.data.recipe.provider.CRRecipes;
-
 import java.util.List;
 import java.util.Optional;
 

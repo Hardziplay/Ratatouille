@@ -166,7 +166,6 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    implementation fg.deobf("curse.maven:create_central_kitchen-820977:${central_kitchen_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
