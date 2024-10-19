@@ -19,7 +19,6 @@ import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
 import org.forsteri.ratatouille.content.oven.*;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
 import org.forsteri.ratatouille.content.spreader.SpreaderBlock;
-import org.forsteri.ratatouille.content.spreader.SpreaderBlockEntity;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinGenerator;
 import org.forsteri.ratatouille.content.thresher.ThresherBlock;

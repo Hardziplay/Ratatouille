@@ -5,6 +5,7 @@ import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.demolder.DemolderInstance;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlockEntity;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderRenderer;
+import org.forsteri.ratatouille.content.frozen_block.FrozenBlockEntity;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlockEntity;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerRenderer;
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
@@ -67,6 +68,11 @@ public class CRBlockEntityTypes {
             .instance(() -> SpreaderInstance::new)
             .validBlock(CRBlocks.SPREADER_BLOCK)
             .renderer(() -> SpreaderRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<FrozenBlockEntity> FROZEN_BLOCK_ENTITY = Ratatouille.REGISTRATE
+            .blockEntity("frozen_block", FrozenBlockEntity::new)
+            .validBlock(CRBlocks.FROZEN_BLOCK)
             .register();
 
     public static void register() {}
