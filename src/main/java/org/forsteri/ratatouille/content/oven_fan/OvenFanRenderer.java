@@ -1,15 +1,13 @@
 package org.forsteri.ratatouille.content.oven_fan;
 
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.trains.display.FlapDisplayBlock;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -29,12 +27,12 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
 
     protected void renderSafe(OvenFanBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
-        if (!Backend.canUseInstancing(be.getLevel())) {
+        if (!VisualizationManager.supportsVisualization(be.getLevel())) {
             Direction direction = (Direction)be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
             VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
             int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
             int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
-            SuperByteBuffer fanInner = CachedBufferer.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
+            SuperByteBuffer fanInner = CachedBuffers.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
             float time = AnimationTickHolder.getRenderTime(be.getLevel());
             float speed = be.getSpeed() * 5.0F;
             if (speed > 0.0F) {
@@ -51,9 +49,9 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
         }
     }
 
-    @Override
-    protected SuperByteBuffer getRotatedModel(OvenFanBlockEntity be, BlockState state) {
-        return CachedBufferer.partialFacingVertical(AllPartialModels.SHAFTLESS_COGWHEEL, state,
-                state.getValue(OvenFanBlock.HORIZONTAL_FACING));
-    }
+//    @Override
+//    protected SuperByteBuffer getRotatedModel(OvenFanBlockEntity be, BlockState state) {
+//        return CachedBufferer.partialFacingVertical(AllPartialModels.SHAFTLESS_COGWHEEL, state,
+//                state.getValue(OvenFanBlock.HORIZONTAL_FACING));
+//    }
 }

@@ -1,8 +1,6 @@
 package org.forsteri.ratatouille.content.oven;
 
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.BoilerHeaters;
-import com.simibubi.create.foundation.utility.Components;
 import joptsimple.internal.Strings;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -90,7 +88,7 @@ public class BakeData {
             for (int zOffset = 0; zOffset < controller.radius; zOffset++) {
                 BlockPos pos = controllerPos.offset(xOffset, -1, zOffset);
                 BlockState blockState = level.getBlockState(pos);
-                float heat = BoilerHeaters.getActiveHeat(level, pos, blockState);
+                float heat = BoilerHeaters.blazeBurner(level, pos, blockState);
                 if (heat > 0) {
                     tempLevel += heat;
                 }
@@ -177,12 +175,12 @@ public class BakeData {
     }
 
     private MutableComponent blockComponent(int level) {
-        return Components.literal(
+        return Component.literal(
                 "" + "\u2588".repeat(0) + "\u2592".repeat(level - 8) + "\u2591".repeat(8 - level));
     }
 
     private MutableComponent barComponent(int level) {
-        return Components.empty()
+        return Component.empty()
                 .append(bars(Math.max(0, 0 - 1), ChatFormatting.DARK_GREEN))
                 .append(bars(0 > 0 ? 1 : 0, ChatFormatting.GREEN))
                 .append(bars(Math.max(0, level - 0), ChatFormatting.DARK_GREEN))
@@ -193,7 +191,7 @@ public class BakeData {
     }
 
     @NotNull
-    public MutableComponent getLevelComponent() {
+    public MutableComponent getHeatLevelTextComponent() {
         int ovenLevel = Math.min(fanLevel, Math.min(sizeLevel, tempLevel));
 
         if (ovenLevel == 0) {
@@ -206,7 +204,7 @@ public class BakeData {
     }
 
     private MutableComponent bars(int level, ChatFormatting format) {
-        return Components.literal(Strings.repeat('|', level))
+        return Component.literal(Strings.repeat('|', level))
                 .withStyle(format);
     }
 
@@ -215,19 +213,24 @@ public class BakeData {
 //        tooltip.add(Component.nullToEmpty("Fan level: " + fanLevel));
 //        tooltip.add(Component.nullToEmpty("Size level: " + sizeLevel));
 //        tooltip.add(Component.nullToEmpty("Temp level: " + tempLevel));
-        Component indent = Components.literal(IHaveGoggleInformation.spacing);
-        Component indent2 = Components.literal(IHaveGoggleInformation.spacing + " ");
+//        Component indent = Component.literal(IHaveGoggleInformation.spacing);
+//        Component indent2 = Component.literal(IHaveGoggleInformation.spacing + " ");
+//
+//        tooltip.add(indent.plainCopy()
+//                .append(
+//                        Lang.translateDirect("oven.status").append(getHeatLevelTextComponent().withStyle(ChatFormatting.GREEN))));
+//        tooltip.add(indent2.plainCopy()
+//                .append(getSizeComponent(true, false)));
+//        tooltip.add(indent2.plainCopy()
+//                .append(getFanComponent(true, false)));
+//        tooltip.add(indent2.plainCopy()
+//                .append(getHeatComponent(true, false)));
 
-        tooltip.add(indent.plainCopy()
-                .append(
-                        Lang.translateDirect("oven.status").append(getLevelComponent().withStyle(ChatFormatting.GREEN))));
-        tooltip.add(indent2.plainCopy()
-                .append(getSizeComponent(true, false)));
-        tooltip.add(indent2.plainCopy()
-                .append(getFanComponent(true, false)));
-        tooltip.add(indent2.plainCopy()
-                .append(getHeatComponent(true, false)));
-
+        Lang.translate("oven.status", getHeatLevelTextComponent().withStyle(ChatFormatting.GREEN))
+                .forGoggles(tooltip);
+        Lang.builder().add(getSizeComponent(true, false)).forGoggles(tooltip, 1);
+        Lang.builder().add(getFanComponent(true, false)).forGoggles(tooltip, 1);
+        Lang.builder().add(getHeatComponent(true, false)).forGoggles(tooltip, 1);
 
         return true;
     }

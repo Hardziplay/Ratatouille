@@ -7,8 +7,8 @@ import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.content.logistics.chute.AbstractChuteBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.fluid.FluidHelper;
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
+
+import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -112,7 +112,7 @@ public class SpreaderBlock extends DirectionalKineticBlock implements IBE<Spread
     }
 
     protected void blockUpdate(BlockState state, LevelAccessor worldIn, BlockPos pos) {
-        if (worldIn instanceof WrappedWorld)
+        if (worldIn instanceof WrappedLevel)
             return;
         notifyFanBlockEntity(worldIn, pos);
     }

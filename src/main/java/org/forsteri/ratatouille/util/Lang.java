@@ -4,21 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.LangBuilder;
-import com.simibubi.create.foundation.utility.LangNumberFormat;
+import net.createmod.catnip.lang.LangNumberFormat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.compat.jei.RatatouilleJei;
+import net.createmod.catnip.lang.LangBuilder;
 
 public class Lang {
 
     public static MutableComponent translateDirect(String key, Object... args) {
-        return Components.translatable( Ratatouille.MOD_ID + "." + key, resolveBuilders(args));
+        return Component.translatable( Ratatouille.MOD_ID + "." + key, resolveBuilders(args));
     }
 
     public static String asId(String name) {
@@ -30,18 +28,18 @@ public class Lang {
         return asId.endsWith("s") ? asId.substring(0, asId.length() - 1) : asId;
     }
 
-    public static List<Component> translatedOptions(String prefix, String... keys) {
-        List<Component> result = new ArrayList(keys.length);
-        String[] var3 = keys;
-        int var4 = keys.length;
-
-        for(int var5 = 0; var5 < var4; ++var5) {
-            String key = var3[var5];
-            result.add(translate((prefix != null ? prefix + "." : "") + key).component());
-        }
-
-        return result;
-    }
+//    public static List<Component> translatedOptions(String prefix, String... keys) {
+//        List<Component> result = new ArrayList(keys.length);
+//        String[] var3 = keys;
+//        int var4 = keys.length;
+//
+//        for(int var5 = 0; var5 < var4; ++var5) {
+//            String key = var3[var5];
+//            result.add(translate((prefix != null ? prefix + "." : "") + key).component());
+//        }
+//
+//        return result;
+//    }
 
     public static LangBuilder builder() {
         return new LangBuilder(Ratatouille.MOD_ID);

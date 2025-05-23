@@ -3,12 +3,11 @@ package org.forsteri.ratatouille.content.oven_fan;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
-import com.simibubi.create.content.trains.display.FlapDisplayBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
-import com.simibubi.create.foundation.placement.PlacementHelpers;
-import com.simibubi.create.foundation.placement.PlacementOffset;
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
+import net.createmod.catnip.levelWrappers.WrappedLevel;
+import net.createmod.catnip.placement.IPlacementHelper;
+import net.createmod.catnip.placement.PlacementHelpers;
+import net.createmod.catnip.placement.PlacementOffset;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -69,7 +68,7 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
     }
 
     protected void blockUpdate(BlockState state, LevelAccessor worldIn, BlockPos pos) {
-        if (!(worldIn instanceof WrappedWorld)) {
+        if (!(worldIn instanceof WrappedLevel)) {
             this.notifyOvenFanBlockEntity(worldIn, pos);
         }
     }

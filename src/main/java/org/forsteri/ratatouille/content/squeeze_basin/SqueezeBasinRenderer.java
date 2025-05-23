@@ -1,13 +1,13 @@
 package org.forsteri.ratatouille.content.squeeze_basin;
 
-import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -23,7 +23,7 @@ public class SqueezeBasinRenderer extends SafeBlockEntityRenderer<SqueezeBasinBl
 
     @Override
     protected void renderSafe(SqueezeBasinBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (Backend.canUseInstancing(be.getLevel()))
+        if (VisualizationManager.supportsVisualization(be.getLevel()))
             return;
 
         float renderedHeadOffset = 0;
@@ -34,7 +34,7 @@ public class SqueezeBasinRenderer extends SafeBlockEntityRenderer<SqueezeBasinBl
                     * pressingBehaviour.mode.headOffset - 1;
             renderedHeadOffset = Math.max(0, offset);
         }
-        SuperByteBuffer headRender = CachedBufferer.partialFacing(CRPartialModels.SQUEEZE_BASIN_COVER, blockState,
+        SuperByteBuffer headRender = CachedBuffers.partialFacing(CRPartialModels.SQUEEZE_BASIN_COVER, blockState,
                 blockState.getValue(HORIZONTAL_FACING));
         headRender.translate(0, -renderedHeadOffset, 0)
                 .light(light)

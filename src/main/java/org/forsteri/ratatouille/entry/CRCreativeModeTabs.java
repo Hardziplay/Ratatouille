@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.entry;
 
-import com.simibubi.create.foundation.utility.Components;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -9,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -41,7 +41,7 @@ public class CRCreativeModeTabs {
     static {
         REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Ratatouille.MOD_ID);
         BASE_CREATIVE_TAB = REGISTER.register("base", () -> {
-            return CreativeModeTab.builder().title(Components.translatable("itemGroup.ratatouille.base")).withTabsBefore(new ResourceKey[]{CreativeModeTabs.SPAWN_EGGS}).icon(CRBlocks.OVEN::asStack).displayItems(new RegistrateDisplayItemsGenerator(true, CRCreativeModeTabs.BASE_CREATIVE_TAB)).build();
+            return CreativeModeTab.builder().title(Component.translatable("itemGroup.ratatouille.base")).withTabsBefore(new ResourceKey[]{CreativeModeTabs.SPAWN_EGGS}).icon(CRBlocks.OVEN::asStack).displayItems(new RegistrateDisplayItemsGenerator(true, CRCreativeModeTabs.BASE_CREATIVE_TAB)).build();
         });
     }
 

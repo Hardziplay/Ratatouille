@@ -3,7 +3,7 @@ package org.forsteri.ratatouille.data.recipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -55,7 +55,7 @@ public abstract class ProcessingRecipeGen extends RataouilleRecipeProvider{
         ProcessingRecipeSerializer<T> serializer = this.getSerializer();
         RataouilleRecipeProvider.GeneratedRecipe generatedRecipe = (c) -> {
             ItemLike itemLike = (ItemLike)singleIngredient.get();
-            ((ProcessingRecipeBuilder)transform.apply((new ProcessingRecipeBuilder(serializer.getFactory(), new ResourceLocation(namespace, RegisteredObjects.getKeyOrThrow(itemLike.asItem()).getPath()))).withItemIngredients(new Ingredient[]{Ingredient.of(new ItemLike[]{itemLike})}))).build(c);
+            ((ProcessingRecipeBuilder)transform.apply((new ProcessingRecipeBuilder(serializer.getFactory(), new ResourceLocation(namespace, CatnipServices.REGISTRIES.getKeyOrThrow(itemLike.asItem()).getPath()))).withItemIngredients(new Ingredient[]{Ingredient.of(new ItemLike[]{itemLike})}))).build(c);
         };
         this.all.add(generatedRecipe);
         return generatedRecipe;
@@ -91,7 +91,7 @@ public abstract class ProcessingRecipeGen extends RataouilleRecipeProvider{
 
     protected Supplier<ResourceLocation> idWithSuffix(Supplier<ItemLike> item, String suffix) {
         return () -> {
-            ResourceLocation registryName = RegisteredObjects.getKeyOrThrow(((ItemLike)item.get()).asItem());
+            ResourceLocation registryName = CatnipServices.REGISTRIES.getKeyOrThrow(((ItemLike)item.get()).asItem());
             String var10000 = registryName.getPath();
             return new ResourceLocation(Ratatouille.MOD_ID, var10000 + suffix);
         };

@@ -1,18 +1,6 @@
 package org.forsteri.ratatouille.content.chocolate_mold_filled;
 
-import com.simibubi.create.AllItems;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.infrastructure.config.AllConfigs;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import org.forsteri.ratatouille.entry.CRBlocks;
-import org.forsteri.ratatouille.entry.CRItems;
-import org.jetbrains.annotations.NotNull;
-
 public class ChocolateMoldFilledItem extends Item {
 
     public static int MAX_CHILLNESS = 50;

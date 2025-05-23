@@ -5,13 +5,9 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.utility.FilesHelper;
-import com.simibubi.create.infrastructure.ponder.AllPonderTags;
-import com.simibubi.create.infrastructure.ponder.GeneralText;
-import com.simibubi.create.infrastructure.ponder.PonderIndex;
-import com.simibubi.create.infrastructure.ponder.SharedText;
 import com.tterrag.registrate.providers.ProviderType;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -56,7 +52,6 @@ public class RataouilleDataGen {
 
     private static void providePonderLang(BiConsumer<String, String> consumer) {
         CRPonders.register();
-        PonderLocalization.generateSceneLang();
-        PonderLocalization.provideLang(Ratatouille.MOD_ID, consumer);
+        PonderIndex.getLangAccess().provideLang(Ratatouille.MOD_ID, consumer);
     }
 }

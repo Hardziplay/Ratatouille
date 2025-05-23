@@ -1,7 +1,7 @@
 package org.forsteri.ratatouille.entry;
 
-import com.simibubi.create.foundation.ponder.PonderRegistrationHelper;
-import com.simibubi.create.foundation.ponder.PonderTag;
+
+import net.createmod.ponder.foundation.PonderTag;
 import net.minecraft.resources.ResourceLocation;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.ponders.*;
