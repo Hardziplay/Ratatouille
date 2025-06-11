@@ -18,8 +18,8 @@ plugins {
 
 apply plugin: 'org.spongepowered.mixin'
 
-group = mod_version
-version = mod_group_id
+group = mod_group_id
+version = mod_version
 
 base {
     archivesName = mod_id
@@ -154,17 +154,22 @@ repositories {
         name "createmod maven"
         url "https://maven.createmod.net/"
     }
+    maven {
+        name "JitPack"
+        url 'https://jitpack.io'
+    }
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
 }
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}"))
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
     compileOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-    implementation fg.deobf("curse.maven:create-328085:${create_version}")
-    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
+    implementation( fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false } )
+    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"){ transitive = false } )
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     implementation fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_version}")
     implementation fg.deobf("curse.maven:create_central_kitchen-820977:${create_central_kitchen_version}")
