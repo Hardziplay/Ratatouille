@@ -5,6 +5,9 @@ import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.fluid.FluidHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -16,7 +19,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -28,13 +33,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
+import org.forsteri.ratatouille.entry.CRFluids;
 import org.jetbrains.annotations.NotNull;
 
 public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements IWrenchable, IBE<IrrigationTowerBlockEntity> {
 
     public IrrigationTowerBlock(Properties pProperties) {
-        super(pProperties);
+        super(pProperties.randomTicks());
+
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
@@ -81,4 +89,37 @@ public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements 
     public BlockEntityType<? extends IrrigationTowerBlockEntity> getBlockEntityType() {
         return CRBlockEntityTypes.IRRIGATION_TOWER_BLOCK_ENTITY.get();
     }
+
+    @Override
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (!(blockEntity instanceof IrrigationTowerBlockEntity be)) return;
+
+        FluidStack fluid = be.getTankInventory().getFluid();
+
+
+        if (!fluid.getFluid().isSame(CRFluids.Compost_Tea.get().getSource())) return;
+        if (fluid.getAmount() < 50) return;
+
+        BlockPos center = pos.below();
+        for (int dx = -8; dx <= 8; dx++) {
+            for (int dz = -8; dz <= 8; dz++) {
+                if (random.nextFloat() < 0.20f) {
+                    BlockPos target = center.offset(dx, 0, dz);
+                    BlockState targetState = level.getBlockState(target);
+
+                    if (targetState.is(Blocks.FARMLAND)) {
+                        Block richSoil = ForgeRegistries.BLOCKS.getValue(
+                                new ResourceLocation("farmersdelight:rich_soil_farmland"));
+                        if (richSoil != null) {
+                            level.setBlock(target, richSoil.defaultBlockState(), 3);
+                            be.getTankInventory().drain(50, IFluidHandler.FluidAction.EXECUTE);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

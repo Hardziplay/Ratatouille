@@ -22,6 +22,7 @@ import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.forsteri.ratatouille.entry.CRFluids;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
     }
 
     public static void isNearWater(LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-        for (BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-8, 0, -8), pPos.offset(8, 1, 8))) {
+        for (BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-8, 0, -8), pPos.offset(8, 0, 8))) {
             if (pLevel.getBlockEntity(blockpos.above()) instanceof IrrigationTowerBlockEntity be) {
                 if (!be.getTankInventory().drain(1000, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
 //                    be.getTankInventory().drain(1000, IFluidHandler.FluidAction.EXECUTE);
@@ -64,7 +65,8 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
 
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.getFluid().isSame(Fluids.WATER);
+            return stack.getFluid().isSame(Fluids.WATER)
+                    || stack.getFluid().isSame(CRFluids.Compost_Tea.get().getSource());
         }
     }
 

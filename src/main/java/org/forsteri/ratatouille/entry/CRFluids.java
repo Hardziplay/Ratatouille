@@ -43,6 +43,18 @@ public class CRFluids {
                     .lang("Egg Yolk")
                     .register();
 
+    public static final FluidEntry<VirtualFluid> Compost_Tea =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("compost_tea")
+                    .lang("Compost Tea")
+                    .register();
+
+    public static final FluidEntry<VirtualFluid> BIO_GAS =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("bio_gas")
+                    .lang("Biogas")
+                    .register();
+
     public static void register() {}
 
     private static class BaseFluidType extends AllFluids.TintedFluidType {

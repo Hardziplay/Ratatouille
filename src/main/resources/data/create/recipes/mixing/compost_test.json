@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "wheat_seeds"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:compost_resiude"
+    },
+    {
+      "amount": 1000,
+      "fluid": "ratatouille:compost_tea"
+    },
+    {
+      "amount": 1000,
+      "fluid": "ratatouille:bio_gas"
+    }
+  ]
+}
