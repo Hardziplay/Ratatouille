@@ -1,19 +1,20 @@
 package org.forsteri.ratatouille.compat.jei.category;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedDemolder;
+import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
+import org.forsteri.ratatouille.entry.CRTags;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
+import java.util.List;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
-import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedDemolder;
-import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
-import org.forsteri.ratatouille.entry.CRTags;
-
-import java.util.List;
+import net.minecraft.world.item.crafting.Ingredient;
 
 public class DemoldingCategory extends CreateRecipeCategory<DemoldingRecipe> {
     private final AnimatedDemolder demolder = new AnimatedDemolder();
@@ -36,12 +37,12 @@ public class DemoldingCategory extends CreateRecipeCategory<DemoldingRecipe> {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 104, 1)
                         .setBackground(getRenderedSlot(output), -1, -1)
                         .addItemStack(output.getStack())
-                        .addTooltipCallback(addStochasticTooltip(output));
+                        .addRichTooltipCallback(addStochasticTooltip(output));
             } else {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 131, 50)
                         .setBackground(getRenderedSlot(output), -1, -1)
                         .addItemStack(output.getStack())
-                        .addTooltipCallback(addStochasticTooltip(output));
+                        .addRichTooltipCallback(addStochasticTooltip(output));
 
             }
             i++;

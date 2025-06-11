@@ -4,12 +4,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 
@@ -21,7 +26,7 @@ public class SpreaderRenderer extends KineticBlockEntityRenderer<SpreaderBlockEn
     @Override
     protected void renderSafe(SpreaderBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
-        if (Backend.canUseInstancing(be.getLevel())) return;
+        if (!VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         Direction direction = be.getBlockState()
                 .getValue(FACING);
@@ -31,9 +36,9 @@ public class SpreaderRenderer extends KineticBlockEntityRenderer<SpreaderBlockEn
         int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
 
         SuperByteBuffer shaftHalf =
-                CachedBufferer.partialFacing(AllPartialModels.SHAFT_HALF, be.getBlockState(), direction.getOpposite());
+                CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, be.getBlockState(), direction.getOpposite());
         SuperByteBuffer fanInner =
-                CachedBufferer.partialFacing(AllPartialModels.ENCASED_FAN_INNER, be.getBlockState(), direction.getOpposite());
+                CachedBuffers.partialFacing(AllPartialModels.ENCASED_FAN_INNER, be.getBlockState(), direction.getOpposite());
 
         float time = AnimationTickHolder.getRenderTime(be.getLevel());
         float speed = be.getSpeed() * 5;

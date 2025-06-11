@@ -1,9 +1,15 @@
-package org.forsteri.ratatouille.ponder.scene;
+package org.forsteri.ratatouille.ponder;
 
+import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.logistics.crate.CreativeCrateBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
+import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import net.createmod.ponder.api.PonderPalette;
+import net.createmod.ponder.api.element.ElementLink;
+import net.createmod.ponder.api.element.WorldSectionElement;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,12 +17,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
-import net.createmod.ponder.api.scene.SceneBuilder;
-import net.createmod.ponder.api.scene.SceneBuildingUtil;
 
 public class OvenScene {
-    public static void oven(SceneBuilder scene, SceneBuildingUtil util) {
+    public OvenScene() {
+    }
+
+    public static void oven(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
         scene.title("oven", "Efficient Food Baking with the Oven");
         scene.configureBasePlate(0, 0, 7);
         scene.setSceneOffsetY(-1);
@@ -83,6 +90,7 @@ public class OvenScene {
         BlockPos inputPos = util.grid().at(4, 1, 2);
         ItemStack itemStack = new ItemStack(Items.PORKCHOP, 64);
         scene.world().createItemOnBelt(util.grid().at(4, 1, 1), Direction.NORTH, itemStack);
+
         for (int i = 0; i < 1; i++) {
             scene.idle(12);
             scene.world().modifyBlockEntity(util.grid().at(4, 2, 3), OvenBlockEntity.class, (be)-> {
@@ -131,6 +139,7 @@ public class OvenScene {
                         }
                 );
             });
+
             scene.world().removeItemsFromBelt(inputPos);
             scene.world().flapFunnel(inputPos.above(), false);
             scene.world().createItemOnBelt(util.grid().at(4, 1, 1), Direction.NORTH, itemStack.copy());

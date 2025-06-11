@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipul
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
+import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -298,7 +299,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
             if (stackInSlot.isEmpty())
                 continue;
             Lang.text("")
-                    .add(Components.translatable(stackInSlot.getDescriptionId())
+                    .add(Component.translatable(stackInSlot.getDescriptionId())
                             .withStyle(ChatFormatting.GRAY))
                     .add(Lang.text(" x" + stackInSlot.getCount())
                             .style(ChatFormatting.GREEN))
@@ -323,7 +324,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         }
 
         Lang.text("")
-                .add(Components.translatable(CRItems.SAUSAGE_CASING.get().getDescriptionId())
+                .add(Component.translatable(CRItems.SAUSAGE_CASING.get().getDescriptionId())
                         .withStyle(ChatFormatting.GRAY))
                 .forGoggles(tooltip, 1);
 

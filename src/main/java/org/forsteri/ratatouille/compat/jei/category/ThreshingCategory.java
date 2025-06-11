@@ -5,6 +5,7 @@ import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -39,7 +40,7 @@ public class ThreshingCategory  extends CreateRecipeCategory<ThreshingRecipe> {
                     .addSlot(RecipeIngredientRole.OUTPUT, single ? 139 : 133 + xOffset, 27 + yOffset)
                     .setBackground(getRenderedSlot(output), -1, -1)
                     .addItemStack(output.getStack())
-                    .addTooltipCallback(addStochasticTooltip(output));
+                    .addRichTooltipCallback(addStochasticTooltip(output));
 
             i++;
         }

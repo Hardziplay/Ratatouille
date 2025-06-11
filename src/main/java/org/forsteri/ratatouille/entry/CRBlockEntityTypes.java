@@ -32,27 +32,27 @@ public class CRBlockEntityTypes {
             .register();
     public static final BlockEntityEntry<ThresherBlockEntity> THRESHER_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("thresher", ThresherBlockEntity::new)
-            .instance(() -> ThresherVisual::new)
+            .visual(() -> ThresherVisual::new)
             .validBlock(CRBlocks.THRESHER)
             .renderer(() -> ThresherRenderer::new)
             .register();
     public static final BlockEntityEntry<OvenFanBlockEntity> OVEN_FAN_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("oven_fan", OvenFanBlockEntity::new)
-            .instance(() -> OvenFanVisual::new)
+            .visual(() -> OvenFanVisual::new)
             .validBlock(CRBlocks.OVEN_FAN)
             .renderer(() -> OvenFanRenderer::new)
             .register();
 
     public static final BlockEntityEntry<SqueezeBasinBlockEntity> SQUEEZE_BASIN_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("squeeze_basin", SqueezeBasinBlockEntity::new)
-            .instance(() -> SqueezeBasinVisual::new)
+            .visual(() -> SqueezeBasinVisual::new)
             .validBlock(CRBlocks.SQUEEZE_BASIN)
             .renderer(() -> SqueezeBasinRenderer::new)
             .register();
 
     public static final BlockEntityEntry<MechanicalDemolderBlockEntity> MECHANICAL_DEMOLDER_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("mechanical_demolder", MechanicalDemolderBlockEntity::new)
-            .instance(() -> DemolderVisual::new)
+            .visual(() -> DemolderVisual::new)
             .validBlock(CRBlocks.MECHANICAL_DEMOLDER)
             .renderer(() -> MechanicalDemolderRenderer::new)
             .register();
@@ -65,7 +65,7 @@ public class CRBlockEntityTypes {
 
     public static final BlockEntityEntry<SpreaderBlockEntity> SPREADER_BLOCK_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("spreader", SpreaderBlockEntity::new)
-            .instance(() -> SpreaderVisual::new)
+            .visual(() -> SpreaderVisual::new)
             .validBlock(CRBlocks.SPREADER_BLOCK)
             .renderer(() -> SpreaderRenderer::new)
             .register();

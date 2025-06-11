@@ -1,7 +1,8 @@
 package org.forsteri.ratatouille;
 
-import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import net.createmod.ponder.foundation.PonderIndex;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.forsteri.ratatouille.data.recipe.RataouilleDataGen;
 import org.forsteri.ratatouille.entry.*;
+import org.forsteri.ratatouille.entry.CRPonderPlugin;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Ratatouille.MOD_ID)
@@ -23,19 +25,15 @@ public class Ratatouille {
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "ratatouille";
     // Directly reference a slf4j logger
+    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(Ratatouille.MOD_ID);
 
     // Create a Deferred Register to hold Blocks which will all be registered under the "ratatouille" namespace
     public Ratatouille() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onClientSetup);
-
         MinecraftForge.EVENT_BUS.register(this);
-
         REGISTRATE.registerEventListeners(modEventBus);
-
         CRPartialModels.register();
         CRSpriteShifts.register();
         CRBlocks.register();
@@ -54,8 +52,12 @@ public class Ratatouille {
 
     }
 
-    private void onClientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(CRPonders::register);
+    private void onClientSetup(FMLClientSetupEvent event) {
+        PonderIndex.addPlugin(new CRPonderPlugin());
+    }
+
+    public static ResourceLocation asResource(String path) {
+        return new ResourceLocation("ratatouille", path);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -67,9 +69,8 @@ public class Ratatouille {
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
-
-
+        public ClientModEvents() {}
     }
 
-    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(Ratatouille.MOD_ID);
+
 }

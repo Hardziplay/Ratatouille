@@ -1,10 +1,10 @@
 package org.forsteri.ratatouille.entry;
 
 
-import net.createmod.ponder.foundation.PonderTag;
-import net.minecraft.resources.ResourceLocation;
-import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.ponder.scene.*;
+//import net.createmod.ponder.foundation.PonderTag;
+//import net.minecraft.resources.ResourceLocation;
+//import org.forsteri.ratatouille.Ratatouille;
+//import org.forsteri.ratatouille.ponder.scene.*;
 
 public class CRPonders {
     //public static final PonderTag RATATOUILLE = new PonderTag(new ResourceLocation(Ratatouille.MOD_ID, "ratatouille")).item(CRBlocks.OVEN.get(), true, false)

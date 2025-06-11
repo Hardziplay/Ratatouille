@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -56,40 +57,26 @@ public class SqueezingCategory extends CreateRecipeCategory<SqueezingRecipe> {
                     .addItemStacks(stacks);
             i++;
         }
-        for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
-            builder
-                    .addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
-                    .addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
-            i++;
+        for(FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
+            addFluidSlot(builder, 17 + xOffset + i % 3 * 19, 51 - i / 3 * 19, fluidIngredient);
+            ++i;
         }
 
         size = recipe.getRollableResults().size() + recipe.getFluidResults().size();
         i = 0;
 
-        for (ProcessingOutput result : recipe.getRollableResults()) {
-            int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
+        for(ProcessingOutput result : recipe.getRollableResults()) {
+            int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : (i % 2 == 0 ? 10 : -9));
             int yPosition = -19 * (i / 2) + 51;
-
-            builder
-                    .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
-                    .setBackground(getRenderedSlot(result), -1, -1)
-                    .addItemStack(result.getStack())
-                    .addTooltipCallback(addStochasticTooltip(result));
-            i++;
+            ((IRecipeSlotBuilder)builder.addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition).setBackground(getRenderedSlot(result), -1, -1).addItemStack(result.getStack())).addRichTooltipCallback(addStochasticTooltip(result));
+            ++i;
         }
 
-        for (FluidStack fluidResult : recipe.getFluidResults()) {
-            int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
+        for(FluidStack fluidResult : recipe.getFluidResults()) {
+            int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : (i % 2 == 0 ? 10 : -9));
             int yPosition = -19 * (i / 2) + 51;
-
-            builder
-                    .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidResult))
-                    .addTooltipCallback(addFluidTooltip(fluidResult.getAmount()));
-            i++;
+            addFluidSlot(builder, xPosition, yPosition, fluidResult);
+            ++i;
         }
     }
 
