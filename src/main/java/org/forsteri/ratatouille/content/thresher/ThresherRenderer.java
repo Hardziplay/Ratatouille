@@ -4,8 +4,8 @@ import com.mojang.math.Axis;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.jozufozu.flywheel.backend.Backend;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -40,7 +39,7 @@ public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEn
 
     @Override
     protected SuperByteBuffer getRotatedModel(ThresherBlockEntity be, BlockState state) {
-        return CachedBufferer.partialFacingVertical(CRPartialModels.THRESHER_BLADE, state, state.getValue(ThresherBlock.HORIZONTAL_FACING));
+        return CachedBuffers.partialFacingVertical(CRPartialModels.THRESHER_BLADE, state, state.getValue(ThresherBlock.HORIZONTAL_FACING));
     }
 
     @Override
