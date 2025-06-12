@@ -17,7 +17,6 @@ public class CRPonderScenes {
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         PonderSceneRegistrationHelper<ItemProviderEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
         HELPER.addStoryBoard(CRBlocks.SPREADER_BLOCK, "spreader", SpreaderScene::spreader, new ResourceLocation[0]);
-        HELPER.addStoryBoard(CRBlocks.SPREADER_BLOCK, "spreader", SpreaderScene::spreader, new ResourceLocation[0]);
         HELPER.addStoryBoard(CRBlocks.OVEN, "oven", OvenScene::oven, new ResourceLocation[0]);
         HELPER.addStoryBoard(CRBlocks.OVEN_FAN, "oven", OvenScene::oven, new ResourceLocation[0]);
         HELPER.addStoryBoard(CRBlocks.THRESHER, "thresher", ThresherScene::thresher, new ResourceLocation[0]);
