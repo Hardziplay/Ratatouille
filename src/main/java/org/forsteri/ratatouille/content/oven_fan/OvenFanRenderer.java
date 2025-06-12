@@ -30,7 +30,7 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
         if (!VisualizationManager.supportsVisualization(be.getLevel())) {
             Direction direction = (Direction)be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
             VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
-            int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
+//            int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
             int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
             SuperByteBuffer fanInner = CachedBuffers.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
             float time = AnimationTickHolder.getRenderTime(be.getLevel());
@@ -44,14 +44,14 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
             }
 
             float angle = time * speed * 3.0F / 10.0F % 360.0F;
-            angle = angle / 180.0F * 3.1415927F;
+            angle = angle / 180.0F * (float)Math.PI;
             kineticRotationTransform(fanInner, be, direction.getAxis(), angle, lightInFront).renderInto(ms, vb);
         }
     }
 
-//    @Override
-//    protected SuperByteBuffer getRotatedModel(OvenFanBlockEntity be, BlockState state) {
-//        return CachedBufferer.partialFacingVertical(AllPartialModels.SHAFTLESS_COGWHEEL, state,
-//                state.getValue(OvenFanBlock.HORIZONTAL_FACING));
-//    }
+    @Override
+    protected SuperByteBuffer getRotatedModel(OvenFanBlockEntity be, BlockState state) {
+        return CachedBuffers.partialFacingVertical(AllPartialModels.SHAFTLESS_COGWHEEL, state,
+                state.getValue(OvenFanBlock.HORIZONTAL_FACING));
+    }
 }

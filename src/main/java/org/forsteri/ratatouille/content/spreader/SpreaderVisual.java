@@ -42,10 +42,12 @@ public class SpreaderVisual extends KineticBlockEntityVisual<SpreaderBlockEntity
 
         this.shaft.setup(blockEntity)
                 .setPosition(getVisualPosition())
-//                .rotateToFace(opposite)
-                .setChanged();;
-        this.fan.setup(blockEntity, this.getFanSpeed())
+                .rotateToFace(Direction.SOUTH, opposite)
+                .setChanged();
+
+        this.fan.setup(blockEntity, getFanSpeed())
                 .setPosition(getVisualPosition())
+                .rotateToFace(Direction.SOUTH, opposite)
                 .setChanged();
     }
 

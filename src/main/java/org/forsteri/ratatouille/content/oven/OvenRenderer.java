@@ -6,6 +6,8 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -22,7 +24,7 @@ public class OvenRenderer extends SafeBlockEntityRenderer<OvenBlockEntity> {
         float scale = 1.25f;
         ms.scale(scale, scale, scale);
 
-        DepotRenderer.renderItem(be.getLevel(), ms, bufferSource, light, overlay, be.inventory.getStackInSlot(0), 0, new Random(), VecHelper.getCenterOf(be.getBlockPos()), true);
+        DepotRenderer.renderItem(be.getLevel(), ms, bufferSource, light, OverlayTexture.NO_OVERLAY, be.inventory.getStackInSlot(0), 0, (Random)null, Vec3.atCenterOf(be.getBlockPos()), true);
         ms.popPose();
     }
 }

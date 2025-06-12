@@ -2,6 +2,7 @@ package org.forsteri.ratatouille.content.thresher;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
@@ -33,15 +34,12 @@ public class ThresherVisual extends KineticBlockEntityVisual<ThresherBlockEntity
 //        this.thresher = materialManager.defaultCutout()
 //                .material(AllMaterialSpecs.ROTATING).getModel(CRPartialModels.THRESHER_BLADE, referenceState, direction, this.rotateToFace(direction)).createInstance();
 
-        this.thresher  = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(CRPartialModels.THRESHER_BLADE))
+        this.thresher  = (RotatingInstance)instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(CRPartialModels.THRESHER_BLADE))
                 .createInstance();
-        this.thresher.setup(blockEntity)
-                .setPosition(getVisualPosition())
-//                .rotateToFace(opposite)
-                .setChanged();;
 
-        this.thresher.setup(blockEntity, this.getSpeed())
+        this.thresher.setup(blockEntity,facing.getAxis(), this.getSpeed())
                 .setPosition(getVisualPosition())
+                .rotateToFace(Direction.SOUTH, this.direction)
                 .setChanged();
     }
 
@@ -52,6 +50,10 @@ public class ThresherVisual extends KineticBlockEntityVisual<ThresherBlockEntity
     @Override
     public void collectCrumblingInstances(Consumer<@Nullable Instance> consumer) {
         consumer.accept(thresher);
+    }
+
+    public void update(float partialTick) {
+        this.thresher.setup((KineticBlockEntity)this.blockEntity, this.getSpeed()).setChanged();
     }
 
     @Override

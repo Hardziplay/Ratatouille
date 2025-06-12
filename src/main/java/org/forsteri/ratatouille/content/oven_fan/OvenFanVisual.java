@@ -2,15 +2,18 @@ package org.forsteri.ratatouille.content.oven_fan;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+import dev.engine_room.flywheel.lib.instance.FlatLit;
 import dev.engine_room.flywheel.lib.model.Models;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.forsteri.ratatouille.entry.CRPartialModels;
 import org.jetbrains.annotations.Nullable;
@@ -28,9 +31,9 @@ public class OvenFanVisual extends KineticBlockEntityVisual<OvenFanBlockEntity> 
         this.direction = (Direction)this.blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         this.opposite = this.direction.getOpposite();
 
-        this.cogWheel = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL))
+        this.cogWheel = (RotatingInstance)instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL))
                 .createInstance();
-        this.fan  = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(CRPartialModels.OVEN_FAN_BLADE))
+        this.fan  = (RotatingInstance)instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(CRPartialModels.OVEN_FAN_BLADE))
                 .createInstance();
 
 //        this.cogWheel = (RotatingInstance)context.defaultCutout().material(AllMaterialSpecs.ROTATING).getModel(AllPartialModels.SHAFTLESS_COGWHEEL, this.blockState, this.opposite, this.rotateToFace(this.opposite)).createInstance();
@@ -42,7 +45,7 @@ public class OvenFanVisual extends KineticBlockEntityVisual<OvenFanBlockEntity> 
                 .setChanged();;
         this.fan.setup(blockEntity, this.getFanSpeed())
                 .setPosition(getVisualPosition())
-//                .rotateToFace(Direction.SOUTH, opposite)
+                .rotateToFace(Direction.SOUTH, opposite)
                 .setChanged();
     }
 
