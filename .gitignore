@@ -8,3 +8,4 @@ blockbench_helper_ignored
 src/generated/resources/.cache/
 /src/generated/
 *.ase
+/myAssets
