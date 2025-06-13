@@ -195,47 +195,31 @@ public class BakeData {
 
     }
 
-    @NotNull
-    public MutableComponent getHeatLevelTextComponent() {
-        int ovenLevel = Math.min(fanLevel, Math.min(sizeLevel, tempLevel));
-
-        if (ovenLevel == 0) {
-            return Lang.translateDirect("oven.idle");
-        } else if (ovenLevel == 8) {
-            return Lang.translateDirect("oven.max_lvl");
-        } else {
-            return Lang.translateDirect("oven.lvl").append(String.valueOf(ovenLevel));
-        }
-    }
-
     private MutableComponent bars(int level, ChatFormatting format) {
         return Component.literal(Strings.repeat('|', level))
                 .withStyle(format);
     }
 
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean ignoredIsPlayerSneaking, int ovenSize) {
-//        tooltip.add(Components.literal(IHaveGoggleInformation.spacing));
-//        tooltip.add(Component.nullToEmpty("Fan level: " + fanLevel));
-//        tooltip.add(Component.nullToEmpty("Size level: " + sizeLevel));
-//        tooltip.add(Component.nullToEmpty("Temp level: " + tempLevel));
-//        Component indent = Component.literal(IHaveGoggleInformation.spacing);
-//        Component indent2 = Component.literal(IHaveGoggleInformation.spacing + " ");
-//
-//        tooltip.add(indent.plainCopy()
-//                .append(
-//                        Lang.translateDirect("oven.status").append(getHeatLevelTextComponent().withStyle(ChatFormatting.GREEN))));
-//        tooltip.add(indent2.plainCopy()
-//                .append(getSizeComponent(true, false)));
-//        tooltip.add(indent2.plainCopy()
-//                .append(getFanComponent(true, false)));
-//        tooltip.add(indent2.plainCopy()
-//                .append(getHeatComponent(true, false)));
+    public @NotNull MutableComponent getLevelComponent() {
+        int ovenLevel = Math.min(this.fanLevel, Math.min(this.sizeLevel, this.tempLevel));
+        if (ovenLevel == 0) {
+            return Lang.translateDirect("oven.idle", new Object[0]);
+        } else {
+            return ovenLevel == 8 ? Lang.translateDirect("oven.max_lvl", new Object[0]) : Lang.translateDirect("oven.lvl", new Object[0]).append(String.valueOf(ovenLevel));
+        }
+    }
 
-        Lang.translate("oven.status", getHeatLevelTextComponent().withStyle(ChatFormatting.GREEN))
-                .forGoggles(tooltip);
-        Lang.builder().add(getSizeComponent(true, false)).forGoggles(tooltip, 1);
-        Lang.builder().add(getFanComponent(true, false)).forGoggles(tooltip, 1);
-        Lang.builder().add(getHeatComponent(true, false)).forGoggles(tooltip, 1);
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean ignoredIsPlayerSneaking, int ovenSize) {
+        Component indent = Component.literal("    ");
+        Component indent2 = Component.literal("     ");
+
+        tooltip.add(indent.copy()
+                .append(Lang.translateDirect("oven.status")
+                        .append(this.getLevelComponent().withStyle(ChatFormatting.GREEN))));
+
+        tooltip.add(indent2.copy().append(this.getSizeComponent(true, false)));
+        tooltip.add(indent2.copy().append(this.getFanComponent(true, false)));
+        tooltip.add(indent2.copy().append(this.getHeatComponent(true, false)));
 
         return true;
     }

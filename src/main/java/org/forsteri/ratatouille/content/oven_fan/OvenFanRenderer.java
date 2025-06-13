@@ -27,10 +27,10 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
 
     protected void renderSafe(OvenFanBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
-        if (!VisualizationManager.supportsVisualization(be.getLevel())) {
             Direction direction = (Direction)be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
             VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
 //            int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
+            LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
             int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
             SuperByteBuffer fanInner = CachedBuffers.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
             float time = AnimationTickHolder.getRenderTime(be.getLevel());
@@ -46,7 +46,7 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
             float angle = time * speed * 3.0F / 10.0F % 360.0F;
             angle = angle / 180.0F * (float)Math.PI;
             kineticRotationTransform(fanInner, be, direction.getAxis(), angle, lightInFront).renderInto(ms, vb);
-        }
+
     }
 
     @Override

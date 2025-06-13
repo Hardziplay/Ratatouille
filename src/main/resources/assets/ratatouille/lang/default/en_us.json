@@ -14,35 +14,5 @@
   "ratatouille.recipe.baking": "Bulk Baking",
   "ratatouille.recipe.sausage_casing_requirement": "Sausage Casing Requirement",
   "ratatouille.recipe.demolding": "Demolding",
-  "ratatouille.recipe.freezing": "Freezing",
-  "ratatouille.ponder.oven.header": "Bake Food Efficiently with the Oven",
-  "ratatouille.ponder.oven_fan.header": "Blowers Supply Airflow to the Oven",
-  "ratatouille.ponder.oven.text_1": "The oven is heated by a Blaze Burner.",
-  "ratatouille.ponder.oven.text_2": "A dedicated fan provides airflow to the oven.",
-  "ratatouille.ponder.oven.text_3": "With sufficient heat, airflow, and space...",
-  "ratatouille.ponder.oven.text_4": "...it can cook all types of food efficiently!",
-  "ratatouille.ponder.oven.text_5": "Higher efficiency requires more space, heat, and airflow.",
-  "ratatouille.ponder.oven.text_6": "Use Engineer's Goggles to inspect its current power level.",
-
-  "ratatouille.ponder.thresher.header": "Process Crops with the Thresher",
-  "ratatouille.ponder.thresher.text_1": "The thresher can process various crops.",
-  "ratatouille.ponder.thresher.text_2": "Outputs are ejected from the side with a chute.",
-  "ratatouille.ponder.thresher.text_3": "Can be placed on a belt for automated processing.",
-
-  "ratatouille.ponder.squeeze_basin.header": "Process Items with the Squeeze Basin",
-  "ratatouille.ponder.squeeze_basin.text_1": "The squeeze basin performs squeezing and filling.",
-  "ratatouille.ponder.squeeze_basin.text_2": "It is powered by a compression roller. Outputs are sent below the spout side.",
-  "ratatouille.ponder.squeeze_basin.text_3": "Fluids can also be input into the basin.",
-  "ratatouille.ponder.squeeze_basin.text_4": "Some recipes require items to be inserted into the spout.",
-  "ratatouille.ponder.squeeze_basin.text_5": "Deployer arms can automate this process efficiently.",
-
-  "ratatouille.ponder.spreader.header": "Accelerate Growth with the Crop Spreader",
-  "ratatouille.ponder.spreader.text_1": "The spreader accelerates crop growth in a radius.",
-  "ratatouille.ponder.spreader.text_2": "Each activation consumes one bone meal.",
-  "ratatouille.ponder.spreader.text_3": "Increasing speed and placing a spreader mesh in front greatly expands its effect.",
-
-  "ratatouille.ponder.irrigation_tower.header": "Keep Farmland Moist with the Irrigation Tower",
-  "ratatouille.ponder.irrigation_tower.text_1": "The irrigation tower keeps farmland within range moist.",
-  "ratatouille.ponder.irrigation_tower.text_2": "Fill its internal tank with water before use."
-
+  "ratatouille.recipe.freezing": "Freezing"
 }

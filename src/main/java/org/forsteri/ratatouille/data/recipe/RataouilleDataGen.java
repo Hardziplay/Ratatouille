@@ -13,7 +13,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import org.forsteri.ratatouille.Ratatouille;
-//import org.forsteri.ratatouille.entry.CRPonders;
+import org.forsteri.ratatouille.entry.CRPonderPlugin;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -51,7 +51,7 @@ public class RataouilleDataGen {
     }
 
     private static void providePonderLang(BiConsumer<String, String> consumer) {
-        //CRPonders.register();
+        PonderIndex.addPlugin(new CRPonderPlugin());
         PonderIndex.getLangAccess().provideLang(Ratatouille.MOD_ID, consumer);
     }
 }
