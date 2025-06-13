@@ -40,4 +40,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ratatouille
-        path: build/libs/ratatouille-org.forsteri.jar
+        path: build/libs/ratatouille-*.jar
