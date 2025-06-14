@@ -12,7 +12,13 @@ public class CRSpriteShifts {
             OVEN_SPRITE_TOP_INNER = getCT("oven/oven_top_inner"),
             OVEN_SPRITE_BOTTOM = getCT("oven/oven_bottom"),
             OVEN_SPRITE_BOTTOM_INNER = getCT("oven/oven_bottom_inner"),
-            OVEN_SPRITE_SHIFT_2x2 = getCT("oven/oven", "oven/oven_2x2");
+            OVEN_SPRITE_SHIFT_2x2 = getCT("oven/oven", "oven/oven_2x2"),
+            COMPOST_TOWER = getCT("compost_tower/compost_tower"),
+            COMPOST_TOWER_TOP = getCT("compost_tower/compost_tower_top"),
+            COMPOST_TOWER_TOP_INNER = getCT("compost_tower/compost_tower_top_inner"),
+            COMPOST_TOWER_BOTTOM = getCT("compost_tower/compost_tower_bottom"),
+            COMPOST_TOWER_BOTTOM_INNER = getCT("compost_tower/compost_tower_bottom_inner"),
+            COMPOST_TOWER_SHIFT_2x2 = getCT("compost_tower/compost_tower", "compost_tower/compost_tower_2x2");
 
     private static CTSpriteShiftEntry getCT(String blockTextureName, String connectedTextureName) {
         return CTSpriteShifter.getCT(AllCTTypes.RECTANGLE, new ResourceLocation(Ratatouille.MOD_ID, "block/" + blockTextureName),
