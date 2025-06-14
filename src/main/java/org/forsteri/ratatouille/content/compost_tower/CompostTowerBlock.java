@@ -6,22 +6,18 @@ import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -32,15 +28,36 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.jetbrains.annotations.NotNull;
 
-public class CompostTowerBlock extends HorizontalDirectionalBlock implements IWrenchable, IBE<CompostTowerBlockEntity> {
+public class CompostTowerBlock extends Block implements IWrenchable, IBE<CompostTowerBlockEntity> {
 
     public CompostTowerBlock(Properties properties) {
         super(properties);
     }
 
     @Override
+    public void onPlace(BlockState state, @NotNull Level world, @NotNull BlockPos pos, BlockState oldState, boolean moved) {
+        if (oldState.getBlock() == state.getBlock())
+            return;
+        if (moved)
+            return;
+
+        withBlockEntityDo(world, pos, CompostTowerBlockEntity::updateConnectivity);
+    }
+
+    @Override
+    public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+        if (state.hasBlockEntity() && (state.getBlock() != newState.getBlock() || !newState.hasBlockEntity())) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (!(be instanceof CompostTowerBlockEntity towerBE))
+                return;
+            world.removeBlockEntity(pos);
+            ConnectivityHandler.splitMulti(towerBE);
+        }
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return Shapes.create(0, 0, 0, 1, 1.5F, 1);
+        return Shapes.block();
     }
 
     @Override
@@ -65,17 +82,6 @@ public class CompostTowerBlock extends HorizontalDirectionalBlock implements IWr
         });
     }
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder.add(new Property[]{FACING}));
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction preferredFacing = context.getHorizontalDirection().getOpposite();
-        return this.defaultBlockState().setValue(FACING,
-                context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? preferredFacing : preferredFacing.getOpposite());
-    }
 
     @Override
     public Class<CompostTowerBlockEntity> getBlockEntityClass() {
