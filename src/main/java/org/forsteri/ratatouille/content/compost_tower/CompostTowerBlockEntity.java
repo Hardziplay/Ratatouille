@@ -16,6 +16,15 @@ public class CompostTowerBlockEntity extends FluidTankBlockEntity {
         super(type, pos, state);
     }
 
+    /**
+     * Make connectivity updates callable from {@link CompostTowerBlock}
+     * where the original protected visibility prevents access.
+     */
+    @Override
+    public void updateConnectivity() {
+        super.updateConnectivity();
+    }
+
     @Override
     protected SmartFluidTank createInventory() {
         return new SmartFluidTank(1000, this::onFluidStackChanged);
