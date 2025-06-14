@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.data.recipe.CompostingRecipeGen;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
@@ -31,6 +32,7 @@ public abstract class ProcessingRecipeGen extends RataouilleRecipeProvider{
         GENERATORS.add(new SqueezingRecipeGen(output));
         GENERATORS.add(new DemoldingRecipeGen(output));
         GENERATORS.add(new FreezingRecipeGen(output));
+        GENERATORS.add(new CompostingRecipeGen(output));
 
         gen.addProvider(true, new DataProvider() {
             @Override
