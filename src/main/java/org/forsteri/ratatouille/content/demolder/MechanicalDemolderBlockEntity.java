@@ -180,4 +180,9 @@ public class MechanicalDemolderBlockEntity extends KineticBlockEntity  implement
             return super.extractItem(slot, amount, simulate);
         }
     }
+
+    @Override
+    public float calculateStressApplied() {
+        return 8.0f;
+    }
 }

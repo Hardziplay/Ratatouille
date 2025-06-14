@@ -32,6 +32,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.minecraft.core.Direction.Axis;
+import net.createmod.catnip.math.VecHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -267,6 +268,11 @@ public class ThresherBlockEntity extends KineticBlockEntity {
                 return ItemStack.EMPTY;
             return super.extractItem(slot, amount, simulate);
         }
+    }
+
+    @Override
+    public float calculateStressApplied() {
+        return 4.0f;
     }
 }
 

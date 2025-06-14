@@ -275,4 +275,9 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         }
 
     }
+
+    @Override
+    public float calculateStressApplied() {
+        return 2.0f;
+    }
 }

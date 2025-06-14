@@ -108,4 +108,8 @@ public class OvenFanBlockEntity extends KineticBlockEntity implements IAirCurren
         }
     }
 
+    @Override
+    public float calculateStressApplied() {
+        return 2.0f;
+    }
 }

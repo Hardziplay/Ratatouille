@@ -1,5 +1,6 @@
 package org.forsteri.ratatouille.content.oven_fan;
 
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
@@ -25,33 +26,33 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
         super(context);
     }
 
-    protected void renderSafe(OvenFanBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
-            Direction direction = (Direction)be.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
-            VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
-//            int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
-            LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
-            int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
-            SuperByteBuffer fanInner = CachedBuffers.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
-            float time = AnimationTickHolder.getRenderTime(be.getLevel());
-            float speed = be.getSpeed() * 5.0F;
-            if (speed > 0.0F) {
-                speed = Mth.clamp(speed, 80.0F, 1280.0F);
-            }
-
-            if (speed < 0.0F) {
-                speed = Mth.clamp(speed, -1280.0F, -80.0F);
-            }
-
-            float angle = time * speed * 3.0F / 10.0F % 360.0F;
-            angle = angle / 180.0F * (float)Math.PI;
-            kineticRotationTransform(fanInner, be, direction.getAxis(), angle, lightInFront).renderInto(ms, vb);
-
-    }
-
     @Override
-    protected SuperByteBuffer getRotatedModel(OvenFanBlockEntity be, BlockState state) {
-        return CachedBuffers.partialFacingVertical(AllPartialModels.SHAFTLESS_COGWHEEL, state,
-                state.getValue(OvenFanBlock.HORIZONTAL_FACING));
+    protected void renderSafe(OvenFanBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
+                              int light, int overlay) {
+        if (VisualizationManager.supportsVisualization(be.getLevel())) return;
+
+        Direction direction = be.getBlockState()
+                .getValue(FACING);
+        VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
+
+        int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
+        int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
+
+        SuperByteBuffer shaftHalf =
+                CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, be.getBlockState(), direction.getOpposite());
+        SuperByteBuffer fanInner =
+                CachedBuffers.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
+
+        float time = AnimationTickHolder.getRenderTime(be.getLevel());
+        float speed = be.getSpeed() * 5;
+        if (speed > 0)
+            speed = Mth.clamp(speed, 80, 64 * 20);
+        if (speed < 0)
+            speed = Mth.clamp(speed, -64 * 20, -80);
+        float angle = (time * speed * 3 / 10f) % 360;
+        angle = angle / 180f * (float) Math.PI;
+
+        standardKineticRotationTransform(shaftHalf, be, lightBehind).renderInto(ms, vb);
+        kineticRotationTransform(fanInner, be, direction.getAxis(), angle, lightInFront).renderInto(ms, vb);
     }
 }

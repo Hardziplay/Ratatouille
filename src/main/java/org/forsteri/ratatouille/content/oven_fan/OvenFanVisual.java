@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
 public class OvenFanVisual extends KineticBlockEntityVisual<OvenFanBlockEntity> {
     protected final RotatingInstance cogWheel;
     protected final RotatingInstance fan;
@@ -35,10 +34,6 @@ public class OvenFanVisual extends KineticBlockEntityVisual<OvenFanBlockEntity> 
                 .createInstance();
         this.fan  = (RotatingInstance)instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(CRPartialModels.OVEN_FAN_BLADE))
                 .createInstance();
-
-//        this.cogWheel = (RotatingInstance)context.defaultCutout().material(AllMaterialSpecs.ROTATING).getModel(AllPartialModels.SHAFTLESS_COGWHEEL, this.blockState, this.opposite, this.rotateToFace(this.opposite)).createInstance();
-//        this.fan = (RotatingInstance)context.defaultCutout().material(AllMaterialSpecs.ROTATING).getModel(CRPartialModels.OVEN_FAN_BLADE, this.blockState, this.opposite).createInstance();
-
         this.cogWheel.setup(blockEntity)
                 .setPosition(getVisualPosition())
                 .rotateToFace(opposite)
@@ -50,7 +45,7 @@ public class OvenFanVisual extends KineticBlockEntityVisual<OvenFanBlockEntity> 
     }
 
     private float getFanSpeed() {
-        float speed = ((OvenFanBlockEntity)this.blockEntity).getSpeed() * 5.0F;
+        float speed = ((OvenFanBlockEntity)this.blockEntity).getSpeed() * 2.0F;
         if (speed > 0.0F) {
             speed = Mth.clamp(speed, 80.0F, 1280.0F);
         }

@@ -49,6 +49,7 @@ public class CRItems {
             .onRegister(CreateRegistrate.itemModel(() -> ChefHatWithGogglesModel::new))
             .register();
     public static final ItemEntry<Item> Compost_Residue = Ratatouille.REGISTRATE.item("compost_residue", Item::new).register();
+    public static final ItemEntry<Item> Boil_Stone = Ratatouille.REGISTRATE.item("boil_stone", Item::new).register();
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
     //public static final ItemEntry<Item> SUGAR_CUBE = Ratatouille.REGISTRATE.item("sugar_cube", Item::new).register();

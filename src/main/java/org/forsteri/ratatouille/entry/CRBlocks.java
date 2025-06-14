@@ -5,7 +5,6 @@ import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
-import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +12,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.config.CRStress;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
 import org.forsteri.ratatouille.content.frozen_block.FrozenBlock;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
@@ -51,7 +51,7 @@ public class CRBlocks {
             .initialProperties(SharedProperties::stone)
             .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
             .transform(pickaxeOnly())
-//            .transform(CStress.setImpact(4.0))
+            //.transform(CRStress.setImpact(4.0f))
             .blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p), 270))
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
@@ -65,7 +65,7 @@ public class CRBlocks {
             .initialProperties(SharedProperties::stone)
             .properties(p -> p.noOcclusion().mapColor(MapColor.STONE))
             .transform(pickaxeOnly())
-//            .transform(CStress.setImpact(2.0))
+            //.transform(CRStress.setImpact(2.0f))
             .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .addLayer(() -> RenderType::cutoutMipped)
             .item()
@@ -92,7 +92,7 @@ public class CRBlocks {
             .initialProperties(SharedProperties::stone)
             .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL))
             .transform(pickaxeOnly())
-//            .transform(CStress.setImpact(8.0))
+            //.transform(CRStress.setImpact(8.0))
             .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .addLayer(() -> RenderType::cutoutMipped)
             .item(AssemblyOperatorBlockItem::new)
@@ -118,7 +118,7 @@ public class CRBlocks {
             .initialProperties(SharedProperties::stone)
             .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL))
             .transform(pickaxeOnly())
-//            .transform(CStress.setImpact(2.0))
+            //.transform(CRStress.setImpact(2.0))
             .blockstate(BlockStateGen.directionalBlockProvider(true))
             .addLayer(() -> RenderType::cutoutMipped)
             .item()

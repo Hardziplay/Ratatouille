@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.forsteri.ratatouille.entry.CRFluids;
@@ -32,7 +33,8 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return false;
+        return containedFluidTooltip(tooltip, isPlayerSneaking,
+                getCapability(ForgeCapabilities.FLUID_HANDLER));
     }
 
     public IrrigationTowerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {

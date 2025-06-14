@@ -1,0 +1,15 @@
+{
+  "type": "ratatouille:threshing",
+  "ingredients": [
+    {
+      "tag": "forge:stone"
+    }
+  ],
+  "processingTime": 200,
+  "results": [
+    {
+      "item": "ratatouille:boil_stone",
+      "count": 1
+    }
+  ]
+}

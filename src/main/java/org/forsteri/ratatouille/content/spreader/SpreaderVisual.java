@@ -19,7 +19,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 
 public class SpreaderVisual extends KineticBlockEntityVisual<SpreaderBlockEntity> {
     protected final RotatingInstance shaft;
-    protected final RotatingInstance fan;
+//    protected final RotatingInstance fan;
     final Direction direction;
     private final Direction opposite;
 
@@ -29,26 +29,20 @@ public class SpreaderVisual extends KineticBlockEntityVisual<SpreaderBlockEntity
         direction = blockState.getValue(FACING);
         opposite = direction.getOpposite();
 
-//        shaft = getRotatingMaterial().getModel(AllPartialModels.SHAFT_HALF, blockState, opposite).createInstance();
-//        fan = materialManager.defaultCutout()
-//                .material(AllMaterialSpecs.ROTATING)
-//                .getModel(AllPartialModels.ENCASED_FAN_INNER, blockState, opposite)
-//                .createInstance();
-
         this.shaft = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFT_HALF))
                 .createInstance();
-        this.fan  = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.ENCASED_FAN_INNER))
-                .createInstance();
+//        this.fan  = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.ENCASED_FAN_INNER))
+//                .createInstance();
 
         this.shaft.setup(blockEntity)
                 .setPosition(getVisualPosition())
                 .rotateToFace(Direction.SOUTH, opposite)
                 .setChanged();
 
-        this.fan.setup(blockEntity, getFanSpeed())
-                .setPosition(getVisualPosition())
-                .rotateToFace(Direction.SOUTH, opposite)
-                .setChanged();
+//        this.fan.setup(blockEntity, getFanSpeed())
+//                .setPosition(getVisualPosition().offset(0, 0, 5))
+//                .rotateToFace(Direction.SOUTH, opposite)
+//                .setChanged();
     }
 
     private float getFanSpeed() {
@@ -64,8 +58,8 @@ public class SpreaderVisual extends KineticBlockEntityVisual<SpreaderBlockEntity
     public void update(float pt) {
         shaft.setup(blockEntity)
                 .setChanged();
-        fan.setup(blockEntity, getFanSpeed())
-                .setChanged();
+//        fan.setup(blockEntity, getFanSpeed())
+//                .setChanged();
     }
 
     @Override
@@ -73,19 +67,19 @@ public class SpreaderVisual extends KineticBlockEntityVisual<SpreaderBlockEntity
         BlockPos behind = pos.relative(opposite);
         relight(behind, shaft);
 
-        BlockPos inFront = pos.relative(direction);
-        relight(inFront, fan);
+//        BlockPos inFront = pos.relative(direction);
+//        relight(inFront, fan);
     }
 
     @Override
     protected void _delete() {
         shaft.delete();
-        fan.delete();
+//        fan.delete();
     }
 
     @Override
     public void collectCrumblingInstances(Consumer<@Nullable Instance> consumer) {
         consumer.accept(shaft);
-        consumer.accept(fan);
+//        consumer.accept(fan);
     }
 }
