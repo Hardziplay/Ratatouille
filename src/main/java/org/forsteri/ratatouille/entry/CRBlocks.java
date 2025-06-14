@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.config.CRStress;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
 import org.forsteri.ratatouille.content.frozen_block.FrozenBlock;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;

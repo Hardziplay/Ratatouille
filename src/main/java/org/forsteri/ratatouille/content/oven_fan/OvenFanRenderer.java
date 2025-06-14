@@ -29,12 +29,13 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
     @Override
     protected void renderSafe(OvenFanBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
+        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
         if (VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         Direction direction = be.getBlockState()
                 .getValue(FACING);
-        VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
-
+        VertexConsumer vb = buffer.getBuffer(RenderType.translucent());
+        LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
         int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
         int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
 
