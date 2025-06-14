@@ -34,7 +34,7 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
 
         Direction direction = be.getBlockState()
                 .getValue(FACING);
-        VertexConsumer vb = buffer.getBuffer(RenderType.translucent());
+        VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
         LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
         int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
         int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));

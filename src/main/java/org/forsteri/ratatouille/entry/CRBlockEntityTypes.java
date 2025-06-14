@@ -2,6 +2,7 @@ package org.forsteri.ratatouille.entry;
 
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlockEntity;
 import org.forsteri.ratatouille.content.demolder.DemolderVisual;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlockEntity;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderRenderer;
@@ -22,6 +23,8 @@ import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinRenderer;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
 import org.forsteri.ratatouille.content.thresher.ThresherVisual;
 import org.forsteri.ratatouille.content.thresher.ThresherRenderer;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlockEntity;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerRenderer;
 
 public class CRBlockEntityTypes {
     public CRBlockEntityTypes() {}
@@ -74,6 +77,13 @@ public class CRBlockEntityTypes {
             .blockEntity("frozen_block", FrozenBlockEntity::new)
             .validBlock(CRBlocks.FROZEN_BLOCK)
             .register();
+
+    public static final BlockEntityEntry<CompostTowerBlockEntity> COMPOST_TOWER_BLOCK_ENTITY = Ratatouille.REGISTRATE
+            .blockEntity("compost_tower", CompostTowerBlockEntity::new)
+            .validBlock(CRBlocks.COMPOST_TOWER_BLOCK)
+            .renderer(() -> CompostTowerRenderer::new)
+            .register();
+
 
     public static void register() {}
 }

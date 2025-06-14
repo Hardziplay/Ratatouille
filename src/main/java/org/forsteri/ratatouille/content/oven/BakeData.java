@@ -180,9 +180,8 @@ public class BakeData {
     }
 
     private MutableComponent blockComponent(int level) {
-        return Component.literal(
-                "" + "\u2588".repeat(0) + "\u2592".repeat(level - 8) + "\u2591".repeat(8 - level));
-    }
+        int clamped = Mth.clamp(level, 0, 8);
+        return Component.literal("\u2588".repeat(clamped) + "\u2591".repeat(8 - clamped));}
 
     private MutableComponent barComponent(int level) {
         return Component.empty()

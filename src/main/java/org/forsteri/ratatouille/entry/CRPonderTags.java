@@ -13,5 +13,13 @@ public class CRPonderTags {
         PonderTagRegistrationHelper<RegistryEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
         helper.registerTag(new ResourceLocation("ratatouille", "ratatouille")).addToIndex().item((ItemLike)CRBlocks.OVEN.get(), true, false).title("Ratatouille").description("Components in Ratatouille").register();
         HELPER.addToTag(new ResourceLocation("ratatouille", "ratatouille")).add(CRBlocks.SPREADER_BLOCK).add(CRBlocks.OVEN).add(CRBlocks.OVEN_FAN).add(CRBlocks.THRESHER).add(CRBlocks.IRRIGATION_TOWER_BLOCK).add(CRBlocks.SQUEEZE_BASIN);
+        HELPER.addToTag(new ResourceLocation("ratatouille", "ratatouille"))
+                .add(CRBlocks.SPREADER_BLOCK)
+                .add(CRBlocks.OVEN)
+                .add(CRBlocks.OVEN_FAN)
+                .add(CRBlocks.THRESHER)
+                .add(CRBlocks.IRRIGATION_TOWER_BLOCK)
+                .add(CRBlocks.COMPOST_TOWER_BLOCK)
+                .add(CRBlocks.SQUEEZE_BASIN);
     }
 }

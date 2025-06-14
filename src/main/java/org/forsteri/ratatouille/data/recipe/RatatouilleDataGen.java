@@ -2,15 +2,11 @@ package org.forsteri.ratatouille.data.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.Create;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.entry.CRPonderPlugin;
@@ -18,8 +14,8 @@ import org.forsteri.ratatouille.entry.CRPonderPlugin;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public class RataouilleDataGen {
-    public RataouilleDataGen() {
+public class RatatouilleDataGen {
+    public RatatouilleDataGen() {
     }
 
     public static void gatherData(GatherDataEvent event) {

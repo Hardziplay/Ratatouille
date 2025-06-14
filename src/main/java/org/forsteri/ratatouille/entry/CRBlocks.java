@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlock;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
 import org.forsteri.ratatouille.content.frozen_block.FrozenBlock;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
@@ -135,6 +136,20 @@ public class CRBlocks {
             .item()
             .build()
             .register();
+
+    @SuppressWarnings("removal")
+    public static final BlockEntry<CompostTowerBlock> COMPOST_TOWER_BLOCK = Ratatouille.REGISTRATE
+            .block("compost_tower", CompostTowerBlock::new)
+            .initialProperties(SharedProperties::copperMetal)
+            .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
+            .transform(pickaxeOnly())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item()
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/compost_tower/item")))
+            .build()
+            .register();
+
 
 
     public static void register() {}
