@@ -1,88 +1,65 @@
 package org.forsteri.ratatouille.content.compost_tower;
 
-import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
-import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import net.minecraft.core.BlockPos;
+import com.simibubi.create.content.fluids.transfer.ItemDrainBlockEntity;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraft.world.item.crafting.RecipeType;
-import org.forsteri.ratatouille.entry.CRRecipeTypes;
-import org.forsteri.ratatouille.content.compost_tower.MultiSmartFluidTank;
-import java.util.Optional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.createmod.catnip.lang.LangBuilder;
+import org.forsteri.ratatouille.util.Lang;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public class CompostTowerBlockEntity extends FluidTankBlockEntity {
-    public CompostTowerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+public class CompostTowerBlockEntity extends ItemDrainBlockEntity implements IHaveGoggleInformation {
+    public CompostTowerBlockEntity(BlockEntityType<? extends ItemDrainBlockEntity> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    /**
-     * Make connectivity updates callable from {@link CompostTowerBlock}
-     * where the original protected visibility prevents access.
-     */
-    @Override
-    public void updateConnectivity() {
-        super.updateConnectivity();
-    }
-
-    @Override
-    protected SmartFluidTank createInventory() {
-        return new MultiSmartFluidTank(4, 1000, this::onFluidStackChanged);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (level == null || level.isClientSide || !isController())
-            return;
-
-        MultiSmartFluidTank tank = (MultiSmartFluidTank) getTankInventory();
-        FluidStack inTank = FluidStack.EMPTY;
-        int index = -1;
-        for (int i = 0; i < tank.getTanks(); i++) {
-            FluidStack fs = tank.getFluidInTank(i);
-            if (!fs.isEmpty()) {
-                inTank = fs;
-                index = i;
-                break;
-            }
-        }
-
-        if (inTank.isEmpty())
-            return;
-
-        FluidStack finalInTank = inTank;
-        Optional<CompostingRecipe> recipeOpt = level.getRecipeManager()
-                .getAllRecipesFor((RecipeType<CompostingRecipe>) CRRecipeTypes.COMPOSTING.getType())
-                .stream()
-                .filter(r -> !r.getFluidIngredients().isEmpty()
-                        && r.getFluidIngredients().get(0).test(finalInTank))
-                .findFirst();
-
-        if (recipeOpt.isEmpty())
-            return;
-
-        CompostingRecipe recipe = recipeOpt.get();
-        int amount = recipe.getFluidIngredients().get(0).getRequiredAmount();
-        if (inTank.getAmount() < amount)
-            return;
-
-        if (index >= 0)
-            tank.getInternalTanks().get(index).drain(amount, IFluidHandler.FluidAction.EXECUTE);
-        for (FluidStack out : recipe.getFluidResults()) {
-            tank.fill(out.copy(), IFluidHandler.FluidAction.EXECUTE);
-        }
     }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return containedFluidTooltip(tooltip, isPlayerSneaking,
-                getCapability(ForgeCapabilities.FLUID_HANDLER));
+        LazyOptional<IItemHandler> items = getCapability(ForgeCapabilities.ITEM_HANDLER);
+        LazyOptional<IFluidHandler> fluids = getCapability(ForgeCapabilities.FLUID_HANDLER);
+        boolean empty = true;
+
+        IItemHandler handler = items.orElse(new ItemStackHandler());
+        for (int i = 0; i < handler.getSlots(); i++) {
+            if (handler.getStackInSlot(i).isEmpty())
+                continue;
+            Lang.text("")
+                    .add(Component.translatable(handler.getStackInSlot(i).getDescriptionId())
+                            .withStyle(ChatFormatting.GRAY))
+                    .add(Lang.text(" x" + handler.getStackInSlot(i).getCount())
+                            .style(ChatFormatting.GREEN))
+                    .forGoggles(tooltip, 1);
+            empty = false;
+        }
+
+        LangBuilder mb = Lang.translate("generic.unit.millibuckets");
+        IFluidHandler fh = fluids.orElse(null);
+        if (fh != null)
+            for (int i = 0; i < fh.getTanks(); i++) {
+                FluidStack fs = fh.getFluidInTank(i);
+                if (fs.isEmpty())
+                    continue;
+                Lang.text("")
+                        .add(Lang.fluidName(fs)
+                                .add(Lang.text(" "))
+                                .style(ChatFormatting.GRAY)
+                                .add(Lang.number(fs.getAmount())
+                                        .add(mb)
+                                        .style(ChatFormatting.BLUE)))
+                        .forGoggles(tooltip, 1);
+                empty = false;
+            }
+
+        return !empty;
     }
 }
-
