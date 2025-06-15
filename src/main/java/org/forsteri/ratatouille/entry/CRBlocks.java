@@ -14,6 +14,7 @@ import net.minecraft.world.level.material.MapColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlock;
 import org.forsteri.ratatouille.content.compost_tower.CompostTowerModel;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlockItem;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
 import org.forsteri.ratatouille.content.frozen_block.FrozenBlock;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
@@ -147,7 +148,7 @@ public class CRBlocks {
             .blockstate(new CompostTowerModel.CompostTowerGenerator()::generate)
             .onRegister(CreateRegistrate.blockModel(() -> CompostTowerModel::standard))
             .addLayer(() -> RenderType::cutoutMipped)
-            .item()
+            .item(CompostTowerBlockItem::new)
             .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/compost_tower/item")))
             .build()
             .register();
