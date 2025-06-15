@@ -8,7 +8,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import java.util.List;
+import org.forsteri.ratatouille.content.compost_tower.MultiFluidTank;
 
 public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBlockEntity> {
     public CompostTowerRenderer(BlockEntityRendererProvider.Context context) {
@@ -19,14 +20,14 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
         if (!be.isController())
             return;
 
-        FluidTank tank = (FluidTank) be.getTankInventory();
-        FluidStack fluidStack = tank.getFluid();
+        MultiFluidTank tank = (MultiFluidTank) be.getTankInventory();
+        List<FluidStack> fluids = tank.getFluids();
 
-        if (fluidStack.isEmpty())
+        if (fluids.isEmpty())
             return;
 
         LerpedFloat fluidLevel = be.getFluidLevel();
-        float fillRatio = (float) fluidStack.getAmount() / tank.getCapacity();
+        float fillRatio = (float) tank.getTotalAmount() / tank.getCapacity();
         float level = fluidLevel == null ? fillRatio : fluidLevel.getValue(partialTicks);
 
 
@@ -39,26 +40,32 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
             return;
         float clampedLevel = Mth.clamp(level * totalHeight, 0, totalHeight);
 
-        boolean top = fluidStack.getFluid()
-                .getFluidType()
-                .isLighterThanAir();
-
         float xMin = tankHullWidth;
         float xMax = xMin + be.getWidth() - 2 * tankHullWidth;
-        float yMin = totalHeight + capHeight + minPuddleHeight - clampedLevel;
-        float yMax = yMin + clampedLevel;
-
-        if (top) {
-            yMin += totalHeight - clampedLevel;
-            yMax += totalHeight - clampedLevel;
-        }
-
         float zMin = tankHullWidth;
         float zMax = zMin + be.getWidth() - 2 * tankHullWidth;
 
-        ms.pushPose();
-        ms.translate(0, clampedLevel - totalHeight, 0);
-        ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, bufferSource, ms, light, false, true);
-        ms.popPose();
+        float yOffset = totalHeight + capHeight + minPuddleHeight;
+        for (FluidStack fluidStack : fluids) {
+            float part = clampedLevel * fluidStack.getAmount() / tank.getTotalAmount();
+            if (part <= 0)
+                continue;
+
+            float yMin = yOffset - part;
+            float yMax = yOffset;
+
+            boolean top = fluidStack.getFluid().getFluidType().isLighterThanAir();
+            if (top) {
+                yMin += totalHeight - clampedLevel;
+                yMax += totalHeight - clampedLevel;
+            }
+
+            ms.pushPose();
+            ms.translate(0, part - totalHeight, 0);
+            ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, bufferSource, ms, light, false, true);
+            ms.popPose();
+
+            yOffset = yMin;
+        }
     }
 }

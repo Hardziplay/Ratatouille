@@ -2,6 +2,7 @@ package org.forsteri.ratatouille.content.compost_tower;
 
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
+import org.forsteri.ratatouille.content.compost_tower.MultiFluidTank;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -32,7 +33,7 @@ public class CompostTowerBlockEntity extends FluidTankBlockEntity {
 
     @Override
     protected SmartFluidTank createInventory() {
-        return new SmartFluidTank(1000, this::onFluidStackChanged);
+        return new MultiFluidTank(1000, this::onFluidStackChanged);
     }
 
     @Override
@@ -41,27 +42,35 @@ public class CompostTowerBlockEntity extends FluidTankBlockEntity {
         if (level == null || level.isClientSide || !isController())
             return;
 
-        FluidTank tank = (FluidTank) getTankInventory();
-        FluidStack inTank = tank.getFluid();
-        if (inTank.isEmpty())
+        MultiFluidTank tank = (MultiFluidTank) getTankInventory();
+        List<FluidStack> fluids = tank.getFluids();
+        if (fluids.isEmpty())
             return;
 
-        Optional<CompostingRecipe> recipeOpt = level.getRecipeManager()
-                .getAllRecipesFor((RecipeType<CompostingRecipe>) CRRecipeTypes.COMPOSTING.getType())
-                .stream()
-                .filter(r -> !r.getFluidIngredients().isEmpty()
-                        && r.getFluidIngredients().get(0).test(inTank))
-                .findFirst();
+        Optional<CompostingRecipe> recipeOpt = Optional.empty();
+        FluidStack selected = FluidStack.EMPTY;
+        for (FluidStack stack : fluids) {
+            recipeOpt = level.getRecipeManager()
+                    .getAllRecipesFor((RecipeType<CompostingRecipe>) CRRecipeTypes.COMPOSTING.getType())
+                    .stream()
+                    .filter(r -> !r.getFluidIngredients().isEmpty()
+                            && r.getFluidIngredients().get(0).test(stack))
+                    .findFirst();
+            if (recipeOpt.isPresent()) {
+                selected = stack;
+                break;
+            }
+        }
 
         if (recipeOpt.isEmpty())
             return;
 
         CompostingRecipe recipe = recipeOpt.get();
         int amount = recipe.getFluidIngredients().get(0).getRequiredAmount();
-        if (inTank.getAmount() < amount)
+        if (selected.getAmount() < amount)
             return;
 
-        tank.drain(amount, IFluidHandler.FluidAction.EXECUTE);
+        tank.drain(new FluidStack(selected, amount), IFluidHandler.FluidAction.EXECUTE);
         for (FluidStack out : recipe.getFluidResults()) {
             tank.fill(out.copy(), IFluidHandler.FluidAction.EXECUTE);
         }
