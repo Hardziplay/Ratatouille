@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlock;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerModel;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlockItem;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlock;
 import org.forsteri.ratatouille.content.frozen_block.FrozenBlock;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlock;
@@ -141,11 +143,13 @@ public class CRBlocks {
     public static final BlockEntry<CompostTowerBlock> COMPOST_TOWER_BLOCK = Ratatouille.REGISTRATE
             .block("compost_tower", CompostTowerBlock::new)
             .initialProperties(SharedProperties::copperMetal)
-            .properties(p -> p.noOcclusion())
+            .properties(p -> p.lightLevel(state -> 1).noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
             .transform(pickaxeOnly())
-            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .blockstate(new CompostTowerModel.CompostTowerGenerator()::generate)
+            .onRegister(CreateRegistrate.blockModel(() -> CompostTowerModel::standard))
             .addLayer(() -> RenderType::cutoutMipped)
-            .item()
+            .item(CompostTowerBlockItem::new)
+            .model((c, p) -> p.withExistingParent(c.getName(), new ResourceLocation(Ratatouille.MOD_ID, "block/compost_tower/item")))
             .build()
             .register();
 

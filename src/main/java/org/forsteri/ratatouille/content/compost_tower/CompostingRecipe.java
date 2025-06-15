@@ -7,10 +7,6 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Recipe used by the Compost Tower. It can either transform an item into a fluid
- * or convert one fluid into multiple fluid outputs.
- */
 public class CompostingRecipe extends ProcessingRecipe<RecipeWrapper> {
     public CompostingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
         super(CRRecipeTypes.COMPOSTING, params);
@@ -18,7 +14,7 @@ public class CompostingRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     @Override
     protected int getMaxInputCount() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -37,9 +33,7 @@ public class CompostingRecipe extends ProcessingRecipe<RecipeWrapper> {
     }
 
     @Override
-    public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level level) {
-        if (!inv.isEmpty() && !this.ingredients.isEmpty())
-            return this.ingredients.get(0).test(inv.getItem(0));
-        return !this.fluidIngredients.isEmpty();
+    public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level world) {
+        return true;
     }
 }
