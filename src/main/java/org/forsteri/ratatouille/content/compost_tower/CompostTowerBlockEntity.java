@@ -10,6 +10,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.content.compost_tower.MultiSmartFluidTank;
 import java.util.Optional;
