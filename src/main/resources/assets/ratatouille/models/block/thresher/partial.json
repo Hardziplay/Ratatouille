@@ -7,6 +7,7 @@
 		"5": "block/anvil",
 		"particle": "create:block/axis_top"
 	},
+	"render_type": "minecraft:cutout",
 	"elements": [
 		{
 			"name": "Blade",

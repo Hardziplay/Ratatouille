@@ -4,6 +4,7 @@
 	"textures": {
 		"7": "ratatouille:block/oven_fan/fan_blades"
 	},
+	"render_type": "minecraft:cutout",
 	"elements": [
 		{
 			"name": "fan",
