@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -30,6 +31,8 @@ public class Ratatouille {
     // Create a Deferred Register to hold Blocks which will all be registered under the "ratatouille" namespace
     public Ratatouille() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ModLoadingContext modLoadingContext = ModLoadingContext.get();
+
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onClientSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -44,6 +47,7 @@ public class Ratatouille {
         CRCreativeModeTabs.register(modEventBus);
         CRRecipeTypes.register(modEventBus);
         CRParticleTypes.register(modEventBus);
+        CRConfigs.register(modLoadingContext);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(CRParticleTypes::registerFactories));
         modEventBus.addListener(EventPriority.LOWEST, RatatouilleDataGen::gatherData);
     }
@@ -57,7 +61,7 @@ public class Ratatouille {
     }
 
     public static ResourceLocation asResource(String path) {
-        return new ResourceLocation("ratatouille", path);
+        return new ResourceLocation(MOD_ID, path);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
