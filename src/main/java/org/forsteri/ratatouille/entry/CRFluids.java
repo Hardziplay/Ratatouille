@@ -56,10 +56,10 @@ public class CRFluids {
                     .lang("Biogas")
                     .register();
 
-    public static final FluidEntry<VirtualFluid> COMPOST_MASS =
+    public static final FluidEntry<VirtualFluid> COMPOST_FLUID =
             Ratatouille.REGISTRATE
-                    .virtualFluid("compost_mass")
-                    .lang("Compost Mass")
+                    .virtualFluid("compost_fluid")
+                    .lang("Compost Fluid")
                     .register();
 
 

@@ -3,6 +3,7 @@ package org.forsteri.ratatouille.content.compost_tower;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.fluids.tank.FluidTankCTBehaviour;
 import com.simibubi.create.content.fluids.tank.FluidTankGenerator;
+import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
 import com.simibubi.create.foundation.block.connected.CTModel;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.tterrag.registrate.providers.DataGenContext;
@@ -30,7 +31,7 @@ import java.util.*;
 public class CompostTowerModel extends CTModel {
     public static CompostTowerModel standard(BakedModel originalModel) {
         return new CompostTowerModel(originalModel,
-                CRSpriteShifts.COMPOST_TOWER, CRSpriteShifts.COMPOST_TOWER_TOP, CRSpriteShifts.COMPOST_TOWER_TOP_INNER,
+                CRSpriteShifts.COMPOST_TOWER_SPRITE, CRSpriteShifts.COMPOST_TOWER_TOP, CRSpriteShifts.COMPOST_TOWER_TOP_INNER,
                 CRSpriteShifts.COMPOST_TOWER_BOTTOM, CRSpriteShifts.COMPOST_TOWER_BOTTOM_INNER,
                 CRSpriteShifts.COMPOST_TOWER_SHIFT_2x2);
     }
@@ -60,7 +61,10 @@ public class CompostTowerModel extends CTModel {
                 return bottomShift;
             if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomInnerShift.getOriginal() == sprite)
                 return bottomInnerShift;
-            return super.getShift(state, direction, sprite);
+            CTSpriteShiftEntry shift = super.getShift(state, direction, sprite);
+            if (shift == CRSpriteShifts.COMPOST_TOWER_SPRITE && state.getValue(CompostTowerBlock.IS_2x2))
+                return shift2x2;
+            return shift;
         }
     }
 

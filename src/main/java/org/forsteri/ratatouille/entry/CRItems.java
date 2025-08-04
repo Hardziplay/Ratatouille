@@ -51,6 +51,7 @@ public class CRItems {
     public static final ItemEntry<Item> RIPEN_MATTER = Ratatouille.REGISTRATE.item("ripen_matter", Item::new).register();
     public static final ItemEntry<Item> MATURE_MATTER = Ratatouille.REGISTRATE.item("mature_matter", Item::new).register();
     public static final ItemEntry<Item> BOIL_STONE = Ratatouille.REGISTRATE.item("boil_stone", Item::new).register();
+    public static final ItemEntry<Item> COMPOST_MASS = Ratatouille.REGISTRATE.item("compost_mass", Item::new).register();
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
     //public static final ItemEntry<Item> SUGAR_CUBE = Ratatouille.REGISTRATE.item("sugar_cube", Item::new).register();

@@ -17,26 +17,26 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
 
     @Override
     protected void renderSafe(CompostTowerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (!be.isController())
-            return;
-
-        FluidTank tank = (FluidTank) be.getTankInventory();
-        FluidStack fluidStack = tank.getFluid();
-
-        if (fluidStack.isEmpty())
-            return;
-
-        LerpedFloat fluidLevel = be.getFluidLevel();
-        float fillRatio = (float) fluidStack.getAmount() / tank.getCapacity();
-        float level = fluidLevel == null ? fillRatio : fluidLevel.getValue(partialTicks);
-
-
-        float capHeight = 1 / 4f;
-        float tankHullWidth =  1 / 128f;
-        float minPuddleHeight = 1 / 16f;
-        float totalHeight = be.getHeight() - 2 * capHeight - minPuddleHeight;
-
-        float currentHeight = 0;
+//        if (!be.isController())
+//            return;
+//
+//        FluidTank tank = (FluidTank) be.getTankInventory();
+//        FluidStack fluidStack = tank.getFluid();
+//
+//        if (fluidStack.isEmpty())
+//            return;
+//
+//        LerpedFloat fluidLevel = be.getFluidLevel();
+//        float fillRatio = (float) fluidStack.getAmount() / tank.getCapacity();
+//        float level = fluidLevel == null ? fillRatio : fluidLevel.getValue(partialTicks);
+//
+//
+//        float capHeight = 1 / 4f;
+//        float tankHullWidth =  1 / 128f;
+//        float minPuddleHeight = 1 / 16f;
+//        float totalHeight = be.getHeight() - 2 * capHeight - minPuddleHeight;
+//
+//        float currentHeight = 0;
 
 //        for (SmartFluidTank inner : tanks) {
 //            FluidStack fluidStack = inner.getFluid();
@@ -48,7 +48,7 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
 
 //            if (level < 1 / (512f * totalHeight))
 //                continue;
-            float clampedLevel = Mth.clamp(level * totalHeight, 0, totalHeight - currentHeight);
+//            float clampedLevel = Mth.clamp(level * totalHeight, 0, totalHeight - currentHeight);
 //        }
 //        boolean top = fluidStack.getFluid()
 //                .getFluidType()
