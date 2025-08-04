@@ -49,10 +49,11 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
     public static void isNearWater(LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
         for (BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-8, 0, -8), pPos.offset(8, 0, 8))) {
             if (pLevel.getBlockEntity(blockpos.above()) instanceof IrrigationTowerBlockEntity be) {
-                if (!be.getTankInventory().drain(1000, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
-//                    be.getTankInventory().drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                FluidStack fluid = be.getTankInventory().getFluid();
+                if (!fluid.isEmpty() && fluid.getFluid().isSame(Fluids.WATER)) {
                     cir.setReturnValue(true);
                     cir.cancel();
+                    return;
                 }
             }
         }

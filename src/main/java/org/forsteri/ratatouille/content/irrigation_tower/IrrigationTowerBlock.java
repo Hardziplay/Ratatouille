@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -37,6 +38,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.forsteri.ratatouille.entry.CRFluids;
 import org.jetbrains.annotations.NotNull;
+import vectorwing.farmersdelight.common.registry.ModBlocks;
 
 public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements IWrenchable, IBE<IrrigationTowerBlockEntity> {
 
@@ -93,30 +95,30 @@ public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (!(blockEntity instanceof IrrigationTowerBlockEntity be)) return;
+        if (!(blockEntity instanceof IrrigationTowerBlockEntity tower)) return;
 
-        FluidStack fluid = be.getTankInventory().getFluid();
+        FluidStack simulate = tower.getTankInventory().drain(
+                new FluidStack(CRFluids.Compost_Tea.get().getSource(), 200),
+                IFluidHandler.FluidAction.SIMULATE
+        );
 
-
-        if (!fluid.getFluid().isSame(CRFluids.Compost_Tea.get().getSource())) return;
-        if (fluid.getAmount() < 50) return;
+        if (simulate.isEmpty() || simulate.getAmount() < 200) return;
 
         BlockPos center = pos.below();
         for (int dx = -8; dx <= 8; dx++) {
             for (int dz = -8; dz <= 8; dz++) {
-                if (random.nextFloat() < 0.20f) {
-                    BlockPos target = center.offset(dx, 0, dz);
-                    BlockState targetState = level.getBlockState(target);
+                BlockPos target = center.offset(dx, 0, dz);
+                BlockState targetState = level.getBlockState(target);
 
-                    if (targetState.is(Blocks.FARMLAND)) {
-                        Block richSoil = ForgeRegistries.BLOCKS.getValue(
-                                new ResourceLocation("farmersdelight:rich_soil_farmland"));
-                        if (richSoil != null) {
-                            level.setBlock(target, richSoil.defaultBlockState(), 3);
-                            be.getTankInventory().drain(50, IFluidHandler.FluidAction.EXECUTE);
-                            return;
-                        }
-                    }
+                if (targetState.is(Blocks.FARMLAND)) {
+                    BlockState newState = ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState();
+                    level.setBlockAndUpdate(target, newState);
+                    level.gameEvent(GameEvent.BLOCK_CHANGE, target, GameEvent.Context.of(null, newState));
+                    tower.getTankInventory().drain(
+                            new FluidStack(CRFluids.Compost_Tea.get().getSource(), 200),
+                            IFluidHandler.FluidAction.EXECUTE
+                    );
+                    return;
                 }
             }
         }
