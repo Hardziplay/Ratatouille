@@ -2,19 +2,19 @@ package org.forsteri.ratatouille.content.spreader;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
-import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.NozzleBlockEntity;
 import com.simibubi.create.content.logistics.chute.ChuteBlockEntity;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -31,7 +31,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlockEntity;
+import org.forsteri.ratatouille.entry.CRItems;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -223,34 +223,87 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
                 timer = 1000;
                 inventory.getStackInSlot(0).shrink(1);
                 ArrayList<BlockPos> corps = new ArrayList<>();
-                BlockPos nozzlePos = getBlockPos().relative(getBlockState().getValue(FACING));
+                ArrayList<Animal> adultAnimals = new ArrayList<>();
+                ArrayList<AgeableMob> babyAnimals = new ArrayList<>();
 
-                if (level.getBlockEntity(nozzlePos) instanceof NozzleBlockEntity) {
-                    int range = (int) (getMaxDistance() / 2);
-                    for (BlockPos corpPos : BlockPos.betweenClosed(nozzlePos.offset(-range, -range, -range), nozzlePos.offset(range, range, range))) {
-                        addCorpBuffer(corps, new BlockPos(corpPos));
+                BlockPos facingPos = getBlockPos().relative(getBlockState().getValue(FACING));
+                boolean hasNozzle = level.getBlockEntity(facingPos) instanceof NozzleBlockEntity;
+                int range = hasNozzle ? (int) (getMaxDistance() / 2) : (int) airCurrent.maxDistance;
+
+                if (hasNozzle) {
+                    BlockPos min = facingPos.offset(-range, -range, -range);
+                    BlockPos max = facingPos.offset(range, range, range);
+                    for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
+                        addCorpBuffer(corps, new BlockPos(pos));
                     }
+
+                    var aabb = new net.minecraft.world.phys.AABB(min, max);
+                    level.getEntitiesOfClass(Animal.class, aabb).forEach(animal -> {
+                        if (!animal.isBaby() && !animal.isInLove()) adultAnimals.add(animal);
+                        if (animal.isBaby()) babyAnimals.add(animal);
+                    });
                 } else {
-                    for (int i = 1; i < Mth.floor(airCurrent.maxDistance); i++) {
+                    for (int i = 1; i < range; i++) {
                         BlockPos corpPos = getBlockPos().relative(airCurrent.direction, i);
                         addCorpBuffer(corps, corpPos);
+
+                        var aabb = new net.minecraft.world.phys.AABB(corpPos).inflate(0.5);
+                        level.getEntitiesOfClass(Animal.class, aabb).forEach(animal -> {
+                            if (!animal.isBaby() && !animal.isInLove()) adultAnimals.add(animal);
+                            if (animal.isBaby()) babyAnimals.add(animal);
+                        });
                     }
                 }
 
-                if (!corps.isEmpty()) {
-                    int count = getProcessingLevel();
-                    while (count > 0) {
-                        BlockPos corpPos = corps.get(level.random.nextInt(0, corps.size()));
-                        BlockState corpState = level.getBlockState(corpPos);
-                        if (corpState.getBlock() instanceof BonemealableBlock growable
-                                && growable.isValidBonemealTarget(level, corpPos, corpState, false)
-                                && ForgeHooks.onCropsGrowPre(level, corpPos, corpState, true)
-                        ) {
-                            growable.performBonemeal(level.getServer().overworld(), level.random, corpPos, corpState);
-                            level.levelEvent(2005, corpPos, 0);
-                            ForgeHooks.onCropsGrowPost(level, corpPos, corpState);
+                ItemStack stack = inventory.getStackInSlot(0);
+                if (stack.is(CRItems.RIPEN_MATTER.get())) {
+                    if (!corps.isEmpty()) {
+                        stack.shrink(1);
+                        int count = getProcessingLevel();
+                        while (count > 0) {
+                            BlockPos corpPos = corps.get(level.random.nextInt(0, corps.size()));
+                            BlockState corpState = level.getBlockState(corpPos);
+                            if (corpState.getBlock() instanceof BonemealableBlock growable
+                                    && growable.isValidBonemealTarget(level, corpPos, corpState, false)
+                                    && ForgeHooks.onCropsGrowPre(level, corpPos, corpState, true)
+                            ) {
+                                growable.performBonemeal(level.getServer().overworld(), level.random, corpPos, corpState);
+                                level.levelEvent(2005, corpPos, 0);
+                                ForgeHooks.onCropsGrowPost(level, corpPos, corpState);
+                            }
+                            count--;
                         }
-                        count--;
+                    }
+                } else if (stack.is(CRItems.MATURE_MATTER.get())) {
+                    if (!adultAnimals.isEmpty() || !babyAnimals.isEmpty()) {
+                        stack.shrink(1);
+                        int count = getProcessingLevel();
+                        while (count > 0) {
+                            boolean tryAdultFirst = level.random.nextBoolean();
+
+                            if (tryAdultFirst) {
+                                if (!adultAnimals.isEmpty()) {
+                                    Animal target = adultAnimals.get(level.random.nextInt(adultAnimals.size()));
+                                    if (!target.isInLove()) {
+                                        target.setInLove(null);
+                                    }
+                                } else if (!babyAnimals.isEmpty()) {
+                                    AgeableMob target = babyAnimals.get(level.random.nextInt(babyAnimals.size()));
+                                    target.ageUp(Animal.getSpeedUpSecondsWhenFeeding(-target.getAge()), true);
+                                }
+                            } else {
+                                if (!babyAnimals.isEmpty()) {
+                                    AgeableMob target = babyAnimals.get(level.random.nextInt(babyAnimals.size()));
+                                    target.ageUp(Animal.getSpeedUpSecondsWhenFeeding(-target.getAge()), true);
+                                } else if (!adultAnimals.isEmpty()) {
+                                    Animal target = adultAnimals.get(level.random.nextInt(adultAnimals.size()));
+                                    if (!target.isInLove()) {
+                                        target.setInLove(null);
+                                    }
+                                }
+                            }
+                            count--;
+                        }
                     }
                 }
             }
@@ -264,7 +317,7 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
-            return stack.is(Items.BONE_MEAL);
+            return stack.is(CRItems.RIPEN_MATTER.get()) || stack.is(CRItems.MATURE_MATTER.get());
         }
 
         @Override

@@ -2,7 +2,6 @@ package org.forsteri.ratatouille.entry;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import org.forsteri.ratatouille.Ratatouille;
@@ -48,8 +47,10 @@ public class CRItems {
             .properties(p -> p.stacksTo(1))
             .onRegister(CreateRegistrate.itemModel(() -> ChefHatWithGogglesModel::new))
             .register();
-    public static final ItemEntry<Item> Compost_Residue = Ratatouille.REGISTRATE.item("compost_residue", Item::new).register();
-    public static final ItemEntry<Item> Boil_Stone = Ratatouille.REGISTRATE.item("boil_stone", Item::new).register();
+    public static final ItemEntry<Item> COMPOST_RESIDUE = Ratatouille.REGISTRATE.item("compost_residue", Item::new).register();
+    public static final ItemEntry<Item> RIPEN_MATTER = Ratatouille.REGISTRATE.item("ripen_matter", Item::new).register();
+    public static final ItemEntry<Item> MATURE_MATTER = Ratatouille.REGISTRATE.item("mature_matter", Item::new).register();
+    public static final ItemEntry<Item> BOIL_STONE = Ratatouille.REGISTRATE.item("boil_stone", Item::new).register();
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
     //public static final ItemEntry<Item> SUGAR_CUBE = Ratatouille.REGISTRATE.item("sugar_cube", Item::new).register();
