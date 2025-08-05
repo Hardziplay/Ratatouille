@@ -3,14 +3,16 @@ package org.forsteri.ratatouille.data.recipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.minecraft.data.PackOutput;
 import org.forsteri.ratatouille.entry.CRFluids;
+import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 
 public class CompostingRecipeGen extends ProcessingRecipeGen {
-    GeneratedRecipe DEFAULT = this.create("composting_example", b -> b
-            .require(CRFluids.COCOA_LIQUOR.get(), BUCKET)
-            .output(CRFluids.EGG_YOLK.get(), BUCKET)
-            .output(CRFluids.Compost_Tea.get(), BOTTLE)
-            .output(CRFluids.BIO_GAS.get(), BOTTLE));
+    GeneratedRecipe DEFAULT = this.create("composting", b -> b
+            .require(CRItems.COMPOST_MASS.get())
+            .duration(200)
+            .output(CRItems.COMPOST_RESIDUE.get(), 2)
+            .output(CRFluids.Compost_Tea.get(), 600)
+            .output(CRFluids.BIO_GAS.get(), 200));
 
     public CompostingRecipeGen(PackOutput generator) {
         super(generator);

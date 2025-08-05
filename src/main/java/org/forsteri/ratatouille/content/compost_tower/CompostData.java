@@ -2,6 +2,7 @@ package org.forsteri.ratatouille.content.compost_tower;
 
 import com.simibubi.create.content.fluids.tank.BoilerHeaters;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import joptsimple.internal.Strings;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -10,8 +11,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
+import org.forsteri.ratatouille.entry.CRFluids;
+import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +66,25 @@ public class CompostData {
         if (updateCompostTower(tower))
             tower.notifyUpdate();
 
+        processCompostMass(tower);
 //        processFood(tower);
+    }
+
+    private void processCompostMass(CompostTowerBlockEntity tower) {
+        var itemHandler = tower.itemCapability.orElse(null);
+        var fluidHandler = tower.fluidCapability.orElse(null);
+
+        if (itemHandler == null || fluidHandler == null)
+            return;
+
+        var slot = itemHandler.hasInput(CRItems.COMPOST_MASS.get());
+        if (slot != -1) {
+            var fluid = new FluidStack(CRFluids.COMPOST_FLUID.get(), 250);
+            if (fluidHandler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == 250) {
+                fluidHandler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                itemHandler.getStackInSlot(slot).shrink(1);
+            }
+        }
     }
 
     public boolean evaluate(CompostTowerBlockEntity tower) {

@@ -14,26 +14,22 @@ public class CompostingRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     @Override
     protected int getMaxInputCount() {
-        return 0;
-    }
-
-    @Override
-    protected int getMaxFluidInputCount() {
         return 1;
     }
 
     @Override
     protected int getMaxOutputCount() {
-        return 0;
+        return 1;
     }
 
     @Override
     protected int getMaxFluidOutputCount() {
-        return 3;
+        return 2;
     }
 
     @Override
     public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level world) {
+        // hard-coded in compost tower
         return true;
     }
 }
