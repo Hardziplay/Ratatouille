@@ -69,6 +69,15 @@ public class CRFluids {
                     .register();
 
 
+    public static final FluidEntry<VirtualFluid> COMPOST_RESIDUE_FLUID =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("compost_residue_fluid")
+                    .properties(p -> p
+                            .density(1450))
+                    .lang("Compost Residue Fluid")
+                    .register();
+
+
     public static void register() {}
 
     private static class BaseFluidType extends AllFluids.TintedFluidType {
