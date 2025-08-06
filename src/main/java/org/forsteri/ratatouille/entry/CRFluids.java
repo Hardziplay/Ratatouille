@@ -43,7 +43,7 @@ public class CRFluids {
                     .lang("Egg Yolk")
                     .register();
 
-    public static final FluidEntry<VirtualFluid> Compost_Tea =
+    public static final FluidEntry<VirtualFluid> COMPOST_TEA =
             Ratatouille.REGISTRATE
                     .virtualFluid("compost_tea")
                     .lang("Compost Tea")

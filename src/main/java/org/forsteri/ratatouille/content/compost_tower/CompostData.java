@@ -16,23 +16,31 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.entry.CRFluids;
 import org.forsteri.ratatouille.entry.CRItems;
+import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class CompostData {
     public int sizeLevel;
     public int tempLevel;
     public int updateRequired;
+    public int timer;
+    public CompostingRecipe lastRecipe;
 
     public void clear() {
         sizeLevel = 0;
         tempLevel = 0;
+        timer = 0;
+        lastRecipe = null;
     }
 
     public boolean updateCompostTower(CompostTowerBlockEntity controller) {
@@ -66,25 +74,71 @@ public class CompostData {
         if (updateCompostTower(tower))
             tower.notifyUpdate();
 
-        processCompostMass(tower);
-//        processFood(tower);
-    }
-
-    private void processCompostMass(CompostTowerBlockEntity tower) {
         var itemHandler = tower.itemCapability.orElse(null);
         var fluidHandler = tower.fluidCapability.orElse(null);
 
-        if (itemHandler == null || fluidHandler == null)
-            return;
+        if (itemHandler == null || fluidHandler == null) return;
+        assert tower.getLevel() != null;
 
-        var slot = itemHandler.hasInput(CRItems.COMPOST_MASS.get());
-        if (slot != -1) {
-            var fluid = new FluidStack(CRFluids.COMPOST_FLUID.get(), 250);
-            if (fluidHandler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == 250) {
-                fluidHandler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
-                itemHandler.getStackInSlot(slot).shrink(1);
+        RecipeWrapper inventoryIn = new RecipeWrapper(tower.inputInv);
+        if (timer > 0) {
+            if (this.lastRecipe == null || !this.lastRecipe.matches(inventoryIn, tower.getLevel())) {
+                Optional<CompostingRecipe> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
+                if (recipe.isEmpty()) {
+                    return;
+                }
+                this.lastRecipe =  recipe.get();
             }
+
+            boolean canOutput = true;
+            for (ItemStack outputStack : lastRecipe.rollResults()) {
+                if (outputStack.isEmpty()) continue;
+                if (!ItemHandlerHelper.insertItemStacked(tower.outputInv, outputStack, true).isEmpty()) {
+                    canOutput = false;
+                    break;
+                }
+            }
+            for (FluidStack fluidStack : lastRecipe.getFluidResults()) {
+                if (fluidStack.isEmpty()) continue;
+                if (fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) < fluidStack.getAmount()) {
+                    canOutput = false;
+                    break;
+                }
+            }
+            if (!canOutput) {
+                timer = 100;
+                return;
+            }
+
+            timer -= getProcessingSpeed();
+            if (tower.getLevel().isClientSide) {
+                return;
+            }
+            if (timer <= 0) {
+                tower.inputInv.getStackInSlot(0).shrink(1);
+                this.lastRecipe.rollResults().forEach((stack) -> {
+                    ItemHandlerHelper.insertItemStacked(tower.outputInv, stack, false);
+                });
+                this.lastRecipe.getFluidResults().forEach((fluidStack) -> {
+                    fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+                });
+                tower.notifyUpdate();
+            }
+            return;
         }
+
+        if (lastRecipe == null || !lastRecipe.matches(inventoryIn, tower.getLevel())) {
+            Optional<CompostingRecipe> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
+            if (recipe.isEmpty()) {
+                timer = 100;
+            } else {
+                lastRecipe = recipe.get();
+                timer = lastRecipe.getProcessingDuration();
+            }
+        } else {
+            timer = lastRecipe.getProcessingDuration();
+        }
+        tower.notifyUpdate();
     }
 
     public boolean evaluate(CompostTowerBlockEntity tower) {
@@ -174,5 +228,9 @@ public class CompostData {
         tooltip.add(indent2.copy().append(this.getHeatComponent(true, false)));
 
         return true;
+    }
+
+    public int getProcessingSpeed() {
+        return (int) (Math.max(1.0, sizeLevel / 8.0 * tempLevel / 8.0) * 512);
     }
 }

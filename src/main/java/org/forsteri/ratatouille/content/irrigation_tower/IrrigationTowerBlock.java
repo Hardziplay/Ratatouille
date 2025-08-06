@@ -5,7 +5,6 @@ import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.fluid.FluidHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.core.BlockPos;
@@ -34,7 +33,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.forsteri.ratatouille.entry.CRFluids;
 import org.jetbrains.annotations.NotNull;
@@ -98,7 +96,7 @@ public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements 
         if (!(blockEntity instanceof IrrigationTowerBlockEntity tower)) return;
 
         FluidStack simulate = tower.getTankInventory().drain(
-                new FluidStack(CRFluids.Compost_Tea.get().getSource(), 200),
+                new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 200),
                 IFluidHandler.FluidAction.SIMULATE
         );
 
@@ -115,7 +113,7 @@ public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements 
                     level.setBlockAndUpdate(target, newState);
                     level.gameEvent(GameEvent.BLOCK_CHANGE, target, GameEvent.Context.of(null, newState));
                     tower.getTankInventory().drain(
-                            new FluidStack(CRFluids.Compost_Tea.get().getSource(), 200),
+                            new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 200),
                             IFluidHandler.FluidAction.EXECUTE
                     );
                     return;

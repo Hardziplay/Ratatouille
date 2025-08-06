@@ -1,27 +1,15 @@
 package org.forsteri.ratatouille.content.irrigation_tower;
 
-import com.simibubi.create.AllParticleTypes;
-import com.simibubi.create.content.fluids.particle.FluidParticleData;
-import com.simibubi.create.content.fluids.tank.CreativeFluidTankBlockEntity;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.WaterFluid;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.forsteri.ratatouille.entry.CRFluids;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -68,7 +56,7 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
         @Override
         public boolean isFluidValid(FluidStack stack) {
             return stack.getFluid().isSame(Fluids.WATER)
-                    || stack.getFluid().isSame(CRFluids.Compost_Tea.get().getSource());
+                    || stack.getFluid().isSame(CRFluids.COMPOST_TEA.get().getSource());
         }
     }
 
