@@ -8,10 +8,13 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -22,9 +25,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
@@ -40,8 +46,9 @@ import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
+import static com.simibubi.create.content.fluids.tank.FluidTankBlockEntity.getCapacityMultiplier;
 
 public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IMultiBlockEntityContainer.Inventory {
     protected LazyOptional<CompostTowerInventoryHandler> itemCapability = LazyOptional.empty();
@@ -52,8 +59,28 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
     protected CompostData compostData;
     public ItemStackHandler inputInv = new ItemStackHandler();
     public ItemStackHandler outputInv = new ItemStackHandler();
-    public FluidTank tankInventory = new SmartFluidTank(1000, $->{});
-    private IFluidHandler[] tanks = null;
+    public FluidTank tankInventory = new SmartFluidTank(getCapacityMultiplier(), this::onFluidStackChanged);
+    public IFluidHandler[] tanks = null;
+    public HashMap<net.minecraft.world.level.material.Fluid, LerpedFloat> fluidLevels = new HashMap<>();
+    public HashMap<net.minecraft.world.level.material.Fluid, LerpedFloat> gasLevels = new HashMap<>();
+
+    public List<FluidStack> getSortedFluids() {
+        List<FluidStack> fluids = new ArrayList<>();
+        fluids.add(new FluidStack(CRFluids.COMPOST_FLUID.get(), getInputFluidAmount()));
+        if (tanks == null) return fluids;
+
+        for (IFluidHandler handler : tanks) {
+            FluidStack stack = handler.getFluidInTank(0);
+            if (!stack.isEmpty()) {
+                fluids.add(stack.copy());
+            }
+        }
+        fluids.sort(Comparator.comparingInt(
+                (FluidStack fs) -> fs.getFluid().getFluidType().getDensity()
+        ).reversed());
+
+        return fluids;
+    }
 
     private boolean canProcess(ItemStack stack) {
         ItemStackHandler tester = new ItemStackHandler(1);
@@ -76,7 +103,7 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            if (CompostTowerBlockEntity.this.outputInv == this.getHandlerFromIndex(this.getIndexForSlot(slot)) || blockHeight > 0)
+            if (CompostTowerBlockEntity.this.outputInv == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
                 return false;
             return CompostTowerBlockEntity.this.canProcess(stack) && super.isItemValid(slot, stack);
         }
@@ -87,14 +114,18 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
                 return stack;
             if (!this.isItemValid(slot, stack))
                 return stack;
-            return super.insertItem(slot, stack, simulate);
+            var result = super.insertItem(slot, stack, simulate);
+            if (!simulate) onInputStackChanged();
+            return result;
         }
 
         @Override
         public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
             if (CompostTowerBlockEntity.this.inputInv == this.getHandlerFromIndex(this.getIndexForSlot(slot)) || blockHeight > 0)
                 return ItemStack.EMPTY;
-            return super.extractItem(slot, amount, simulate);
+            var result = super.extractItem(slot, amount, simulate);
+            if (!simulate) onInputStackChanged();
+            return result;
         }
     }
     protected class CompostTowerFluidHandler extends CombinedTankWrapper {
@@ -116,8 +147,15 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
     @Override
     public void tick() {
         super.tick();
-        if (isController())
+        if (isController()) {
             compostData.tick(this);
+            assert level != null;
+            if (level.isClientSide) {
+                fluidLevels.values().forEach(LerpedFloat::tickChaser);
+                gasLevels.values().forEach(LerpedFloat::tickChaser);
+            }
+        }
+
 
         if (lastKnownPos == null)
             lastKnownPos = getBlockPos();
@@ -173,8 +211,7 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
             return;
         this.controller = pos;
         refreshCapability();
-        setChanged();
-        sendData();
+        notifyUpdate();
     }
 
     @Override
@@ -189,8 +226,8 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
 
         refreshCapability();
         compostData.clear();
-        setChanged();
-        sendData();
+        onFluidStackChanged(tankInventory.getFluid());
+        notifyUpdate();
     }
 
     @Override
@@ -221,6 +258,7 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         level.setBlock(getBlockPos(), getBlockState().setValue(CompostTowerBlock.IS_2x2, getWidth() == 2), 6);
 
         refreshCapability();
+        onFluidStackChanged(tankInventory.getFluid());
         updateCompostTowerState();
         setChanged();
     }
@@ -266,9 +304,7 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         radius = width;
     }
 
-    public int getTotalCompostTowerSize() {
-        return radius * radius * height;
-    }
+
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -279,6 +315,9 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         return controllerBE.compostData.addToGoggleTooltip(tooltip, isPlayerSneaking);
     }
 
+    public float getFillState(int amount) {
+        return amount / (radius * radius * height * (float) getCapacityMultiplier());
+    }
 
     public void updateCompostTowerState() {
         if (!isController() && getControllerBE() != null) {
@@ -296,6 +335,10 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         if (be == null)
             return;
         be.compostData.updateRequired = 2;
+    }
+
+    public int getInputFluidAmount() {
+        return inputInv.getStackInSlot(0).getCount() * getCapacityMultiplier() / 64 * radius * radius;
     }
 
     @Override
@@ -321,6 +364,38 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
             height = compound.getInt("Height");
             inputInv.deserializeNBT(compound.getCompound("InputInventory"));
             outputInv.deserializeNBT(compound.getCompound("OutputInventory"));
+            var inputLevel = fluidLevels.get(CRFluids.COMPOST_FLUID.get());
+            var amount = getInputFluidAmount();
+            if (inputLevel == null) {
+                inputLevel = LerpedFloat.linear()
+                        .startWithValue(0)
+                        .chase(getFillState(amount), 0.5f, LerpedFloat.Chaser.EXP);
+                fluidLevels.put(CRFluids.COMPOST_FLUID.get(), inputLevel);
+            }
+
+            inputLevel.chase(getFillState(amount), 0.5f, LerpedFloat.Chaser.EXP);
+            if (compound.contains("Tanks")) {
+//                tanks = new IFluidHandler[radius * radius * height];
+                ListTag tanksNBT = compound.getList("Tanks", Tag.TAG_COMPOUND);
+                for (int i = 0; i < tanksNBT.size() && i < tanks.length; i++) {
+                    CompoundTag tankTag = tanksNBT.getCompound(i);
+                    tanks[i] = new SmartFluidTank(getCapacityMultiplier(), this::onFluidStackChanged);
+                    if (tanks[i] instanceof SmartFluidTank tank) {
+                        tank.readFromNBT(tankTag);
+                    }
+                    var newFluidStack = tanks[i].getFluidInTank(0);
+                    var levels = newFluidStack.getFluid().getFluidType().isLighterThanAir() ? gasLevels : fluidLevels;
+                    LerpedFloat fluidLevel = levels.get(newFluidStack.getFluid());
+                    amount = newFluidStack.getAmount();
+                    if (fluidLevel == null) {
+                        fluidLevel = LerpedFloat.linear()
+                                .startWithValue(0)
+                                .chase(getFillState(amount), 0.5f, LerpedFloat.Chaser.EXP);
+                        levels.put(newFluidStack.getFluid(), fluidLevel);
+                    }
+                    fluidLevel.chase(getFillState(amount), 0.5f, LerpedFloat.Chaser.EXP);
+                }
+            }
         }
 
         compostData.read(compound, clientPacket);
@@ -348,14 +423,25 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         if (isController()) {
             compound.putInt("Size", radius);
             compound.putInt("Height", height);
+            compound.putString("StorageType", "CombinedInv");
             compound.put("InputInventory", inputInv.serializeNBT());
             compound.put("OutputInventory", outputInv.serializeNBT());
+            if (fluidCapability.isPresent()) {
+                ListTag tanksNBT = new ListTag();
+                for (IFluidHandler handler : tanks) {
+                    if (handler instanceof SmartFluidTank tank) {
+                        CompoundTag tankTag = new CompoundTag();
+                        tank.writeToNBT(tankTag);
+                        tanksNBT.add(tankTag);
+                    }
+                }
+                compound.put("Tanks", tanksNBT);
+            }
         }
 
         super.write(compound, clientPacket);
 
         if (!clientPacket) {
-            compound.putString("StorageType", "CombinedInv");
             compound.put("TankInventory", tankInventory.writeToNBT(new CompoundTag()));
         }
         compostData.write(compound, clientPacket);
@@ -393,7 +479,7 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
                         CompostTowerBlockEntity part = ConnectivityHandler.partAt(
                                 this.getType(), level, partPos
                         );
-                        tanks[index] = part != null ? part.tankInventory : new SmartFluidTank(1000, $->{});
+                        tanks[index] = part != null ? part.tankInventory : new SmartFluidTank(getCapacityMultiplier(), this::onFluidStackChanged);
                         index++;
                     }
                 }
@@ -402,10 +488,26 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         } else {
             controller.initCapability();
             tanks = controller.tanks;
-            inputInv = controller.inputInv;
-            outputInv = controller.outputInv;
-            itemCapability = controller.itemCapability;
+            itemCapability = LazyOptional.of(() -> new CompostTowerInventoryHandler(new IItemHandlerModifiable[]{controller.inputInv, controller.outputInv}, blockHeight));
         }
         fluidCapability = LazyOptional.of(() -> new CompostTowerFluidHandler(tanks, blockHeight));
+    }
+
+    protected void onInputStackChanged() {
+        if (level == null)
+            return;
+        if (!level.isClientSide) {
+            notifyUpdate();
+        }
+//        if (isVirtual()) {
+//        }
+    }
+
+    protected void onFluidStackChanged(FluidStack newFluidStack) {
+        if (level == null)
+            return;
+        if (!level.isClientSide) {
+            notifyUpdate();
+        }
     }
 }

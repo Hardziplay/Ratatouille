@@ -74,6 +74,7 @@ public class CompostData {
         if (updateCompostTower(tower))
             tower.notifyUpdate();
 
+        if (tower.tanks == null) return;
         var itemHandler = tower.itemCapability.orElse(null);
         var fluidHandler = tower.fluidCapability.orElse(null);
 

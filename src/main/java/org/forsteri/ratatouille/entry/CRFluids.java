@@ -46,6 +46,8 @@ public class CRFluids {
     public static final FluidEntry<VirtualFluid> COMPOST_TEA =
             Ratatouille.REGISTRATE
                     .virtualFluid("compost_tea")
+                    .properties(p -> p
+                            .density(1050))
                     .lang("Compost Tea")
                     .bucket().build()
                     .register();
@@ -53,12 +55,16 @@ public class CRFluids {
     public static final FluidEntry<VirtualFluid> BIO_GAS =
             Ratatouille.REGISTRATE
                     .virtualFluid("bio_gas")
+                    .properties(p -> p
+                            .density(-150))
                     .lang("Biogas")
                     .register();
 
     public static final FluidEntry<VirtualFluid> COMPOST_FLUID =
             Ratatouille.REGISTRATE
                     .virtualFluid("compost_fluid")
+                    .properties(p -> p
+                            .density(1400))
                     .lang("Compost Fluid")
                     .register();
 
