@@ -75,6 +75,7 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
 //            } else {
 //                accumulatedFluidHeight += initialLevel;
 //            }
+//            break;
         }
     }
 
@@ -82,4 +83,5 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
     public boolean shouldRenderOffScreen(CompostTowerBlockEntity be) {
         return be.isController();
     }
+
 }

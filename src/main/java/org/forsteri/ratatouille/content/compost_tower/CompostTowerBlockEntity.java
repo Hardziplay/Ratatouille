@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -145,6 +146,22 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
     }
 
     @Override
+    protected AABB createRenderBoundingBox() {
+        if (isController())
+            return super.createRenderBoundingBox().expandTowards(radius - 1, height - 1, radius - 1);
+        else
+            return super.createRenderBoundingBox();
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        sendData();
+        if (level.isClientSide)
+            invalidateRenderBoundingBox();
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if (isController()) {
@@ -198,7 +215,8 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
 
     @Override
     public boolean isController() {
-        return controller == null || worldPosition.equals(controller);
+        return controller == null || worldPosition.getX() == controller.getX()
+                && worldPosition.getY() == controller.getY() && worldPosition.getZ() == controller.getZ();
     }
 
     @Override
@@ -409,6 +427,9 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
                 !Objects.equals(controllerBefore, controller);
         if (hasLevel() && (changeOfController || prevSize != radius || prevHeight != height)) {
             level.setBlocksDirty(getBlockPos(), Blocks.AIR.defaultBlockState(), getBlockState());
+            if (hasLevel())
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 16);
+            invalidateRenderBoundingBox();
         }
     }
 
