@@ -5,6 +5,7 @@ import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.fluid.FluidHelper;
+import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.ItemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -58,10 +59,7 @@ public class CompostTowerBlock extends Block implements IWrenchable, IBE<Compost
             BlockEntity be = world.getBlockEntity(pos);
             if (!(be instanceof CompostTowerBlockEntity towerBE))
                 return;
-            if (towerBE.isController()) {
-                ItemHelper.dropContents(world, pos, towerBE.inputInv);
-                ItemHelper.dropContents(world, pos, towerBE.outputInv);
-            }
+            ItemHelper.dropContents(world, pos, new ItemFromFluidInvHandler(new SmartFluidTank[]{towerBE.tankInventory}));
             world.removeBlockEntity(pos);
             ConnectivityHandler.splitMulti(towerBE);
         }

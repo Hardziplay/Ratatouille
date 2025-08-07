@@ -81,7 +81,7 @@ public class CompostData {
         if (itemHandler == null || fluidHandler == null) return;
         assert tower.getLevel() != null;
 
-        RecipeWrapper inventoryIn = new RecipeWrapper(tower.inputInv);
+        RecipeWrapper inventoryIn = new RecipeWrapper(tower.getInputInvs());
         if (timer > 0) {
             if (this.lastRecipe == null || !this.lastRecipe.matches(inventoryIn, tower.getLevel())) {
                 Optional<CompostingRecipe> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
@@ -94,7 +94,7 @@ public class CompostData {
             boolean canOutput = true;
             for (ItemStack outputStack : lastRecipe.rollResults()) {
                 if (outputStack.isEmpty()) continue;
-                if (!ItemHandlerHelper.insertItemStacked(tower.outputInv, outputStack, true).isEmpty()) {
+                if (!ItemHandlerHelper.insertItemStacked(tower.getOutputInvs(), outputStack, true).isEmpty()) {
                     canOutput = false;
                     break;
                 }
@@ -116,9 +116,9 @@ public class CompostData {
                 return;
             }
             if (timer <= 0) {
-                tower.inputInv.getStackInSlot(0).shrink(1);
+                tower.getInputInvs().getStackInSlot(0).shrink(1);
                 this.lastRecipe.rollResults().forEach((stack) -> {
-                    ItemHandlerHelper.insertItemStacked(tower.outputInv, stack, false);
+                    ItemHandlerHelper.insertItemStacked(tower.getOutputInvs(), stack, false);
                 });
                 this.lastRecipe.getFluidResults().forEach((fluidStack) -> {
                     fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
