@@ -29,7 +29,10 @@ public class CompostingRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     @Override
     public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level world) {
-        return ingredients.get(0)
-                .test(inv.getItem(0));
+        for (int slot = 0; slot < inv.getContainerSize(); slot++) {
+            if (ingredients.get(0)
+                    .test(inv.getItem(slot))) return true;
+        }
+        return false;
     }
 }

@@ -116,7 +116,7 @@ public class CompostData {
                 return;
             }
             if (timer <= 0) {
-                tower.getInputInvs().getStackInSlot(0).shrink(1);
+                tower.getInputInvs().consume(lastRecipe.getIngredients().get(0).getItems()[0], false);
                 this.lastRecipe.rollResults().forEach((stack) -> {
                     ItemHandlerHelper.insertItemStacked(tower.getOutputInvs(), stack, false);
                 });

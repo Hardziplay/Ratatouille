@@ -10,9 +10,11 @@ import org.forsteri.ratatouille.entry.CRFluids;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.jetbrains.annotations.NotNull;
 
+import static com.simibubi.create.content.fluids.tank.FluidTankBlockEntity.getCapacityMultiplier;
+
 public class ItemFromFluidInvHandler implements IItemHandlerModifiable {
     private final SmartFluidTank[] tanks;
-    private final static int ITEM_MB_RATION = 144;
+    private final static int ITEM_MB_RATION = getCapacityMultiplier() / 64;
     public ItemFromFluidInvHandler(SmartFluidTank[] tanks) {
         this.tanks = tanks;
     }
@@ -162,5 +164,25 @@ public class ItemFromFluidInvHandler implements IItemHandlerModifiable {
         var fluidStack = itemToFluid(stack);
         if (!fluidStack.isEmpty()) this.tanks[slot].setFluid(fluidStack);
         onContentsChanged(slot);
+    }
+
+    public ItemStack consume(ItemStack stack, boolean simulate) {
+        var fluidStack = itemToFluid(stack);
+        if (fluidStack.isEmpty()) return ItemStack.EMPTY;
+        int remaining = fluidStack.getAmount();
+        for (var tank : tanks) {
+            var tankFluid = tank.getFluid();
+            if (tankFluid.isEmpty()) continue;
+            if (tankFluid.isFluidEqual(fluidStack)) {
+                if (tankFluid.getAmount() > remaining) {
+                    if (!simulate) tankFluid.shrink(remaining);
+                    remaining = 0;
+                } else {
+                    if (!simulate) tank.setFluid(FluidStack.EMPTY);
+                    remaining -= tankFluid.getAmount();
+                }
+            }
+        }
+        return ItemHandlerHelper.copyStackWithSize(stack, remaining);
     }
 }
