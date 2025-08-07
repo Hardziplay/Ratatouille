@@ -58,6 +58,7 @@ public class CRFluids {
                     .properties(p -> p
                             .density(-150))
                     .lang("Biogas")
+                    .bucket().build()
                     .register();
 
     public static final FluidEntry<VirtualFluid> COMPOST_FLUID =
@@ -66,6 +67,7 @@ public class CRFluids {
                     .properties(p -> p
                             .density(1400))
                     .lang("Compost Fluid")
+                    .bucket().build()
                     .register();
 
 
@@ -75,6 +77,7 @@ public class CRFluids {
                     .properties(p -> p
                             .density(1450))
                     .lang("Compost Residue Fluid")
+                    .bucket().build()
                     .register();
 
 
