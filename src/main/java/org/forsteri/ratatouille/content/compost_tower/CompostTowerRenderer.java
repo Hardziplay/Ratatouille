@@ -30,15 +30,13 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
         float minPuddleHeight = 1 / 16f;
         float totalHeight = be.height - 2 * capHeight - minPuddleHeight;
 
-        var sortedFluids = be.getSortedFluids();
+        var sortedFluids = be.tankInventory.getSortedFluids();
         float accumulatedFluidHeight = 0;
         float accumulatedGasHeight = 0;
-        for (int i = 0; i < sortedFluids.size(); i++) {
-            var fluid = sortedFluids.get(i);
-            if (fluid.isEmpty()) continue;
-
-            boolean isGas = fluid.getFluid().getFluidType().isLighterThanAir();
-            LerpedFloat levelValue = (isGas ? be.gasLevels : be.fluidLevels).get(fluid.getFluid());
+        for (int i = 0; i < sortedFluids.length; i++) {
+            var fluid = sortedFluids[i];
+            boolean isGas = fluid.getFluidType().isLighterThanAir();
+            LerpedFloat levelValue = (isGas ? be.gasLevels : be.fluidLevels).get(fluid);
             if (levelValue == null) continue;
 
             float ratio = levelValue.getValue(partialTicks);
@@ -65,7 +63,7 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
 
             ms.pushPose();
             ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(
-                    fluid, xMin, yStart, zMin, xMax, yEnd, zMax,
+                    fluid.defaultFluidState(), xMin, yStart, zMin, xMax, yEnd, zMax,
                     bufferSource, ms, light, false, true
             );
             ms.popPose();

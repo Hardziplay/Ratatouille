@@ -3,6 +3,7 @@ package org.forsteri.ratatouille.content.compost_tower;
 import com.simibubi.create.content.fluids.tank.BoilerHeaters;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import joptsimple.internal.Strings;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -74,14 +75,11 @@ public class CompostData {
         if (updateCompostTower(tower))
             tower.notifyUpdate();
 
-        if (tower.tanks == null) return;
-        var itemHandler = tower.itemCapability.orElse(null);
-        var fluidHandler = tower.fluidCapability.orElse(null);
-
-        if (itemHandler == null || fluidHandler == null) return;
         assert tower.getLevel() != null;
 
-        RecipeWrapper inventoryIn = new RecipeWrapper(tower.getInputInvs());
+        var itemHandler = tower.getItemInventory();
+        var fluidHandler = tower.tankInventory;
+        RecipeWrapper inventoryIn = new RecipeWrapper(itemHandler);
         if (timer > 0) {
             if (this.lastRecipe == null || !this.lastRecipe.matches(inventoryIn, tower.getLevel())) {
                 Optional<CompostingRecipe> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
@@ -94,7 +92,7 @@ public class CompostData {
             boolean canOutput = true;
             for (ItemStack outputStack : lastRecipe.rollResults()) {
                 if (outputStack.isEmpty()) continue;
-                if (!ItemHandlerHelper.insertItemStacked(tower.getOutputInvs(), outputStack, true).isEmpty()) {
+                if (!ItemHandlerHelper.insertItemStacked(itemHandler, outputStack, true).isEmpty()) {
                     canOutput = false;
                     break;
                 }
@@ -116,9 +114,9 @@ public class CompostData {
                 return;
             }
             if (timer <= 0) {
-                tower.getInputInvs().consume(lastRecipe.getIngredients().get(0).getItems()[0], false);
+                itemHandler.consume(lastRecipe.getIngredients().get(0).getItems()[0], false);
                 this.lastRecipe.rollResults().forEach((stack) -> {
-                    ItemHandlerHelper.insertItemStacked(tower.getOutputInvs(), stack, false);
+                    ItemHandlerHelper.insertItemStacked(itemHandler, stack, false);
                 });
                 this.lastRecipe.getFluidResults().forEach((fluidStack) -> {
                     fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
