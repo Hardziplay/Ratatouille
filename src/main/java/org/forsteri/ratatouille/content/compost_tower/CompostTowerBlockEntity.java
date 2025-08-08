@@ -401,6 +401,7 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         if (isController()) {
             compound.putInt("Size", radius);
             compound.putInt("Height", height);
+            applyFluidTankSize(getTotalTankSize());
             compound.put("TankContent", tankInventory.serializeNBT());
         }
 
