@@ -1,0 +1,15 @@
+{
+  "type": "ratatouille:squeezing",
+  "ingredients": [
+    {
+      "item": "minecraft:melon"
+    }
+  ],
+  "processingTime": 200,
+  "results": [
+    {
+      "item": "ratatouille:compost_mass",
+      "count": 9
+    }
+  ]
+}

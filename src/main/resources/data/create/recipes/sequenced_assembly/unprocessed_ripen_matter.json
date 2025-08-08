@@ -1,0 +1,47 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "ratatouille:compost_residue"
+  },
+  "loops": 2,
+  "results": [
+    {
+      "item": "ratatouille:unprocessed_ripen_matter"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "ratatouille:unprocessed_ripen_matter"
+        },
+        {
+          "amount": 100,
+          "fluid": "ratatouille:compost_tea"
+        }
+      ],
+      "results": [
+        {
+          "item": "ratatouille:unprocessed_ripen_matter"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "ratatouille:unprocessed_ripen_matter"
+        }
+      ],
+      "results": [
+        {
+          "item": "ratatouille:unprocessed_ripen_matter"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "ratatouille:unprocessed_ripen_matter"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "ratatouille:unprocessed_mature_matter"
+    }
+  ],
+  "processingTime": 200,
+  "results": [
+    {
+      "item": "ratatouille:mature_matter",
+      "count": 2
+    }
+  ]
+}

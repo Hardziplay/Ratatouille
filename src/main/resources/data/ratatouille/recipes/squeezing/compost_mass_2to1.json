@@ -1,0 +1,16 @@
+{
+  "type": "ratatouille:squeezing",
+  "ingredients": [
+    {
+      "tag": "ratatouille:compostable_items_2to1"
+    }
+  ],
+  "processingTime": 200,
+  "results": [
+    {
+      "item": "ratatouille:compost_mass",
+      "count": 1,
+      "chance": 0.5
+    }
+  ]
+}
