@@ -83,9 +83,22 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
     }
     protected class CompostTowerFluidHandler extends CompostFluidTank {
         private final int blockHeight;
-        public CompostTowerFluidHandler(CompostFluidTank tank, int blockHeight) {
+        private final int towerHeight;
+        public CompostTowerFluidHandler(CompostFluidTank tank, int blockHeight, int towerHeight) {
             super(tank.fluidIds, tank.tanks, tank.updateCallback, tank.index, tank.capacity);
             this.blockHeight = blockHeight;
+            this.towerHeight = towerHeight;
+        }
+
+        @Override
+        public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+            if (Math.floor(getFilledPercentage(resource.getFluid()) * towerHeight) != blockHeight) return FluidStack.EMPTY;
+            return super.drain(resource, action);
+        }
+
+        @Override
+        public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+            return super.drain(maxDrain, action);
         }
     }
 
@@ -381,7 +394,8 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
             if (hasLevel())
                 level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 16);
             if (isController())
-                tankInventory.setCapacity(getCapacityMultiplier() * getTotalTankSize());
+                applyFluidTankSize(getTotalTankSize());
+
             invalidateRenderBoundingBox();
         }
     }
@@ -433,7 +447,7 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         var tank = isController() ? tankInventory : controller.tankInventory;
 
         itemCapability = LazyOptional.of(() -> new CompostTowerInventoryHandler(tank, blockHeight));
-        fluidCapability = LazyOptional.of(() -> new CompostTowerFluidHandler(tank, blockHeight));
+        fluidCapability = LazyOptional.of(() -> new CompostTowerFluidHandler(tank, blockHeight, controller.height));
     }
 
     public CompostItemHandler getItemInventory() {

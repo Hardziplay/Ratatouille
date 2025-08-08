@@ -12,7 +12,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class CompostFluidTank implements IFluidHandler, INBTSerializable<CompoundTag> {
     protected int capacity;
@@ -118,20 +121,25 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
 
     @Override
     public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
-        if (maxDrain == 0) return FluidStack.EMPTY;
-        int totalDrained = 0;
-        for (var fluid : this.tanks.keySet()) {
-            if (totalDrained >= maxDrain) break;
+        if (maxDrain <= 0 || tanks.isEmpty()) return FluidStack.EMPTY;
 
-            var existingAmount = this.tanks.get(fluid);
-            int drained = Math.min(existingAmount, maxDrain);
-            totalDrained += drained;
-            if (action.execute()){
-                this.tanks.put(fluid, existingAmount - drained);
-                this.onContentsChanged();
-            }
+        Fluid maxFluid = tanks.entrySet().stream()
+                .filter(entry -> entry.getValue() > 0)
+                .max(Comparator.comparingInt(Map.Entry::getValue))
+                .map(HashMap.Entry::getKey)
+                .orElse(null);
+
+        if (maxFluid == null) return FluidStack.EMPTY;
+
+        int available = tanks.get(maxFluid);
+        int drained = Math.min(available, maxDrain);
+
+        if (action.execute()) {
+            tanks.put(maxFluid, available - drained);
+            onContentsChanged();
         }
-        return new FluidStack(FluidStack.EMPTY, totalDrained);
+
+        return new FluidStack(maxFluid, drained);
     }
 
     @Override
@@ -181,6 +189,8 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         return capacity;
     }
 
+    // Returns an array of Fluids currently present in the tank,
+    // sorted by their density in descending order (from highest to lowest).
     public Fluid[] getSortedFluids() {
         return tanks.keySet().stream()
                 .sorted(Comparator.comparingInt((Fluid fluid) -> fluid.getFluidType().getDensity()).reversed())
@@ -188,7 +198,21 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
     }
 
     public void clearOverflow() {
-        if (getRemainingAmount() < 0) drain(-getRemainingAmount(), FluidAction.EXECUTE);
+        int overflow = -getRemainingAmount();
+        if (overflow <= 0) return;
+
+        for (Fluid fluid : tanks.keySet()) {
+            int amount = tanks.getOrDefault(fluid, 0);
+            if (amount <= 0) continue;
+
+            int toDrain = Math.min(overflow, amount);
+            tanks.put(fluid, amount - toDrain);
+            overflow -= toDrain;
+
+            if (overflow <= 0) break;
+        }
+
+//        onContentsChanged();
     }
 
     public FluidStack[] getFluidStacks() {
@@ -207,5 +231,18 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
     public void clear() {
         tanks.replaceAll((f, v) -> 0);
         onContentsChanged();
+    }
+
+    public List<Fluid> getFluidsAtBlockHeight(int blockHeight, int towerHeight) {
+        return tanks.keySet().stream()
+                .filter(fluid -> {
+                    float percentage = getFilledPercentage(fluid);
+                    if (fluid.getFluidType().isLighterThanAir()) percentage = 1 - percentage;
+
+                    int flooredHeight = (int) Math.floor(percentage * towerHeight);
+                    return flooredHeight == blockHeight;
+                })
+                .sorted(Comparator.comparingInt((Fluid f) -> f.getFluidType().getDensity()).reversed())
+                .collect(Collectors.toList());
     }
 }
