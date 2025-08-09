@@ -221,7 +221,6 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
                 timer -= getProcessingSpeed();
             } else {
                 timer = 1000;
-                inventory.getStackInSlot(0).shrink(1);
                 ArrayList<BlockPos> corps = new ArrayList<>();
                 ArrayList<Animal> adultAnimals = new ArrayList<>();
                 ArrayList<AgeableMob> babyAnimals = new ArrayList<>();
