@@ -25,8 +25,8 @@ public class AirFlowParticleMixin extends SimpleAnimatedParticle {
 
     @Inject(method = "tick", at=@At(value = "INVOKE", target = "Lcom/simibubi/create/content/kinetics/fan/AirFlowParticle;setAlpha(F)V", shift = At.Shift.AFTER), remap = true)
     private void tick(CallbackInfo ci) {
-        if (source instanceof SpreaderBlockEntity) {
-            setColor(0xa1bd61);
+        if (source instanceof SpreaderBlockEntity be) {
+            setColor(be.getParticleColor());
             setAlpha(1);
         }
     }

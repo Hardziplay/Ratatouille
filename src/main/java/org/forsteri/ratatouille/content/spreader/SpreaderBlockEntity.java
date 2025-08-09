@@ -332,4 +332,15 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
     public float calculateStressApplied() {
         return 2.0f;
     }
+
+    public int getParticleColor() {
+        var stack = inventory.getStackInSlot(0);
+        if (stack.is(CRItems.MATURE_MATTER.get())) {
+            return 0xc53500;
+        } else if (stack.is(CRItems.RIPEN_MATTER.get())) {
+            return 0xa1bd61;
+        } else {
+            return 0xffffff;
+        }
+    }
 }
