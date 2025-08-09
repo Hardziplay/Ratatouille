@@ -38,7 +38,7 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
         for (BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-8, 0, -8), pPos.offset(8, 0, 8))) {
             if (pLevel.getBlockEntity(blockpos.above()) instanceof IrrigationTowerBlockEntity be) {
                 FluidStack fluid = be.getTankInventory().getFluid();
-                if (!fluid.isEmpty() && fluid.getFluid().isSame(Fluids.WATER)) {
+                if (!fluid.isEmpty() && (fluid.getFluid().isSame(Fluids.WATER) || fluid.getFluid().isSame(CRFluids.COMPOST_TEA.get()))) {
                     cir.setReturnValue(true);
                     cir.cancel();
                     return;

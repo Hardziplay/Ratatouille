@@ -96,11 +96,11 @@ public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements 
         if (!(blockEntity instanceof IrrigationTowerBlockEntity tower)) return;
 
         FluidStack simulate = tower.getTankInventory().drain(
-                new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 200),
+                new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 100),
                 IFluidHandler.FluidAction.SIMULATE
         );
 
-        if (simulate.isEmpty() || simulate.getAmount() < 200) return;
+        if (simulate.isEmpty() || simulate.getAmount() < 100) return;
 
         BlockPos center = pos.below();
         for (int dx = -8; dx <= 8; dx++) {
@@ -113,7 +113,7 @@ public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements 
                     level.setBlockAndUpdate(target, newState);
                     level.gameEvent(GameEvent.BLOCK_CHANGE, target, GameEvent.Context.of(null, newState));
                     tower.getTankInventory().drain(
-                            new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 200),
+                            new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 100),
                             IFluidHandler.FluidAction.EXECUTE
                     );
                     return;
