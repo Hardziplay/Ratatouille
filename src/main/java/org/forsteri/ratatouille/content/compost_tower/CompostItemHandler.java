@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CompostItemHandler implements IItemHandlerModifiable {
     protected CompostFluidTank tank;
-    private static final int ITEM_FLUID_RATIO = 8000 / 70;
+    private static final int ITEM_FLUID_RATIO = 8000 / 100;
     private static final BiMap<Fluid, Item> ITEM_FLUID_MAP = HashBiMap.create();
     static {
         ITEM_FLUID_MAP.put(CRFluids.COMPOST_FLUID.get(), CRItems.COMPOST_MASS.get());

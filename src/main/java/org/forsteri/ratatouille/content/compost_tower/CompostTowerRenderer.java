@@ -26,7 +26,7 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
             return;
 
         float capHeight = 1 / 5f;
-        float tankHullWidth = 1 / 16f + 1 / 128f;
+        float tankHullWidth = 1 / 128f;
         float minPuddleHeight = 1 / 16f;
         float totalHeight = be.height - 2 * capHeight - minPuddleHeight;
 
