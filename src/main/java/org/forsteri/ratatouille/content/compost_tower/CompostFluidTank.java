@@ -249,6 +249,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : liquids) {
             accumulatedHeight += getFilledPercentage(fluid);
             double height = Math.floor(accumulatedHeight * towerHeight);
+            if (tanks.getOrDefault(fluid, 0) == 0) continue;
             if (blockHeight <= height)
                 return fluid;
 
@@ -258,6 +259,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : gases) {
             accumulatedHeight += getFilledPercentage(fluid);
             double height = Math.ceil(accumulatedHeight * towerHeight);
+            if (tanks.getOrDefault(fluid, 0) == 0) continue;
             if (blockHeight >= towerHeight - height)
                 return fluid;
         }
