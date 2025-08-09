@@ -17,7 +17,7 @@ import org.forsteri.ratatouille.util.Lang;
 import java.util.function.Supplier;
 
 public enum CRParticleTypes {
-    SPREADER(SpreaderParticle.Provider::new);
+    SPREADER(SpreaderParticle.SpreaderParticleData::new);
     private final ParticleEntry<?> entry;
 
     <D extends ParticleOptions> CRParticleTypes(Supplier<? extends ICustomParticleData<D>> typeFactory) {
