@@ -233,16 +233,35 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         onContentsChanged();
     }
 
-    public List<Fluid> getFluidsAtBlockHeight(int blockHeight, int towerHeight) {
-        return tanks.keySet().stream()
-                .filter(fluid -> {
-                    float percentage = getFilledPercentage(fluid);
-                    if (fluid.getFluidType().isLighterThanAir()) percentage = 1 - percentage;
-
-                    int flooredHeight = (int) Math.floor(percentage * towerHeight);
-                    return flooredHeight == blockHeight;
-                })
+    public Fluid getFluidAtBlockHeight(int blockHeight, int towerHeight) {
+        if (tanks.isEmpty() || towerHeight <= 0) return FluidStack.EMPTY.getFluid();
+        List<Fluid> liquids = tanks.keySet().stream()
+                .filter(f -> !f.getFluidType().isLighterThanAir())
                 .sorted(Comparator.comparingInt((Fluid f) -> f.getFluidType().getDensity()).reversed())
-                .collect(Collectors.toList());
+                .toList();
+
+        List<Fluid> gases = tanks.keySet().stream()
+                .filter(f -> f.getFluidType().isLighterThanAir())
+                .sorted(Comparator.comparingInt((Fluid f) -> f.getFluidType().getDensity()))
+                .toList();
+
+        float accumulatedHeight = 0;
+        for (Fluid fluid : liquids) {
+            accumulatedHeight += getFilledPercentage(fluid);
+            double height = Math.floor(accumulatedHeight * towerHeight);
+            if (blockHeight <= height)
+                return fluid;
+
+        }
+
+        accumulatedHeight = 0;
+        for (Fluid fluid : gases) {
+            accumulatedHeight += getFilledPercentage(fluid);
+            double height = Math.ceil(accumulatedHeight * towerHeight);
+            if (blockHeight >= towerHeight - height)
+                return fluid;
+        }
+
+        return FluidStack.EMPTY.getFluid();
     }
 }

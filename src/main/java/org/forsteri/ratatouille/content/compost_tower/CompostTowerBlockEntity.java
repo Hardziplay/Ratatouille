@@ -59,10 +59,8 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
 
 
     protected class CompostTowerInventoryHandler extends CompostItemHandler {
-        private final int blockHeight;
-        public CompostTowerInventoryHandler(CompostFluidTank tank, int blockHeight) {
+        public CompostTowerInventoryHandler(CompostFluidTank tank) {
             super(tank);
-            this.blockHeight = blockHeight;
         }
 
         @Override
@@ -82,24 +80,41 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     }
     protected class CompostTowerFluidHandler extends CompostFluidTank {
-        private final int blockHeight;
-        private final int towerHeight;
-        public CompostTowerFluidHandler(CompostFluidTank tank, int blockHeight, int towerHeight) {
+        public CompostTowerFluidHandler(CompostFluidTank tank) {
             super(tank.fluidIds, tank.tanks, tank.updateCallback, tank.index, tank.capacity);
-            this.blockHeight = blockHeight;
-            this.towerHeight = towerHeight;
         }
 
         @Override
         public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
-            if (Math.floor(getFilledPercentage(resource.getFluid()) * towerHeight) != blockHeight) return FluidStack.EMPTY;
+            var outputHeight = CompostTowerBlockEntity.this.getOutputHeight();
+            var towerHeight = CompostTowerBlockEntity.this.getTowerHeight();
+            var availFluid = getFluidAtBlockHeight(outputHeight, towerHeight);
+
+            if (!resource.getFluid().isSame(availFluid)) return FluidStack.EMPTY;
             return super.drain(resource, action);
         }
 
         @Override
         public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
-            return super.drain(maxDrain, action);
+            var outputHeight = CompostTowerBlockEntity.this.getOutputHeight();
+            var towerHeight = CompostTowerBlockEntity.this.getTowerHeight();
+            var availFluid = getFluidAtBlockHeight(outputHeight, towerHeight);
+
+            return super.drain(new FluidStack(availFluid, maxDrain), action);
         }
+    }
+
+    private int getTowerHeight() {
+        var be = getControllerBE();
+        if (be == null) return 1;
+        return be.height;
+    }
+
+
+    private int getOutputHeight() {
+        var be = getControllerBE();
+        if (be == null) return 0;
+        return getBlockPos().getY() - be.getBlockPos().getY();
     }
 
     public CompostTowerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -443,11 +458,10 @@ public class CompostTowerBlockEntity extends SmartBlockEntity implements IHaveGo
         if (itemCapability.isPresent() && fluidCapability.isPresent() || controller == null)
             return;
 
-        var blockHeight = getBlockPos().getY() - controller.getBlockPos().getY();
         var tank = isController() ? tankInventory : controller.tankInventory;
 
-        itemCapability = LazyOptional.of(() -> new CompostTowerInventoryHandler(tank, blockHeight));
-        fluidCapability = LazyOptional.of(() -> new CompostTowerFluidHandler(tank, blockHeight, controller.height));
+        itemCapability = LazyOptional.of(() -> new CompostTowerInventoryHandler(tank));
+        fluidCapability = LazyOptional.of(() -> new CompostTowerFluidHandler(tank));
     }
 
     public CompostItemHandler getItemInventory() {
