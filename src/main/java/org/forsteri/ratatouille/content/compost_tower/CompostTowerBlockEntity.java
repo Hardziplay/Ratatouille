@@ -26,6 +26,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
+import org.forsteri.ratatouille.entry.CRFluids;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -8,6 +8,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.forsteri.ratatouille.entry.CRFluids;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -233,6 +234,11 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         onContentsChanged();
     }
 
+    private boolean isValidFluid(Fluid resource) {
+        return resource.isSame(CRFluids.COMPOST_RESIDUE_FLUID.get())
+                || resource.isSame(CRFluids.COMPOST_FLUID.get());
+    }
+
     public Fluid getFluidAtBlockHeight(int blockHeight, int towerHeight) {
         if (tanks.isEmpty() || towerHeight <= 0) return FluidStack.EMPTY.getFluid();
         List<Fluid> liquids = tanks.keySet().stream()
@@ -249,7 +255,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : liquids) {
             accumulatedHeight += getFilledPercentage(fluid);
             double height = Math.floor(accumulatedHeight * towerHeight);
-            if (tanks.getOrDefault(fluid, 0) == 0) continue;
+            if (tanks.getOrDefault(fluid, 0) == 0 || !isValidFluid(fluid)) continue;
             if (blockHeight <= height)
                 return fluid;
 
@@ -259,7 +265,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : gases) {
             accumulatedHeight += getFilledPercentage(fluid);
             double height = Math.ceil(accumulatedHeight * towerHeight);
-            if (tanks.getOrDefault(fluid, 0) == 0) continue;
+            if (tanks.getOrDefault(fluid, 0) == 0 || !isValidFluid(fluid)) continue;
             if (blockHeight >= towerHeight - height)
                 return fluid;
         }
