@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class CompostTeaBottleItem extends Item {
 
-    public CompostTeaBottleItem() {
-        super(new Item.Properties().stacksTo(16).durability(3));
+    public CompostTeaBottleItem(Properties pProperties) {
+        super(pProperties);
     }
 
     @Override

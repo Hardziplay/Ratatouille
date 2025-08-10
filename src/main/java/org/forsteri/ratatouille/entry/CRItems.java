@@ -58,8 +58,10 @@ public class CRItems {
     public static final ItemEntry<Item> MATURE_MATTER_FOLD = Ratatouille.REGISTRATE.item("mature_matter_fold", Item::new).register();
     public static final ItemEntry<Item> BOIL_STONE = Ratatouille.REGISTRATE.item("boil_stone", Item::new).register();
     public static final ItemEntry<Item> COMPOST_MASS = Ratatouille.REGISTRATE.item("compost_mass", Item::new).register();
-    public static final ItemEntry<CompostTeaBottleItem> COMPOST_TEA_BOTTLE = Ratatouille.REGISTRATE.item("compost_tea_bottle", props -> {CompostTeaBottleItem item = new CompostTeaBottleItem();
-                return item;}).register();
+    public static final ItemEntry<CompostTeaBottleItem> COMPOST_TEA_BOTTLE =
+            Ratatouille.REGISTRATE.item("compost_tea_bottle", CompostTeaBottleItem::new)
+                    .properties(p -> p.stacksTo(16))
+                    .register();
 
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
