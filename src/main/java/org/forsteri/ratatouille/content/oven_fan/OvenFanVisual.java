@@ -32,7 +32,7 @@ public class OvenFanVisual extends KineticBlockEntityVisual<OvenFanBlockEntity> 
 
         this.cogWheel = (RotatingInstance)instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL))
                 .createInstance();
-        this.fan  = (RotatingInstance)instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.ENCASED_FAN_INNER))//CRPartialModels.OVEN_FAN_BLADE
+        this.fan  = (RotatingInstance)instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(CRPartialModels.OVEN_FAN_BLADE))//CRPartialModels.OVEN_FAN_BLADE
                 .createInstance();
         this.cogWheel.setup(blockEntity)
                 .setPosition(getVisualPosition())

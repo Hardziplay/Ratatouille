@@ -1,6 +1,8 @@
 package org.forsteri.ratatouille.content.oven_fan;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
@@ -29,21 +31,20 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
     @Override
     protected void renderSafe(OvenFanBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
-        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
+//        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
         if (VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         Direction direction = be.getBlockState()
-                .getValue(FACING);
+                .getValue(HORIZONTAL_FACING);
         VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
         LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
         int lightBehind = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction.getOpposite()));
         int lightInFront = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos().relative(direction));
 
-        SuperByteBuffer shaftHalf =
-                CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, be.getBlockState(), direction.getOpposite());
+        SuperByteBuffer cogwheel =
+                CachedBuffers.partialFacingVertical(AllPartialModels.SHAFTLESS_COGWHEEL, be.getBlockState(), direction.getOpposite());
         SuperByteBuffer fanInner =
                 CachedBuffers.partialFacing(CRPartialModels.OVEN_FAN_BLADE, be.getBlockState(), direction.getOpposite());
-
         float time = AnimationTickHolder.getRenderTime(be.getLevel());
         float speed = be.getSpeed() * 5;
         if (speed > 0)
@@ -53,7 +54,7 @@ public class OvenFanRenderer extends KineticBlockEntityRenderer<OvenFanBlockEnti
         float angle = (time * speed * 3 / 10f) % 360;
         angle = angle / 180f * (float) Math.PI;
 
-        standardKineticRotationTransform(shaftHalf, be, lightBehind).renderInto(ms, vb);
+        standardKineticRotationTransform(cogwheel, be, lightBehind).renderInto(ms, vb);
         kineticRotationTransform(fanInner, be, direction.getAxis(), angle, lightInFront).renderInto(ms, vb);
     }
 }

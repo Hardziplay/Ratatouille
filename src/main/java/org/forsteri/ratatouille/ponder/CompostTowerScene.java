@@ -20,6 +20,8 @@ public class CompostTowerScene {
         scene.title("compost_tower", "Turn organic waste into compost");
         scene.configureBasePlate(0, 0, 5);
         scene.world().showSection(util.select().everywhere(), Direction.UP);
+        scene.world().setKineticSpeed(util.select().position(0, 0, 1), -32);
+//        scene.world().setKineticSpeed(util.select().everywhere(), 32);
         scene.idle(5);
     }
 }

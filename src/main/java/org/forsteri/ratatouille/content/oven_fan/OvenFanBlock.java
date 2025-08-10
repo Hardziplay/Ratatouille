@@ -21,6 +21,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -94,6 +95,12 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
     @Override
     public Direction.Axis getRotationAxis(BlockState blockState) {
         return ((Direction)blockState.getValue(HORIZONTAL_FACING)).getAxis();
+    }
+
+    @Override
+    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+        return face == state.getValue(HORIZONTAL_FACING)
+                .getOpposite();
     }
 
     @Override
