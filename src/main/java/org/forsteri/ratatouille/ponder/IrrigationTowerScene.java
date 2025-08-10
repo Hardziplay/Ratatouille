@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlockEntity;
+import org.forsteri.ratatouille.entry.CRFluids;
 
 public class IrrigationTowerScene {
     public IrrigationTowerScene() {
@@ -20,7 +21,7 @@ public class IrrigationTowerScene {
 
 
     public static void irrigationTower(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("irrigation_tower", "Use irrigation towers to keep farmland moist");
+        scene.title("irrigation_tower", "Use irrigation tower to improve your farmLand");
         scene.configureBasePlate(0, 0, 5);
         scene.world().showSection(util.select().layer(0), Direction.UP);
 
@@ -55,5 +56,32 @@ public class IrrigationTowerScene {
         scene.world().setBlock(towerPos.below().south(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), false);
         scene.idle(5);
         scene.world().setBlock(towerPos.below().east(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), false);
+        scene.idle(50);
+
+        scene.overlay().showText(40)
+                .text("or filled with compost tea")
+                .placeNearTarget()
+                .attachKeyFrame()
+                .pointAt(util.vector().topOf(towerPos));
+        scene.idle(20);
+
+        scene.overlay().showControls(util.vector().blockSurface(towerPos, Direction.UP), Pointing.DOWN, 60).rightClick().withItem(new ItemStack(Items.WATER_BUCKET)).rightClick(); //COMPOST_TEA_BUCKET
+        scene.world().modifyBlockEntity(towerPos, IrrigationTowerBlockEntity.class, (be) -> {be.getTankInventory().fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);}); //COMPOST_TEA_FLUID
+        scene.idle(30);
+
+        scene.overlay().showText(50)
+                .text("This will slowly convert the surrounding farmland into rich soil farmland")
+                .placeNearTarget()
+                .attachKeyFrame()
+                .pointAt(util.vector().topOf(towerPos));
+        scene.idle(60);
+
+        scene.world().setBlock(towerPos.below().north(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
+        scene.idle(10);
+        scene.world().setBlock(towerPos.below().west(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
+        scene.idle(20);
+        scene.world().setBlock(towerPos.below().south(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
+        scene.idle(5);
+        scene.world().setBlock(towerPos.below().east(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
     }
 }
