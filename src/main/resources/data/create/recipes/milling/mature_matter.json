@@ -2,7 +2,7 @@
   "type": "create:milling",
   "ingredients": [
     {
-      "item": "ratatouille:unprocessed_mature_matter"
+      "item": "ratatouille:mature_matter_fold"
     }
   ],
   "processingTime": 200,

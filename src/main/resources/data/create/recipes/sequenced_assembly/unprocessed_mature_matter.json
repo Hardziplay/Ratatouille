@@ -6,7 +6,7 @@
   "loops": 2,
   "results": [
     {
-      "item": "ratatouille:unprocessed_mature_matter"
+      "item": "ratatouille:mature_matter_fold"
     }
   ],
   "sequence": [
@@ -14,7 +14,7 @@
       "type": "create:filling",
       "ingredients": [
         {
-          "item": "ratatouille:unprocessed_mature_matter"
+          "item": "ratatouille:unprocessed_mature_matter_fold"
         },
         {
           "amount": 100,
@@ -23,7 +23,7 @@
       ],
       "results": [
         {
-          "item": "ratatouille:unprocessed_mature_matter"
+          "item": "ratatouille:unprocessed_mature_matter_fold"
         }
       ]
     },
@@ -31,17 +31,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "ratatouille:unprocessed_mature_matter"
+          "item": "ratatouille:unprocessed_mature_matter_fold"
         }
       ],
       "results": [
         {
-          "item": "ratatouille:unprocessed_mature_matter"
+          "item": "ratatouille:unprocessed_mature_matter_fold"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "ratatouille:unprocessed_mature_matter"
+    "item": "ratatouille:unprocessed_mature_matter_fold"
   }
 }

@@ -230,6 +230,9 @@ public class CompostData {
     }
 
     public int getProcessingSpeed() {
-        return (int) (Math.max(1.0, sizeLevel / 8.0 * tempLevel / 8.0) * 512);
+        if(Math.min(this.sizeLevel, this.tempLevel) == 0 )
+            return 16;
+        else
+            return (int) (Math.max(1.0, sizeLevel / 8.0 * tempLevel / 8.0) * 512);
     }
 }
