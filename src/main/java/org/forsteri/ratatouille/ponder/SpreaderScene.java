@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.forsteri.ratatouille.entry.CRItems;
 
 public class SpreaderScene {
     public SpreaderScene() {
@@ -63,9 +64,9 @@ public class SpreaderScene {
                 .pointAt(util.vector().topOf(spreaderPos));
         scene.idle(70);
 
-        scene.world().modifyBlockEntity(depotPos, DepotBlockEntity.class, (be) -> {be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(new TransportedItemStack(new ItemStack(Items.BONE_MEAL)));});
+        scene.world().modifyBlockEntity(depotPos, DepotBlockEntity.class, (be) -> {be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(new TransportedItemStack(new ItemStack(CRItems.RIPEN_MATTER.get(), 64)));});
         scene.overlay().showText(60)
-                .text("Each grown action consumes one bone meal")
+                .text("Each grown action consumes one ripen matter")
                 .placeNearTarget()
                 .attachKeyFrame()
                 .pointAt(util.vector().topOf(spreaderPos));

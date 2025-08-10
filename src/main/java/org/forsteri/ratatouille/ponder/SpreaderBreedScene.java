@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.phys.Vec3;
+import org.forsteri.ratatouille.entry.CRItems;
 
 public class SpreaderBreedScene {
 
@@ -29,17 +30,21 @@ public class SpreaderBreedScene {
         );
     }
 
-    private static ElementLink<EntityElement> spawnPig(CreateSceneBuilder scene, Vec3 pos, boolean baby) {
+    private static ElementLink<EntityElement> spawnPig(CreateSceneBuilder scene, Vec3 pos, boolean baby, float yaw) {
         return scene.world().createEntity(w -> {
             Pig p = EntityType.PIG.create(w);
             if (p != null) {
                 p.setPos(pos.x, pos.y, pos.z);
                 p.setNoAi(true);
+                p.setYRot(yaw); // 设置水平朝向
+                p.setYHeadRot(yaw);
+                p.setDeltaMovement(Vec3.ZERO);
                 if (baby) p.setAge(-24000);
             }
             return p;
         });
     }
+
 
     public static void spreader_breed(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
@@ -67,17 +72,17 @@ public class SpreaderBreedScene {
                 .pointAt(util.vector().topOf(spreaderPos));
         scene.idle(80);
 
-        Vec3 p1 = util.vector().centerOf(util.grid().at(1, 1, 2)).add(0.0, 0.0, -0.5);
-        Vec3 p2 = util.vector().centerOf(util.grid().at(1, 1, 2)).add(0.0, 0.0, +0.5);
-        ElementLink<EntityElement> pigA = spawnPig(scene, p1, false);
-        ElementLink<EntityElement> pigB = spawnPig(scene, p2, false);
+        Vec3 p1 = util.vector().centerOf(util.grid().at(1, 1, 2)).add(0.0, 0.0, -1.0);
+        Vec3 p2 = util.vector().centerOf(util.grid().at(1, 1, 2)).add(0.0, 0.0, +1.0);
+        ElementLink<EntityElement> pigA = spawnPig(scene, p1, false, 0);
+        ElementLink<EntityElement> pigB = spawnPig(scene, p2, false, 180);
         scene.idle(10);
 
         scene.world().modifyBlockEntity(depotPos, DepotBlockEntity.class,
                 be -> be.getBehaviour(DepotBehaviour.TYPE)
-                        .setHeldItem(new TransportedItemStack(new ItemStack(Items.CARROT))));
+                        .setHeldItem(new TransportedItemStack(new ItemStack(CRItems.MATURE_MATTER.get()))));
         scene.overlay().showText(50)
-                .text("Consumes one carrot (placeholder)")
+                .text("Consumes one mature matter (placeholder)")
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(depotPos));
         scene.idle(30);
@@ -85,14 +90,12 @@ public class SpreaderBreedScene {
                 be -> be.getBehaviour(DepotBehaviour.TYPE).setHeldItem(null));
         scene.idle(10);
 
-        heartBurst(scene, p1.add(0, 0.8, 0), 30);
-        heartBurst(scene, p2.add(0, 0.8, 0), 30);
+        heartBurst(scene, p1.add(0, 0.8, 0), 10);
+        heartBurst(scene, p2.add(0, 0.8, 0), 10);
         scene.idle(35);
 
-        Vec3 mid = p1.add(p2).scale(0.5);
-        ElementLink<EntityElement> baby = spawnPig(scene, mid, true);
-        heartBurst(scene, mid.add(0, 0.6, 0), 25);
-
+        Vec3 mid = p1.add(p2).scale(0.5).add(0.0, -0.5, 0.0);
+        ElementLink<EntityElement> baby = spawnPig(scene, mid, true, 90);
         scene.overlay().showText(60)
                 .text("After a short while, a baby pig appears.")
                 .placeNearTarget()
