@@ -11,6 +11,7 @@ import org.forsteri.ratatouille.content.chef_hat.ChefHatModel;
 import org.forsteri.ratatouille.content.chef_hat.ChefHatWithGogglesItem;
 import org.forsteri.ratatouille.content.chef_hat.ChefHatWithGogglesModel;
 import org.forsteri.ratatouille.content.chocolate_mold_filled.ChocolateMoldFilledItem;
+import org.forsteri.ratatouille.content.compost_tea.CompostTeaBottleItem;
 
 public class CRItems {
     static {
@@ -57,6 +58,9 @@ public class CRItems {
     public static final ItemEntry<Item> MATURE_MATTER_FOLD = Ratatouille.REGISTRATE.item("mature_matter_fold", Item::new).register();
     public static final ItemEntry<Item> BOIL_STONE = Ratatouille.REGISTRATE.item("boil_stone", Item::new).register();
     public static final ItemEntry<Item> COMPOST_MASS = Ratatouille.REGISTRATE.item("compost_mass", Item::new).register();
+    public static final ItemEntry<CompostTeaBottleItem> COMPOST_TEA_BOTTLE = Ratatouille.REGISTRATE.item("compost_tea_bottle", props -> {CompostTeaBottleItem item = new CompostTeaBottleItem();
+                return item;}).register();
+
     //public static final ItemEntry<Item> WET_COPPER_INGOT = Ratatouille.REGISTRATE.item("wet_copper_ingot", Item::new).register();
     //public static final ItemEntry<Item> WET_GOLD_INGOT = Ratatouille.REGISTRATE.item("wet_gold_ingot", Item::new).register();
     //public static final ItemEntry<Item> SUGAR_CUBE = Ratatouille.REGISTRATE.item("sugar_cube", Item::new).register();

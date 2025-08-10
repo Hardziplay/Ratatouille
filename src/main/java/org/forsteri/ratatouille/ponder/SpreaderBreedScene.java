@@ -48,7 +48,7 @@ public class SpreaderBreedScene {
 
     public static void spreader_breed(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
-        scene.title("spreader_breed", "Spreader makes pigs fall in love");
+        scene.title("spreader_breed", "Spreader makes animals fall in love");
         scene.configureBasePlate(0, 0, 5);
 
         scene.world().showSection(util.select().layer(0), Direction.UP);
