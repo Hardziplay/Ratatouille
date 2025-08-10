@@ -7,6 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -30,7 +31,11 @@ public class CompostTeaBottleItem extends Item {
                 if (player != null) {
                     player.getCooldowns().addCooldown(this, 20);
                     if (!player.getAbilities().instabuild) {
-                        stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(ctx.getHand()));
+                        stack.shrink(1);
+                        ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
+                        if (!player.getInventory().add(emptyBottle)) {
+                            player.drop(emptyBottle, false);
+                        }
                     }
                 }
                 level.levelEvent(1505, pos, 0);
