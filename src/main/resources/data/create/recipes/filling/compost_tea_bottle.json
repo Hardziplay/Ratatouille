@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "fluid": "ratatouille:compost_tea",
+      "amount": 100
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:compost_tea_bottle"
+    }
+  ]
+}
