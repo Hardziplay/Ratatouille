@@ -70,10 +70,10 @@ public class IrrigationTowerScene {
         });
         scene.idle(20);
 
-        scene.overlay().showControls(util.vector().blockSurface(towerPos, Direction.UP), Pointing.DOWN, 60).rightClick().withItem(new ItemStack(CRFluids.COMPOST_TEA.getBucket().get())).rightClick(); //COMPOST_TEA_BUCKET
+        scene.overlay().showControls(util.vector().blockSurface(towerPos, Direction.UP), Pointing.DOWN, 60).rightClick().withItem(new ItemStack(CRFluids.COMPOST_TEA.getBucket().get())).rightClick();
         scene.world().modifyBlockEntity(towerPos, IrrigationTowerBlockEntity.class, (be) -> {
             be.getTankInventory().fill(new FluidStack(CRFluids.COMPOST_TEA.get(), 1000), IFluidHandler.FluidAction.EXECUTE);
-        }); //COMPOST_TEA_FLUID
+        });
         scene.idle(30);
 
         scene.overlay().showText(50)
@@ -83,12 +83,12 @@ public class IrrigationTowerScene {
                 .pointAt(util.vector().topOf(towerPos));
         scene.idle(60);
 
-        scene.world().setBlock(towerPos.below().north(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
+        scene.world().setBlock(towerPos.below().north(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false);
         scene.idle(10);
-        scene.world().setBlock(towerPos.below().west(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
+        scene.world().setBlock(towerPos.below().west(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false);
         scene.idle(20);
-        scene.world().setBlock(towerPos.below().south(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
+        scene.world().setBlock(towerPos.below().south(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false);
         scene.idle(5);
-        scene.world().setBlock(towerPos.below().east(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false); //farmersdelight:rich_soil_farmland
+        scene.world().setBlock(towerPos.below().east(), ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState().setValue(RichSoilFarmlandBlock.MOISTURE, 7), false);
     }
 }
