@@ -1,0 +1,25 @@
+package org.forsteri.ratatouille.ponder;
+
+import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
+import net.createmod.catnip.math.Pointing;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+
+public class CompostTowerScene {
+    public CompostTowerScene() {}
+
+    public static void tower(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+        scene.scaleSceneView(.9f);
+
+        scene.title("compost_tower", "Turn organic waste into compost");
+        scene.configureBasePlate(0, 0, 5);
+        scene.world().showSection(util.select().everywhere(), Direction.UP);
+        scene.idle(5);
+    }
+}

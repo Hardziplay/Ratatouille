@@ -1,11 +1,6 @@
 package org.forsteri.ratatouille.entry;
 
-import org.forsteri.ratatouille.ponder.IrrigationTowerScene;
-import org.forsteri.ratatouille.ponder.OvenScene;
-import org.forsteri.ratatouille.ponder.SpreaderScene;
-import org.forsteri.ratatouille.ponder.SqueezeBasinScene;
-import org.forsteri.ratatouille.ponder.ThresherScene;
-import org.forsteri.ratatouille.ponder.SpreaderBreedScene;
+import org.forsteri.ratatouille.ponder.*;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
@@ -24,5 +19,6 @@ public class CRPonderScenes {
         HELPER.addStoryBoard(CRBlocks.THRESHER, "thresher", ThresherScene::thresher, new ResourceLocation[0]);
         HELPER.addStoryBoard(CRBlocks.IRRIGATION_TOWER_BLOCK, "irrigation_tower", IrrigationTowerScene::irrigationTower, new ResourceLocation[0]);
         HELPER.addStoryBoard(CRBlocks.SQUEEZE_BASIN, "squeeze_basin", SqueezeBasinScene::squeezeBasin, new ResourceLocation[0]);
+        HELPER.addStoryBoard(CRBlocks.COMPOST_TOWER_BLOCK, "compost_tower", CompostTowerScene::tower, new ResourceLocation[0]);
     }
 }
