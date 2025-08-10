@@ -43,14 +43,14 @@ public class CRFluids {
                     .lang("Egg Yolk")
                     .register();
 
-    public static final FluidEntry<VirtualFluid> COMPOST_TEA =
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> COMPOST_TEA =
             Ratatouille.REGISTRATE
-                    .virtualFluid("compost_tea")
+                    .standardFluid("compost_tea")
                     .properties(p -> p
                             .density(1050))
                     .lang("Compost Tea")
-                    .bucket().build()
-                    .register();
+                    .source(ForgeFlowingFluid.Source::new).block().build()
+                    .bucket().build().register();
 
     public static final FluidEntry<VirtualFluid> BIO_GAS =
             Ratatouille.REGISTRATE
