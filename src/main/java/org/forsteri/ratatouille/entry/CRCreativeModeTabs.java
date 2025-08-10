@@ -72,6 +72,8 @@ public class CRCreativeModeTabs {
         private static Predicate<Item> makeExclusionPredicate() {
             Set<Item> exclusions = new ReferenceOpenHashSet<>();
 
+            exclusions.add(CRItems.UNPROCESSED_RIPEN_MATTER_FOLD.get());
+            exclusions.add(CRItems.UNPROCESSED_MATURE_MATTER_FOLD.get());
 
             return exclusions::contains;
         }
