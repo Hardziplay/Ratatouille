@@ -68,6 +68,7 @@ public class CompostData {
                 }
             }
         }
+        tempLevel = Mth.clamp(tempLevel, 0, 8);
         return tempLevel != prevTemp;
     }
 
@@ -146,7 +147,7 @@ public class CompostData {
         int sizeLevelBefore = sizeLevel;
 
         sizeLevel = tower.getWidth() * tower.getHeight() * tower.getWidth() / 4;
-
+        sizeLevel = Mth.clamp(sizeLevel, 0, 8);
         return sizeLevelBefore != sizeLevel;
     }
 
@@ -211,7 +212,7 @@ public class CompostData {
         if (compostTowerLevel == 0) {
             return Lang.translateDirect("compost_tower.idle", new Object[0]);
         } else {
-            return compostTowerLevel == 8 ? Lang.translateDirect("compost_tower.max_lvl", new Object[0]) : Lang.translateDirect("compost_tower.lvl", new Object[0]).append(String.valueOf(compostTowerLevel));
+            return compostTowerLevel >= 8 ? Lang.translateDirect("compost_tower.max_lvl", new Object[0]) : Lang.translateDirect("compost_tower.lvl", new Object[0]).append(String.valueOf(compostTowerLevel));
         }
     }
 
@@ -233,6 +234,6 @@ public class CompostData {
         if(Math.min(this.sizeLevel, this.tempLevel) == 0 )
             return 16;
         else
-            return (int) (Math.max(1.0, sizeLevel / 8.0 * tempLevel / 8.0) * 512);
+            return (int) (sizeLevel / 8.0 * tempLevel / 8.0 * 512);
     }
 }
