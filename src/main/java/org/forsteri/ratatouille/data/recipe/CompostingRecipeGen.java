@@ -11,8 +11,8 @@ public class CompostingRecipeGen extends ProcessingRecipeGen {
             .require(CRItems.COMPOST_MASS.get())
             .duration(200)
             //.output(CRItems.COMPOST_RESIDUE.get(), 1)
-            .output(CRFluids.COMPOST_RESIDUE_FLUID.get(), 20)
-            .output(CRFluids.COMPOST_TEA.get(), 60)
+            .output(CRFluids.COMPOST_RESIDUE_FLUID.get(), 60)
+            .output(CRFluids.COMPOST_TEA.get(), 20)
             .output(CRFluids.BIO_GAS.get(), 20));
 
     public CompostingRecipeGen(PackOutput generator) {
