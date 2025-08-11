@@ -32,6 +32,7 @@ import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.ItemLike;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.compat.jei.category.*;
+import org.forsteri.ratatouille.content.compost_tower.CompostingRecipe;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.content.frozen_block.FreezingRecipe;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
@@ -100,6 +101,13 @@ public class RatatouilleJei implements IModPlugin {
                 .itemIcon(CRBlocks.FROZEN_BLOCK.get())
                 .emptyBackground(178, 72)
                 .build("freezing", FreezingCategory::new);
+
+        final CreateRecipeCategory<?> composting = builder(CompostingRecipe.class)
+                .addTypedRecipes(CRRecipeTypes.COMPOSTING::getType)
+                .catalyst(CRBlocks.COMPOST_TOWER_BLOCK::get)
+                .itemIcon(CRBlocks.COMPOST_TOWER_BLOCK.get())
+                .emptyBackground(178, 72)
+                .build("composting", CompostingCategory::new);
         allCategories.forEach(registration::addRecipeCategories);
     }
 
