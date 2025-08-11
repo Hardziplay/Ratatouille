@@ -13,6 +13,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.NoPlaceBucketItem;
 import org.joml.Vector3f;
 
 import java.util.function.Supplier;
@@ -59,7 +60,7 @@ public class CRFluids {
                             .density(-150))
                     .lang("Biogas")
                     .source(ForgeFlowingFluid.Source::new).block().build()
-                    .bucket().build().register();
+                    .bucket(NoPlaceBucketItem::new).build().register();
 
     public static final FluidEntry<VirtualFluid> COMPOST_FLUID =
             Ratatouille.REGISTRATE
