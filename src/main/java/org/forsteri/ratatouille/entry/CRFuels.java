@@ -17,5 +17,9 @@ public class CRFuels {
         if (stack.is(CRItems.COMPOST_RESIDUE.get())) {
             event.setBurnTime(80);
         }
+
+        if (stack.is(CRFluids.BIO_GAS.getBucket().get())) {
+            event.setBurnTime(4000);
+        }
     }
 }

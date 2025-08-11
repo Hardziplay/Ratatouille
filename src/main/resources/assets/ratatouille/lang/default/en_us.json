@@ -24,6 +24,7 @@
   "ratatouille.recipe.sausage_casing_requirement": "Sausage Casing Requirement",
   "ratatouille.recipe.demolding": "Demolding",
   "ratatouille.recipe.freezing": "Freezing",
+  "ratatouille.recipe.composting": "Composting",
   "item.ratatouille.ripen_matter.tooltip.summary": "Use for spreader to fertilizer plants",
   "item.ratatouille.mature_matter.tooltip.summary": "Use for spreader to promote breeding readiness in animals",
   "item.ratatouille.compost_tea_bottle.tooltip.summary": "Plant ripening agent, usable three times"
