@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class CompostFluidTank implements IFluidHandler, INBTSerializable<CompoundTag> {
     protected int capacity;
@@ -234,9 +233,10 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         onContentsChanged();
     }
 
-    private boolean isValidFluid(Fluid resource) {
-        return resource.isSame(CRFluids.COMPOST_RESIDUE_FLUID.get())
-                || resource.isSame(CRFluids.COMPOST_FLUID.get());
+    private boolean isValidInputFluid(Fluid resource) {
+//        return resource.isSame(CRFluids.COMPOST_RESIDUE_FLUID.get())
+//                || resource.isSame(CRFluids.COMPOST_FLUID.get());
+        return resource.isSame(CRFluids.COMPOST_FLUID.get());
     }
 
     public Fluid getFluidAtBlockHeight(int blockHeight, int towerHeight) {
@@ -255,7 +255,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : liquids) {
             accumulatedHeight += getFilledPercentage(fluid);
             double height = Math.floor(accumulatedHeight * towerHeight);
-            if (tanks.getOrDefault(fluid, 0) == 0 || isValidFluid(fluid)) continue;
+            if (tanks.getOrDefault(fluid, 0) == 0 || isValidInputFluid(fluid)) continue;
             if (blockHeight <= height)
                 return fluid;
 
@@ -265,7 +265,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : gases) {
             accumulatedHeight += getFilledPercentage(fluid);
             double height = Math.ceil(accumulatedHeight * towerHeight);
-            if (tanks.getOrDefault(fluid, 0) == 0 || isValidFluid(fluid)) continue;
+            if (tanks.getOrDefault(fluid, 0) == 0 || isValidInputFluid(fluid)) continue;
             if (blockHeight >= towerHeight - height)
                 return fluid;
         }
