@@ -94,8 +94,7 @@ public class OvenScene {
         for (int i = 0; i < 1; i++) {
             scene.idle(12);
             scene.world().modifyBlockEntity(util.grid().at(4, 2, 3), OvenBlockEntity.class, (be)-> {
-                be.updateConnectivity();
-                be.getControllerBE().getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(
+                be.itemCapability.ifPresent(
                         (inv) -> {
                             for (int slot = 0; slot < inv.getSlots(); slot++) {
                                 inv.insertItem(slot, itemStack.copy(), false);
@@ -128,7 +127,7 @@ public class OvenScene {
         for (int i = 0; i < 4; i++) {
             scene.idle(12);
             scene.world().modifyBlockEntity(util.grid().at(4, 2, 5), OvenBlockEntity.class, (be)-> {
-                be.getControllerBE().getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(
+                be.itemCapability.ifPresent(
                         (inv) -> {
                             ItemStack insertStack = itemStack.copy();
                             for (int slot = 0; slot < inv.getSlots(); slot++) {

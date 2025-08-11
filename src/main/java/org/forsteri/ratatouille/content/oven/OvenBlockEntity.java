@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IMultiBlockEntityContainer.Inventory {
-    protected LazyOptional<CombinedInvWrapper> itemCapability = LazyOptional.empty();
-    private boolean updateConnectivity = true;
+public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IMultiBlockEntityContainer {
+    public LazyOptional<CombinedInvWrapper> itemCapability = LazyOptional.empty();
+    private boolean updateConnectivity = false;
     protected BlockPos controller;
     protected BlockPos lastKnownPos;
     protected BakeData bakeData;
@@ -284,6 +284,13 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         return controllerBE.bakeData.addToGoggleTooltip(tooltip, isPlayerSneaking, controllerBE.getTotalOvenSize());
     }
 
+    @Override
+    public void initialize() {
+        super.initialize();
+        notifyUpdate();
+        if (level.isClientSide)
+            invalidateRenderBoundingBox();
+    }
 
     public void updateOvenState() {
         if (!isController() && getControllerBE() != null) {
@@ -338,6 +345,9 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
                 !Objects.equals(controllerBefore, controller);
         if (hasLevel() && (changeOfController || prevSize != radius || prevHeight != height)) {
             level.setBlocksDirty(getBlockPos(), Blocks.AIR.defaultBlockState(), getBlockState());
+            if (hasLevel())
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 16);
+            invalidateRenderBoundingBox();
         }
     }
 
