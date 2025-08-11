@@ -104,19 +104,21 @@ public class IrrigationTowerBlock extends HorizontalDirectionalBlock implements 
 
         BlockPos center = pos.below();
         for (int dx = -8; dx <= 8; dx++) {
-            for (int dz = -8; dz <= 8; dz++) {
-                BlockPos target = center.offset(dx, 0, dz);
-                BlockState targetState = level.getBlockState(target);
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -8; dz <= 8; dz++) {
+                    BlockPos target = center.offset(dx, dy, dz);
+                    BlockState targetState = level.getBlockState(target);
 
-                if (targetState.is(Blocks.FARMLAND)) {
-                    BlockState newState = ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState();
-                    level.setBlockAndUpdate(target, newState);
-                    level.gameEvent(GameEvent.BLOCK_CHANGE, target, GameEvent.Context.of(null, newState));
-                    tower.getTankInventory().drain(
-                            new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 100),
-                            IFluidHandler.FluidAction.EXECUTE
-                    );
-                    return;
+                    if (targetState.is(Blocks.FARMLAND)) {
+                        BlockState newState = ModBlocks.RICH_SOIL_FARMLAND.get().defaultBlockState();
+                        level.setBlockAndUpdate(target, newState);
+                        level.gameEvent(GameEvent.BLOCK_CHANGE, target, GameEvent.Context.of(null, newState));
+                        tower.getTankInventory().drain(
+                                new FluidStack(CRFluids.COMPOST_TEA.get().getSource(), 100),
+                                IFluidHandler.FluidAction.EXECUTE
+                        );
+                        return;
+                    }
                 }
             }
         }

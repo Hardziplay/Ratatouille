@@ -19,7 +19,7 @@ public class CompostItemHandler implements IItemHandlerModifiable {
     private static final BiMap<Fluid, Item> ITEM_FLUID_MAP = HashBiMap.create();
     static {
         ITEM_FLUID_MAP.put(CRFluids.COMPOST_FLUID.get(), CRItems.COMPOST_MASS.get());
-        ITEM_FLUID_MAP.put(CRFluids.COMPOST_RESIDUE_FLUID.get(), CRItems.COMPOST_RESIDUE.get());
+//        ITEM_FLUID_MAP.put(CRFluids.COMPOST_RESIDUE_FLUID.get(), CRItems.COMPOST_RESIDUE.get());
     }
 
     CompostItemHandler(CompostFluidTank tank) {
