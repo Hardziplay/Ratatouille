@@ -19,6 +19,6 @@ public class CRPonderScenes {
         HELPER.addStoryBoard(CRBlocks.THRESHER, "thresher", ThresherScene::thresher, new ResourceLocation[0]);
         HELPER.addStoryBoard(CRBlocks.IRRIGATION_TOWER_BLOCK, "irrigation_tower", IrrigationTowerScene::irrigationTower, new ResourceLocation[0]);
         HELPER.addStoryBoard(CRBlocks.SQUEEZE_BASIN, "squeeze_basin", SqueezeBasinScene::squeezeBasin, new ResourceLocation[0]);
-        HELPER.addStoryBoard(CRBlocks.COMPOST_TOWER_BLOCK, "compost_tower", CompostTowerScene::tower, new ResourceLocation[0]);
+//        HELPER.addStoryBoard(CRBlocks.COMPOST_TOWER_BLOCK, "compost_tower", CompostTowerScene::tower, new ResourceLocation[0]);
     }
 }

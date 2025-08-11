@@ -2,7 +2,9 @@ package org.forsteri.ratatouille.entry;
 
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.item.ItemDescription;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import org.forsteri.ratatouille.Ratatouille;
@@ -50,7 +52,7 @@ public class CRItems {
             .onRegister(CreateRegistrate.itemModel(() -> ChefHatWithGogglesModel::new))
             .register();
     public static final ItemEntry<Item> COMPOST_RESIDUE = Ratatouille.REGISTRATE.item("compost_residue", Item::new).register();
-    public static final ItemEntry<Item> RIPEN_MATTER = Ratatouille.REGISTRATE.item("ripen_matter", Item::new).register();
+    public static final ItemEntry<Item> RIPEN_MATTER = Ratatouille.REGISTRATE.item("ripen_matter", Item::new).onRegisterAfter(Registries.ITEM, item -> ItemDescription.useKey(item, "item.ratatouille.ripen_matter")).register();
     public static final ItemEntry<SequencedAssemblyItem> UNPROCESSED_RIPEN_MATTER_FOLD = Ratatouille.REGISTRATE.item("unprocessed_ripen_matter_fold", SequencedAssemblyItem::new).register();
     public static final ItemEntry<Item> RIPEN_MATTER_FOLD = Ratatouille.REGISTRATE.item("ripen_matter_fold", Item::new).register();
     public static final ItemEntry<Item> MATURE_MATTER = Ratatouille.REGISTRATE.item("mature_matter", Item::new).register();

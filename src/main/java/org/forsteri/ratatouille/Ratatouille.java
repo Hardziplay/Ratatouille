@@ -1,6 +1,10 @@
 package org.forsteri.ratatouille;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.foundation.item.KineticStats;
+import com.simibubi.create.foundation.item.TooltipModifier;
+import net.createmod.catnip.lang.FontHelper;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,7 +30,11 @@ public class Ratatouille {
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "ratatouille";
     // Directly reference a slf4j logger
-    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(Ratatouille.MOD_ID);
+    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(Ratatouille.MOD_ID)
+            .setTooltipModifierFactory(item ->
+            new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
+                    .andThen(TooltipModifier.mapNull(KineticStats.create(item)))
+    );
 
     // Create a Deferred Register to hold Blocks which will all be registered under the "ratatouille" namespace
     public Ratatouille() {

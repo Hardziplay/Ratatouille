@@ -22,5 +22,6 @@
   "ratatouille.recipe.baking": "Bulk Baking",
   "ratatouille.recipe.sausage_casing_requirement": "Sausage Casing Requirement",
   "ratatouille.recipe.demolding": "Demolding",
-  "ratatouille.recipe.freezing": "Freezing"
+  "ratatouille.recipe.freezing": "Freezing",
+  "item.ratatouille.ripen_matter.tooltip.summary": "Use for spreader to fertilizer plants"
 }
