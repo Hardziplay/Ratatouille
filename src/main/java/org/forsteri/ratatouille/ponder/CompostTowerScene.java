@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import org.forsteri.ratatouille.entry.CRItems;
 
 public class CompostTowerScene {
     public CompostTowerScene() {}
@@ -20,8 +21,10 @@ public class CompostTowerScene {
         scene.title("compost_tower", "Turn organic waste into compost");
         scene.configureBasePlate(0, 0, 5);
         scene.world().showSection(util.select().everywhere(), Direction.UP);
-        scene.world().setKineticSpeed(util.select().position(0, 0, 1), -32);
-//        scene.world().setKineticSpeed(util.select().everywhere(), 32);
-        scene.idle(5);
+        //scene.world().setKineticSpeed(util.select().position(0, 0, 1), -32);
+        scene.world().createItemOnBelt(util.grid().at(3, 1, 1), Direction.NORTH, new ItemStack(CRItems.COMPOST_MASS, 64));
+        scene.idle(40);
+        scene.world().setKineticSpeed(util.select().everywhere(), 32);
+        scene.idle(50);
     }
 }

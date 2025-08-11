@@ -49,7 +49,7 @@ public class CompostingCategory extends CreateRecipeCategory<CompostingRecipe> {
                 copy.setCount(pair.getSecond().getValue());
                 stacks.add(copy);
             }
-            builder.addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
+            builder.addSlot(RecipeIngredientRole.INPUT, 5 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
                     .setBackground(getRenderedSlot(), -1, -1)
                     .addItemStacks(stacks);
             i++;

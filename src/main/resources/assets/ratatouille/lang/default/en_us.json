@@ -17,11 +17,14 @@
   "ratatouille.compost_tower.size_dots": "......",
   "ratatouille.compost_tower.fan_dots": "......",
   "ratatouille.compost_tower.heat_dots": "......",
+  "ratatouille.compost_tower.max_lvl": "Max Level",
   "ratatouille.recipe.squeezing": "Squeezing",
   "ratatouille.recipe.threshing": "Threshing",
   "ratatouille.recipe.baking": "Bulk Baking",
   "ratatouille.recipe.sausage_casing_requirement": "Sausage Casing Requirement",
   "ratatouille.recipe.demolding": "Demolding",
   "ratatouille.recipe.freezing": "Freezing",
-  "item.ratatouille.ripen_matter.tooltip.summary": "Use for spreader to fertilizer plants"
+  "item.ratatouille.ripen_matter.tooltip.summary": "Use for spreader to fertilizer plants",
+  "item.ratatouille.mature_matter.tooltip.summary": "Use for spreader to promote breeding readiness in animals",
+  "item.ratatouille.compost_tea_bottle.tooltip.summary": "Plant ripening agent, usable three times"
 }

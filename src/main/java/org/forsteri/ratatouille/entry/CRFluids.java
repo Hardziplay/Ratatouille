@@ -52,14 +52,14 @@ public class CRFluids {
                     .source(ForgeFlowingFluid.Source::new).block().build()
                     .bucket().build().register();
 
-    public static final FluidEntry<VirtualFluid> BIO_GAS =
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> BIO_GAS =
             Ratatouille.REGISTRATE
-                    .virtualFluid("bio_gas")
+                    .standardFluid("bio_gas")
                     .properties(p -> p
                             .density(-150))
                     .lang("Biogas")
-                    .bucket().build()
-                    .register();
+                    .source(ForgeFlowingFluid.Source::new).block().build()
+                    .bucket().build().register();
 
     public static final FluidEntry<VirtualFluid> COMPOST_FLUID =
             Ratatouille.REGISTRATE
@@ -67,18 +67,17 @@ public class CRFluids {
                     .properties(p -> p
                             .density(1400))
                     .lang("Compost Fluid")
-                    .bucket().build()
                     .register();
 
 
-    public static final FluidEntry<VirtualFluid> COMPOST_RESIDUE_FLUID =
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> COMPOST_RESIDUE_FLUID =
             Ratatouille.REGISTRATE
-                    .virtualFluid("compost_residue_fluid")
+                    .standardFluid("compost_residue_fluid")
                     .properties(p -> p
                             .density(1450))
                     .lang("Compost Residue Fluid")
-                    .bucket().build()
-                    .register();
+                    .source(ForgeFlowingFluid.Source::new).block().build()
+                    .bucket().build().register();
 
 
     public static void register() {}

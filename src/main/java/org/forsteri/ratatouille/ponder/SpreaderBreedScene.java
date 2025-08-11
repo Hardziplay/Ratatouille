@@ -82,7 +82,7 @@ public class SpreaderBreedScene {
                 be -> be.getBehaviour(DepotBehaviour.TYPE)
                         .setHeldItem(new TransportedItemStack(new ItemStack(CRItems.MATURE_MATTER.get()))));
         scene.overlay().showText(50)
-                .text("Consumes one mature matter (placeholder)")
+                .text("Consumes one mature matter")
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(depotPos));
         scene.idle(30);

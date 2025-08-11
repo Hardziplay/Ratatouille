@@ -19,7 +19,7 @@ public class CRPonderTags {
                 .add(CRBlocks.OVEN_FAN)
                 .add(CRBlocks.THRESHER)
                 .add(CRBlocks.IRRIGATION_TOWER_BLOCK)
-                .add(CRBlocks.COMPOST_TOWER_BLOCK)
+                //.add(CRBlocks.COMPOST_TOWER_BLOCK)
                 .add(CRBlocks.SQUEEZE_BASIN);
     }
 }
