@@ -1,4 +1,5 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"render_type": "minecraft:cutout",
 	"texture_size": [32, 32],
@@ -9,7 +10,6 @@
 		"4": "ratatouille:block/oven_fan/fan_casing",
 		"5": "ratatouille:block/oven_fan/fan_side",
 		"6": "ratatouille:block/oven_fan/fan_side2",
-		"7": "ratatouille:block/oven_fan/fans_black",
 		"particle": "ratatouille:block/oven_fan/andesite_casing"
 	},
 	"elements": [
@@ -188,19 +188,6 @@
 			}
 		},
 		{
-			"name": "black",
-			"from": [2, 2, 0],
-			"to": [14, 14, 0],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#7"},
-				"east": {"uv": [0, 0, 0, 6], "texture": "#missing"},
-				"west": {"uv": [0, 0, 0, 6], "texture": "#missing"},
-				"up": {"uv": [0, 0, 0, 6], "rotation": 90, "texture": "#missing"},
-				"down": {"uv": [0, 0, 0, 6], "rotation": 270, "texture": "#missing"}
-			}
-		},
-		{
 			"name": "front",
 			"from": [2, 2, -2],
 			"to": [14, 14, -2],
@@ -232,7 +219,7 @@
 			"name": "cover",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [10, 11, 12, 13, 14, 15]
+			"children": [10, 11, 12, 13, 14]
 		}
 	]
 }
