@@ -26,7 +26,7 @@ public class SpreaderRenderer extends KineticBlockEntityRenderer<SpreaderBlockEn
     @Override
     protected void renderSafe(SpreaderBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
-        if (!VisualizationManager.supportsVisualization(be.getLevel())) return;
+        if (VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         Direction direction = be.getBlockState()
                 .getValue(FACING);
