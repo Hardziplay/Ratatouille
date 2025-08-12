@@ -40,7 +40,7 @@ public class SpreaderVisual extends KineticBlockEntityVisual<SpreaderBlockEntity
                 .setChanged();
 
         this.fan.setup(blockEntity, getFanSpeed())
-                .setPosition(getVisualPosition().offset(0, 0, 5))
+                .setPosition(getVisualPosition())
                 .rotateToFace(Direction.SOUTH, opposite)
                 .setChanged();
     }
