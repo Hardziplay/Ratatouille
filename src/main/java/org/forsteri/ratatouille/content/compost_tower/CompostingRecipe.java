@@ -1,14 +1,14 @@
 package org.forsteri.ratatouille.content.compost_tower;
 
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.jetbrains.annotations.NotNull;
 
-public class CompostingRecipe extends ProcessingRecipe<RecipeWrapper> {
-    public CompostingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+public class CompostingRecipe extends StandardProcessingRecipe<RecipeInput> {
+    public CompostingRecipe(ProcessingRecipeParams params) {
         super(CRRecipeTypes.COMPOSTING, params);
     }
 
@@ -23,15 +23,20 @@ public class CompostingRecipe extends ProcessingRecipe<RecipeWrapper> {
     }
 
     @Override
-    protected int getMaxFluidOutputCount() {
-        return 2;
+    protected boolean canSpecifyDuration() {
+        return true;
     }
 
     @Override
-    public boolean matches(@NotNull RecipeWrapper inv, @NotNull Level world) {
-        for (int slot = 0; slot < inv.getContainerSize(); slot++) {
-            if (ingredients.get(0)
-                    .test(inv.getItem(slot))) return true;
+    protected int getMaxFluidOutputCount() {
+        return 3;
+    }
+
+    @Override
+    public boolean matches(RecipeInput recipeInput, @NotNull Level level) {
+        for (int slot = 0; slot < recipeInput.size(); slot++) {
+            if (ingredients.getFirst()
+                    .test(recipeInput.getItem(slot))) return true;
         }
         return false;
     }

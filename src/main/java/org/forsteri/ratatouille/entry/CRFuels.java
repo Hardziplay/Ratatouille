@@ -1,13 +1,12 @@
 package org.forsteri.ratatouille.entry;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.entry.CRItems;
 
-@Mod.EventBusSubscriber(modid = Ratatouille.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Ratatouille.MOD_ID)
 public class CRFuels {
 
     @SubscribeEvent

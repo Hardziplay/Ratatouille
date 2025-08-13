@@ -1,41 +1,20 @@
 package org.forsteri.ratatouille.content.spreader;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.Create;
-import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
-import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.content.logistics.chute.AbstractChuteBlock;
 import com.simibubi.create.foundation.block.IBE;
-
 import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
-import org.forsteri.ratatouille.entry.CRItems;
-import org.jetbrains.annotations.NotNull;
 
 public class SpreaderBlock extends DirectionalKineticBlock implements IBE<SpreaderBlockEntity> {
     public SpreaderBlock(Properties properties) {
@@ -79,6 +58,22 @@ public class SpreaderBlock extends DirectionalKineticBlock implements IBE<Spread
 //        });
 //    }
 
+    protected void blockUpdate(BlockState state, LevelAccessor worldIn, BlockPos pos) {
+        if (worldIn instanceof WrappedLevel)
+            return;
+        notifyFanBlockEntity(worldIn, pos);
+    }
+
+    protected void notifyFanBlockEntity(LevelAccessor world, BlockPos pos) {
+        withBlockEntityDo(world, pos, SpreaderBlockEntity::blockInFrontChanged);
+    }
+
+    @Override
+    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+        return face == state.getValue(FACING)
+                .getOpposite();
+    }
+
     @Override
     public void updateIndirectNeighbourShapes(BlockState stateIn, LevelAccessor worldIn, BlockPos pos, int flags, int count) {
         super.updateIndirectNeighbourShapes(stateIn, worldIn, pos, flags, count);
@@ -111,16 +106,6 @@ public class SpreaderBlock extends DirectionalKineticBlock implements IBE<Spread
                 .isShiftKeyDown() ? preferredFacing : preferredFacing.getOpposite());
     }
 
-    protected void blockUpdate(BlockState state, LevelAccessor worldIn, BlockPos pos) {
-        if (worldIn instanceof WrappedLevel)
-            return;
-        notifyFanBlockEntity(worldIn, pos);
-    }
-
-    protected void notifyFanBlockEntity(LevelAccessor world, BlockPos pos) {
-        withBlockEntityDo(world, pos, SpreaderBlockEntity::blockInFrontChanged);
-    }
-
     @Override
     public BlockState updateAfterWrenched(BlockState newState, UseOnContext context) {
         blockUpdate(newState, context.getLevel(), context.getClickedPos());
@@ -131,12 +116,6 @@ public class SpreaderBlock extends DirectionalKineticBlock implements IBE<Spread
     public Direction.Axis getRotationAxis(BlockState state) {
         return state.getValue(FACING)
                 .getAxis();
-    }
-
-    @Override
-    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-        return face == state.getValue(FACING)
-                .getOpposite();
     }
 
     @Override

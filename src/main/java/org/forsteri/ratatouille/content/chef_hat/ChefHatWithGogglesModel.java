@@ -1,11 +1,16 @@
 package org.forsteri.ratatouille.content.chef_hat;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraftforge.client.model.BakedModelWrapper;
+import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import org.forsteri.ratatouille.entry.CRPartialModels;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class ChefHatWithGogglesModel extends BakedModelWrapper<BakedModel> {
 
     public ChefHatWithGogglesModel(BakedModel template) {

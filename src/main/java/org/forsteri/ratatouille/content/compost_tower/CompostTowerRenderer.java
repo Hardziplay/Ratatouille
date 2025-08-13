@@ -1,20 +1,11 @@
 package org.forsteri.ratatouille.content.compost_tower;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import net.createmod.catnip.animation.LerpedFloat;
-import net.createmod.catnip.platform.ForgeCatnipServices;
+import net.createmod.catnip.platform.NeoForgeCatnipServices;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.util.Mth;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import org.forsteri.ratatouille.entry.CRFluids;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBlockEntity> {
     public CompostTowerRenderer(BlockEntityRendererProvider.Context context) {
@@ -48,11 +39,11 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
 
             if (isGas) {
                 yStart = totalHeight - accumulatedGasHeight - fluidHeight + capHeight + minPuddleHeight;
-                yEnd   = totalHeight - accumulatedGasHeight + capHeight + minPuddleHeight;
+                yEnd = totalHeight - accumulatedGasHeight + capHeight + minPuddleHeight;
                 accumulatedGasHeight += fluidHeight;
             } else {
                 yStart = accumulatedFluidHeight + capHeight + minPuddleHeight;
-                yEnd   = accumulatedFluidHeight + fluidHeight + capHeight + minPuddleHeight;
+                yEnd = accumulatedFluidHeight + fluidHeight + capHeight + minPuddleHeight;
                 accumulatedFluidHeight += fluidHeight;
             }
 
@@ -62,7 +53,7 @@ public class CompostTowerRenderer extends SafeBlockEntityRenderer<CompostTowerBl
             float zMax = zMin + be.radius - 2 * tankHullWidth;
 
             ms.pushPose();
-            ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(
+            NeoForgeCatnipServices.FLUID_RENDERER.renderFluidBox(
                     fluid.defaultFluidState(), xMin, yStart, zMin, xMax, yEnd, zMax,
                     bufferSource, ms, light, false, true
             );

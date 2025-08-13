@@ -2,7 +2,6 @@ package org.forsteri.ratatouille.content.squeeze_basin;
 
 import com.simibubi.create.foundation.item.SmartInventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 public class SqueezeBasinInventory extends SmartInventory {
     private SqueezeBasinBlockEntity blockEntity;
@@ -13,8 +12,8 @@ public class SqueezeBasinInventory extends SmartInventory {
     }
 
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        for(int i = 0; i < this.getSlots(); ++i) {
-            if (i != slot && ItemHandlerHelper.canItemStacksStack(stack, this.inv.getStackInSlot(i))) {
+        for (int i = 0; i < this.getSlots(); ++i) {
+            if (i != slot && ItemStack.isSameItemSameComponents(stack, this.inv.getStackInSlot(i))) {
                 return stack;
             }
         }

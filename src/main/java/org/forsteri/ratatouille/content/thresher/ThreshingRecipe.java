@@ -1,14 +1,16 @@
 package org.forsteri.ratatouille.content.thresher;
 
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import org.forsteri.ratatouille.entry.CRRecipeTypes;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.jetbrains.annotations.NotNull;
+import org.forsteri.ratatouille.entry.CRRecipeTypes;
 
-public class ThreshingRecipe extends ProcessingRecipe<RecipeWrapper> {
-    public ThreshingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+public class ThreshingRecipe extends StandardProcessingRecipe<RecipeInput> {
+    public ThreshingRecipe(ProcessingRecipeParams params) {
         super(CRRecipeTypes.THRESHING, params);
     }
 
@@ -16,15 +18,19 @@ public class ThreshingRecipe extends ProcessingRecipe<RecipeWrapper> {
         return 1;
     }
 
+    protected int getMaxOutputCount() {
+        return 4;
+    }
+
     protected boolean canSpecifyDuration() {
         return true;
     }
 
-    public boolean matches(RecipeWrapper inv, @NotNull Level worldIn) {
-        return !inv.isEmpty() && this.ingredients.get(0).test(inv.getItem(0));
-    }
-
-    protected int getMaxOutputCount() {
-        return 4;
+    @Override
+    public boolean matches(RecipeInput inv, Level worldIn) {
+        if (inv.isEmpty())
+            return false;
+        return ingredients.getFirst()
+                .test(inv.getItem(0));
     }
 }

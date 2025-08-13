@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.content.oven;
 
-import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.fluids.tank.FluidTankCTBehaviour;
 import com.simibubi.create.content.fluids.tank.FluidTankGenerator;
@@ -20,9 +19,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import org.forsteri.ratatouille.entry.CRSpriteShifts;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,42 +29,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class OvenModel extends CTModel {
+    protected static final ModelProperty<CullData> CULL_PROPERTY = new ModelProperty<>();
+
+    public OvenModel(BakedModel originalModel, CTSpriteShiftEntry side, CTSpriteShiftEntry top,
+                     CTSpriteShiftEntry topInner, CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
+        super(originalModel, new OvenCTBehavior(side, top, topInner, bottom, bottomInner, shift2x2));
+    }
+
     public static OvenModel standard(BakedModel originalModel) {
         return new OvenModel(originalModel,
                 CRSpriteShifts.OVEN_SPRITE, CRSpriteShifts.OVEN_SPRITE_TOP, CRSpriteShifts.OVEN_SPRITE_TOP_INNER, CRSpriteShifts.OVEN_SPRITE_BOTTOM, CRSpriteShifts.OVEN_SPRITE_BOTTOM_INNER, CRSpriteShifts.OVEN_SPRITE_SHIFT_2x2);
     }
-    public OvenModel(BakedModel originalModel, CTSpriteShiftEntry side, CTSpriteShiftEntry top,
-                           CTSpriteShiftEntry topInner, CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
-        super(originalModel, new OvenCTBehavior(side, top, topInner, bottom, bottomInner, shift2x2));
-    }
-
-    public static class OvenCTBehavior extends FluidTankCTBehaviour {
-        private final CTSpriteShiftEntry bottomShift;
-        private final CTSpriteShiftEntry bottomInnerShift;
-        private final CTSpriteShiftEntry shift2x2;
-
-        public OvenCTBehavior(CTSpriteShiftEntry layerShift, CTSpriteShiftEntry topShift, CTSpriteShiftEntry innerShift,
-                              CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
-            super(layerShift, topShift, innerShift);
-            this.bottomShift = bottom;
-            this.bottomInnerShift = bottomInner;
-            this.shift2x2 = shift2x2;
-        }
-
-        @Override
-        public CTSpriteShiftEntry getShift(BlockState state, Direction direction, @Nullable TextureAtlasSprite sprite) {
-            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomShift.getOriginal() == sprite)
-                return bottomShift;
-            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomInnerShift.getOriginal() == sprite)
-                return bottomInnerShift;
-            CTSpriteShiftEntry shift = super.getShift(state, direction, sprite);
-            if (shift == CRSpriteShifts.OVEN_SPRITE && state.getValue(OvenBlock.IS_2x2))
-                return shift2x2;
-            return shift;
-        }
-    }
-
-    protected static final ModelProperty<CullData> CULL_PROPERTY = new ModelProperty<>();
 
     @Override
     protected ModelData.Builder gatherModelData(ModelData.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
@@ -101,6 +75,32 @@ public class OvenModel extends CTModel {
                 .isCulled(null))
             quads.addAll(super.getQuads(state, null, rand, extraData, renderType));
         return quads;
+    }
+
+    public static class OvenCTBehavior extends FluidTankCTBehaviour {
+        private final CTSpriteShiftEntry bottomShift;
+        private final CTSpriteShiftEntry bottomInnerShift;
+        private final CTSpriteShiftEntry shift2x2;
+
+        public OvenCTBehavior(CTSpriteShiftEntry layerShift, CTSpriteShiftEntry topShift, CTSpriteShiftEntry innerShift,
+                              CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
+            super(layerShift, topShift, innerShift);
+            this.bottomShift = bottom;
+            this.bottomInnerShift = bottomInner;
+            this.shift2x2 = shift2x2;
+        }
+
+        @Override
+        public CTSpriteShiftEntry getShift(BlockState state, Direction direction, @Nullable TextureAtlasSprite sprite) {
+            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomShift.getOriginal() == sprite)
+                return bottomShift;
+            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomInnerShift.getOriginal() == sprite)
+                return bottomInnerShift;
+            CTSpriteShiftEntry shift = super.getShift(state, direction, sprite);
+            if (shift == CRSpriteShifts.OVEN_SPRITE && state.getValue(OvenBlock.IS_2x2))
+                return shift2x2;
+            return shift;
+        }
     }
 
     private static class CullData {

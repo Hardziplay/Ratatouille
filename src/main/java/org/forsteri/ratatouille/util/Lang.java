@@ -1,26 +1,27 @@
 package org.forsteri.ratatouille.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
+import net.createmod.catnip.lang.LangBuilder;
 import net.createmod.catnip.lang.LangNumberFormat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.forsteri.ratatouille.Ratatouille;
-import net.createmod.catnip.lang.LangBuilder;
+
+import java.util.Locale;
 
 public class Lang {
 
     public static MutableComponent translateDirect(String key, Object... args) {
-        return Component.translatable( Ratatouille.MOD_ID + "." + key, resolveBuilders(args));
+        return Component.translatable(Ratatouille.MOD_ID + "." + key, resolveBuilders(args));
     }
 
-    public static String asId(String name) {
-        return name.toLowerCase(Locale.ROOT);
+    public static Object[] resolveBuilders(Object[] args) {
+        for (int i = 0; i < args.length; i++)
+            if (args[i] instanceof LangBuilder cb)
+                args[i] = cb.component();
+        return args;
     }
 
     public static String nonPluralId(String name) {
@@ -41,8 +42,8 @@ public class Lang {
 //        return result;
 //    }
 
-    public static LangBuilder builder() {
-        return new LangBuilder(Ratatouille.MOD_ID);
+    public static String asId(String name) {
+        return name.toLowerCase(Locale.ROOT);
     }
 
     public static LangBuilder builder(String namespace) {
@@ -53,12 +54,17 @@ public class Lang {
         return builder().add(state.getBlock().getName());
     }
 
+    public static LangBuilder builder() {
+        return new LangBuilder(Ratatouille.MOD_ID);
+    }
+
     public static LangBuilder itemName(ItemStack stack) {
         return builder().add(stack.getHoverName().copy());
     }
 
     public static LangBuilder fluidName(FluidStack stack) {
-        return builder().add(stack.getDisplayName().copy());
+        return builder().add(stack.getHoverName()
+                .copy());
     }
 
     public static LangBuilder number(double d) {
@@ -71,12 +77,5 @@ public class Lang {
 
     public static LangBuilder text(String text) {
         return builder().text(text);
-    }
-
-    public static Object[] resolveBuilders(Object[] args) {
-        for (int i = 0; i < args.length; i++)
-            if (args[i] instanceof LangBuilder cb)
-                args[i] = cb.component();
-        return args;
     }
 }

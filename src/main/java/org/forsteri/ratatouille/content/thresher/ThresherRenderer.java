@@ -1,33 +1,22 @@
 package org.forsteri.ratatouille.content.thresher;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.forsteri.ratatouille.content.oven_fan.OvenFanBlock;
-import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.entry.CRPartialModels;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 
@@ -39,26 +28,27 @@ public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEn
     }
 
     @Override
-    protected SuperByteBuffer getRotatedModel(ThresherBlockEntity be, BlockState state) {
-        return CachedBuffers.partialFacingVertical(CRPartialModels.THRESHER_BLADE, state, state.getValue(ThresherBlock.HORIZONTAL_FACING));
-    }
-
-    @Override
     protected void renderSafe(ThresherBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
         renderItems(be, partialTicks, ms, buffer, light, overlay);
     }
 
+    @Override
+    protected SuperByteBuffer getRotatedModel(ThresherBlockEntity be, BlockState state) {
+        return CachedBuffers.partialFacingVertical(CRPartialModels.THRESHER_BLADE, state, state.getValue(ThresherBlock.HORIZONTAL_FACING));
+    }
+
     protected void renderItems(ThresherBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                                int light, int overlay) {
+        if (be.getLevel() == null) return;
         RecipeWrapper inventoryIn = new RecipeWrapper(be.inputInv);
         if (be.lastRecipe == null || !be.lastRecipe.matches(inventoryIn, be.getLevel())) {
-            Optional<ThreshingRecipe> recipe = CRRecipeTypes.THRESHING.find(inventoryIn, be.getLevel());
+            Optional<RecipeHolder<ThreshingRecipe>> recipe = CRRecipeTypes.THRESHING.find(inventoryIn, be.getLevel());
             if (recipe.isEmpty()) {
                 return;
             }
 
-            be.lastRecipe =  recipe.get();
+            be.lastRecipe = recipe.get().value();
         }
         if (be.lastRecipe != null) {
             for (int slot = 0; slot < be.inputInv.getSlots(); slot++) {
@@ -84,12 +74,12 @@ public class ThresherRenderer extends KineticBlockEntityRenderer<ThresherBlockEn
                             ms.mulPose(Axis.XN.rotationDegrees(66));
                         }
                         case WEST -> {
-                            ms.translate(deltaM, deltaY,1);
+                            ms.translate(deltaM, deltaY, 1);
                             ms.mulPose(Axis.YP.rotationDegrees(90));
                             ms.mulPose(Axis.XP.rotationDegrees(66));
                         }
                         case EAST -> {
-                            ms.translate(2 - deltaM, deltaY,1);
+                            ms.translate(2 - deltaM, deltaY, 1);
                             ms.mulPose(Axis.YP.rotationDegrees(-90));
                             ms.mulPose(Axis.XP.rotationDegrees(66));
                         }

@@ -1,23 +1,18 @@
 package org.forsteri.ratatouille.entry;
 
-import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import it.unimi.dsi.fastutil.objects.*;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.forsteri.ratatouille.Ratatouille;
 
@@ -29,20 +24,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class CRCreativeModeTabs {
-    private static final DeferredRegister<CreativeModeTab> REGISTER;
-    public static final RegistryObject<CreativeModeTab> BASE_CREATIVE_TAB;
 
-    public CRCreativeModeTabs() {}
+    private static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Ratatouille.MOD_ID);
+
+    public CRCreativeModeTabs() {
+    }
 
     public static void register(IEventBus modEventBus) {
         REGISTER.register(modEventBus);
-    }
-
-    static {
-        REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Ratatouille.MOD_ID);
-        BASE_CREATIVE_TAB = REGISTER.register("base", () -> {
-            return CreativeModeTab.builder().title(Component.translatable("itemGroup.ratatouille.base")).withTabsBefore(new ResourceKey[]{CreativeModeTabs.SPAWN_EGGS}).icon(CRBlocks.OVEN::asStack).displayItems(new RegistrateDisplayItemsGenerator(true, CRCreativeModeTabs.BASE_CREATIVE_TAB)).build();
-        });
     }
 
     private static class RegistrateDisplayItemsGenerator implements CreativeModeTab.DisplayItemsGenerator {
@@ -50,23 +39,42 @@ public class CRCreativeModeTabs {
 
         static {
             MutableObject<Predicate<Item>> isItem3d = new MutableObject<>(item -> false);
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            if (CatnipServices.PLATFORM.getEnv().isClient())
                 isItem3d.setValue(item -> {
                     ItemRenderer itemRenderer = Minecraft.getInstance()
                             .getItemRenderer();
                     BakedModel model = itemRenderer.getModel(new ItemStack(item), null, null, 0);
                     return model.isGui3d();
                 });
-            });
             IS_ITEM_3D_PREDICATE = isItem3d.getValue();
         }
 
         private final boolean addItems;
-        private final RegistryObject<CreativeModeTab> tabFilter;
+        private final DeferredHolder<CreativeModeTab, CreativeModeTab> tabFilter;
 
-        public RegistrateDisplayItemsGenerator(boolean addItems, RegistryObject<CreativeModeTab> tabFilter) {
+        public RegistrateDisplayItemsGenerator(boolean addItems, DeferredHolder<CreativeModeTab, CreativeModeTab> tabFilter) {
             this.addItems = addItems;
             this.tabFilter = tabFilter;
+        }
+
+        @Override
+        public void accept(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+            Predicate<Item> exclusionPredicate = makeExclusionPredicate();
+            List<RegistrateDisplayItemsGenerator.ItemOrdering> orderings = makeOrderings();
+            Function<Item, ItemStack> stackFunc = makeStackFunc();
+            Function<Item, CreativeModeTab.TabVisibility> visibilityFunc = makeVisibilityFunc();
+
+            List<Item> items = new LinkedList<>();
+            if (addItems) {
+                items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE.negate())));
+            }
+            items.addAll(collectBlocks(exclusionPredicate));
+            if (addItems) {
+                items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE)));
+            }
+
+            applyOrderings(items, orderings);
+            outputAll(output, items, stackFunc, visibilityFunc);
         }
 
         private static Predicate<Item> makeExclusionPredicate() {
@@ -108,29 +116,21 @@ public class CRCreativeModeTabs {
             };
         }
 
-        @Override
-        public void accept(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
-            Predicate<Item> exclusionPredicate = makeExclusionPredicate();
-            List<RegistrateDisplayItemsGenerator.ItemOrdering> orderings = makeOrderings();
-            Function<Item, ItemStack> stackFunc = makeStackFunc();
-            Function<Item, CreativeModeTab.TabVisibility> visibilityFunc = makeVisibilityFunc();
-
-            List<Item> items = new LinkedList<>();
-            if (addItems) {
-                items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE.negate())));
+        private List<Item> collectItems(Predicate<Item> exclusionPredicate) {
+            List<Item> items = new ReferenceArrayList<>();
+            for (RegistryEntry<Item, Item> entry : Ratatouille.REGISTRATE.getAll(Registries.ITEM)) {
+                Item item = entry.get();
+                if (item instanceof BlockItem)
+                    continue;
+                if (!exclusionPredicate.test(item))
+                    items.add(item);
             }
-            items.addAll(collectBlocks(exclusionPredicate));
-            if (addItems) {
-                items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE)));
-            }
-
-            applyOrderings(items, orderings);
-            outputAll(output, items, stackFunc, visibilityFunc);
+            return items;
         }
 
         private List<Item> collectBlocks(Predicate<Item> exclusionPredicate) {
             List<Item> items = new ReferenceArrayList<>();
-            for (RegistryEntry<Block> entry : Ratatouille.REGISTRATE.getAll(Registries.BLOCK)) {
+            for (RegistryEntry<Block, Block> entry : Ratatouille.REGISTRATE.getAll(Registries.BLOCK)) {
                 Item item = entry.get()
                         .asItem();
                 if (item == Items.AIR)
@@ -139,18 +139,6 @@ public class CRCreativeModeTabs {
                     items.add(item);
             }
             items = new ReferenceArrayList<>(new ReferenceLinkedOpenHashSet<>(items));
-            return items;
-        }
-
-        private List<Item> collectItems(Predicate<Item> exclusionPredicate) {
-            List<Item> items = new ReferenceArrayList<>();
-            for (RegistryEntry<Item> entry : Ratatouille.REGISTRATE.getAll(Registries.ITEM)) {
-                Item item = entry.get();
-                if (item instanceof BlockItem)
-                    continue;
-                if (!exclusionPredicate.test(item))
-                    items.add(item);
-            }
             return items;
         }
 
@@ -196,6 +184,11 @@ public class CRCreativeModeTabs {
             }
         }
     }
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BASE_CREATIVE_TAB = REGISTER.register("base", () -> {
+        return CreativeModeTab.builder().title(Component.translatable("itemGroup.ratatouille.base")).withTabsBefore(CreativeModeTabs.SPAWN_EGGS).icon(CRBlocks.OVEN::asStack).displayItems(new RegistrateDisplayItemsGenerator(true, CRCreativeModeTabs.BASE_CREATIVE_TAB)).build();
+    });
+
 }
 
 

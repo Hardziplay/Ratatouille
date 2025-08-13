@@ -9,14 +9,12 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
-// 1) 自定义桶
 public class NoPlaceBucketItem extends BucketItem {
 
 
-    public NoPlaceBucketItem(Supplier<? extends Fluid> supplier, Properties builder) {
-        super(supplier, builder);
+    public NoPlaceBucketItem(Fluid content, Properties properties) {
+        super(content, properties);
     }
 
     @Override

@@ -8,8 +8,10 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.forsteri.ratatouille.entry.CRFluids;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -19,19 +21,8 @@ import java.util.function.Consumer;
 
 public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
 
-    @Override
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return containedFluidTooltip(tooltip, isPlayerSneaking,
-                getCapability(ForgeCapabilities.FLUID_HANDLER));
-    }
-
     public IrrigationTowerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    @Override
-    protected SmartFluidTank createInventory() {
-        return new IrrigationSmartFluidTank(1000, this::onFluidStackChanged);
     }
 
     public static void isNearWater(LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
@@ -45,6 +36,26 @@ public class IrrigationTowerBlockEntity extends FluidTankBlockEntity {
                 }
             }
         }
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                CRBlockEntityTypes.IRRIGATION_TOWER_BLOCK_ENTITY.get(),
+                (be, context) -> be.fluidCapability
+        );
+    }
+
+    @Override
+    protected SmartFluidTank createInventory() {
+        return new IrrigationSmartFluidTank(1000, this::onFluidStackChanged);
+    }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        if (level == null) return false;
+        return containedFluidTooltip(tooltip, isPlayerSneaking,
+                level.getCapability(Capabilities.FluidHandler.BLOCK, worldPosition, null));
     }
 
     public static class IrrigationSmartFluidTank extends SmartFluidTank {

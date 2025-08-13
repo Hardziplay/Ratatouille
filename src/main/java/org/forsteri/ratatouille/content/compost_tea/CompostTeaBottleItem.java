@@ -1,5 +1,6 @@
 package org.forsteri.ratatouille.content.compost_tea;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -13,6 +14,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CompostTeaBottleItem extends Item {
 
     public CompostTeaBottleItem(Properties pProperties) {
@@ -49,7 +54,7 @@ public class CompostTeaBottleItem extends Item {
     private boolean applyBonemealLike(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof BonemealableBlock growable) {
-            if (growable.isValidBonemealTarget(level, pos, state, level.isClientSide)) {
+            if (growable.isValidBonemealTarget(level, pos, state)) {
                 if (!level.isClientSide) {
                     RandomSource rand = level.getRandom();
                     if (growable.isBonemealSuccess(level, rand, pos, state)) {

@@ -1,7 +1,6 @@
 package org.forsteri.ratatouille.entry;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import net.minecraft.resources.ResourceLocation;
 import org.forsteri.ratatouille.Ratatouille;
 
 public class CRPartialModels {
@@ -14,10 +13,13 @@ public class CRPartialModels {
     public static final PartialModel CHEF_HAT_WITH_GOGGLES = block("block/chef_hat_with_goggles");
 
 
-    private static PartialModel block(@SuppressWarnings("SameParameterValue") String path) {
-        return PartialModel.of(new ResourceLocation(Ratatouille.MOD_ID, path));
+    public CRPartialModels() {
     }
 
-    public CRPartialModels() {}
-    public static void register() {}
+    private static PartialModel block(@SuppressWarnings("SameParameterValue") String path) {
+        return PartialModel.of(Ratatouille.asResource(path));
+    }
+
+    public static void register() {
+    }
 }

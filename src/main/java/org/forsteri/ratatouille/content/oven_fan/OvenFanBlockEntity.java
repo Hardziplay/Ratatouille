@@ -6,6 +6,7 @@ import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,18 +22,6 @@ public class OvenFanBlockEntity extends KineticBlockEntity implements IAirCurren
 
     public OvenFanBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-    }
-
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
-        if (clientPacket) {
-            this.airCurrent.rebuild();
-        }
-
-    }
-
-    public void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
     }
 
     @Nullable
@@ -54,7 +43,7 @@ public class OvenFanBlockEntity extends KineticBlockEntity implements IAirCurren
 
     @Override
     public Direction getAirflowOriginSide() {
-        return (Direction)this.getBlockState().getValue(OvenFanBlock.HORIZONTAL_FACING);
+        return (Direction) this.getBlockState().getValue(OvenFanBlock.HORIZONTAL_FACING);
     }
 
     @Nullable
@@ -64,7 +53,7 @@ public class OvenFanBlockEntity extends KineticBlockEntity implements IAirCurren
         if (speed == 0.0F) {
             return null;
         } else {
-            Direction facing = (Direction)this.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+            Direction facing = (Direction) this.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
             speed = convertToDirection(speed, facing);
             return speed > 0.0F ? facing : facing.getOpposite();
         }
@@ -75,17 +64,14 @@ public class OvenFanBlockEntity extends KineticBlockEntity implements IAirCurren
         return this.remove;
     }
 
-    public void onSpeedChanged(float prevSpeed) {
-        super.onSpeedChanged(prevSpeed);
-        this.updateAirFlow = true;
-    }
-
     public void blockInFrontChanged() {
         this.updateAirFlow = true;
     }
 
     public void tick() {
         super.tick();
+        if (this.level == null) return;
+
         boolean server = !this.level.isClientSide || this.isVirtual();
         if (server && this.airCurrentUpdateCooldown-- <= 0) {
             this.airCurrentUpdateCooldown = (Integer) AllConfigs.server().kinetics.fanBlockCheckRate.get();
@@ -111,5 +97,23 @@ public class OvenFanBlockEntity extends KineticBlockEntity implements IAirCurren
     @Override
     public float calculateStressApplied() {
         return 2.0f;
+    }
+
+    public void onSpeedChanged(float prevSpeed) {
+        super.onSpeedChanged(prevSpeed);
+        this.updateAirFlow = true;
+    }
+
+    @Override
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound, registries, clientPacket);
+    }
+
+    @Override
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
+        if (clientPacket) {
+            this.airCurrent.rebuild();
+        }
     }
 }

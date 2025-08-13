@@ -1,16 +1,15 @@
 package org.forsteri.ratatouille.content.frozen_block;
 
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
+import org.jetbrains.annotations.NotNull;
 
-public class FreezingRecipe extends ProcessingRecipe<RecipeWrapper>  {
-    public FreezingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+public class FreezingRecipe extends StandardProcessingRecipe<SingleRecipeInput> {
+    public FreezingRecipe(ProcessingRecipeParams params) {
         super(CRRecipeTypes.FREEZING, params);
     }
 
@@ -25,9 +24,9 @@ public class FreezingRecipe extends ProcessingRecipe<RecipeWrapper>  {
     }
 
     @Override
-    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
+    public boolean matches(@NotNull SingleRecipeInput singleRecipeInput, @NotNull Level level) {
         for (Ingredient ingredient : ingredients) {
-            if (ingredient.test(pContainer.getItem(0))) return true;
+            if (ingredient.test(singleRecipeInput.getItem(0))) return true;
         }
         return false;
     }

@@ -3,7 +3,6 @@ package org.forsteri.ratatouille.mixin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.FarmBlock;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

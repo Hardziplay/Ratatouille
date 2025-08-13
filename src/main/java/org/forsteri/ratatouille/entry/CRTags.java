@@ -1,18 +1,29 @@
 package org.forsteri.ratatouille.entry;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import org.forsteri.ratatouille.Ratatouille;
 
-public final class CRTags {
-
-    public static TagKey<Item> create(String id) {
-        return ItemTags.create(new ResourceLocation(Ratatouille.MOD_ID, id));
+public class CRTags {
+    
+    public static void init() {
+        CRItemTags.init();
     }
 
-    public static final TagKey<Item> MOLD = CRTags.create("mold");
+    public enum CRItemTags {
+        MOLD;
 
-    public static void register() {}
+        public final TagKey<Item> tag;
+
+        CRItemTags() {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(Ratatouille.MOD_ID, Lang.asId(name()));
+            tag = ItemTags.create(id);
+        }
+
+        private static void init() {
+        }
+    }
 }

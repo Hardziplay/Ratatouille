@@ -22,11 +22,6 @@ public class MechanicalDemolderBlock extends HorizontalKineticBlock implements I
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return AllShapes.CASING_12PX.get(Direction.DOWN);
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction prefferedSide = getPreferredHorizontalFacing(context);
         if (prefferedSide != null)
@@ -38,6 +33,11 @@ public class MechanicalDemolderBlock extends HorizontalKineticBlock implements I
     public Direction.Axis getRotationAxis(BlockState state) {
         return state.getValue(HORIZONTAL_FACING)
                 .getAxis();
+    }
+
+    @Override
+    public SpeedLevel getMinimumRequiredSpeedLevel() {
+        return SpeedLevel.MEDIUM;
     }
 
     @Override
@@ -58,12 +58,12 @@ public class MechanicalDemolderBlock extends HorizontalKineticBlock implements I
     }
 
     @Override
-    public SpeedLevel getMinimumRequiredSpeedLevel() {
-        return SpeedLevel.MEDIUM;
+    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+        return false;
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
-        return false;
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        return AllShapes.CASING_12PX.get(Direction.DOWN);
     }
 }

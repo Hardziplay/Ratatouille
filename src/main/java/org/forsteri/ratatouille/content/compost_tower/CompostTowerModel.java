@@ -3,7 +3,6 @@ package org.forsteri.ratatouille.content.compost_tower;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.fluids.tank.FluidTankCTBehaviour;
 import com.simibubi.create.content.fluids.tank.FluidTankGenerator;
-import com.simibubi.create.content.kinetics.fan.EncasedFanBlock;
 import com.simibubi.create.foundation.block.connected.CTModel;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.tterrag.registrate.providers.DataGenContext;
@@ -19,9 +18,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import org.forsteri.ratatouille.entry.CRSpriteShifts;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,12 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class CompostTowerModel extends CTModel {
-    public static CompostTowerModel standard(BakedModel originalModel) {
-        return new CompostTowerModel(originalModel,
-                CRSpriteShifts.COMPOST_TOWER_SPRITE, CRSpriteShifts.COMPOST_TOWER_TOP, CRSpriteShifts.COMPOST_TOWER_TOP_INNER,
-                CRSpriteShifts.COMPOST_TOWER_BOTTOM, CRSpriteShifts.COMPOST_TOWER_BOTTOM_INNER,
-                CRSpriteShifts.COMPOST_TOWER_SHIFT_2x2);
-    }
+    protected static final ModelProperty<CullData> CULL_PROPERTY = new ModelProperty<>();
 
     public CompostTowerModel(BakedModel originalModel, CTSpriteShiftEntry side, CTSpriteShiftEntry top,
                              CTSpriteShiftEntry topInner, CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner,
@@ -42,33 +36,12 @@ public class CompostTowerModel extends CTModel {
         super(originalModel, new CompostTowerCTBehavior(side, top, topInner, bottom, bottomInner, shift2x2));
     }
 
-    public static class CompostTowerCTBehavior extends FluidTankCTBehaviour {
-        private final CTSpriteShiftEntry bottomShift;
-        private final CTSpriteShiftEntry bottomInnerShift;
-        private final CTSpriteShiftEntry shift2x2;
-
-        public CompostTowerCTBehavior(CTSpriteShiftEntry layerShift, CTSpriteShiftEntry topShift, CTSpriteShiftEntry innerShift,
-                                      CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
-            super(layerShift, topShift, innerShift);
-            this.bottomShift = bottom;
-            this.bottomInnerShift = bottomInner;
-            this.shift2x2 = shift2x2;
-        }
-
-        @Override
-        public CTSpriteShiftEntry getShift(BlockState state, Direction direction, @Nullable TextureAtlasSprite sprite) {
-            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomShift.getOriginal() == sprite)
-                return bottomShift;
-            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomInnerShift.getOriginal() == sprite)
-                return bottomInnerShift;
-            CTSpriteShiftEntry shift = super.getShift(state, direction, sprite);
-            if (shift == CRSpriteShifts.COMPOST_TOWER_SPRITE && state.getValue(CompostTowerBlock.IS_2x2))
-                return shift2x2;
-            return shift;
-        }
+    public static CompostTowerModel standard(BakedModel originalModel) {
+        return new CompostTowerModel(originalModel,
+                CRSpriteShifts.COMPOST_TOWER_SPRITE, CRSpriteShifts.COMPOST_TOWER_TOP, CRSpriteShifts.COMPOST_TOWER_TOP_INNER,
+                CRSpriteShifts.COMPOST_TOWER_BOTTOM, CRSpriteShifts.COMPOST_TOWER_BOTTOM_INNER,
+                CRSpriteShifts.COMPOST_TOWER_SHIFT_2x2);
     }
-
-    protected static final ModelProperty<CullData> CULL_PROPERTY = new ModelProperty<>();
 
     @Override
     protected ModelData.Builder gatherModelData(ModelData.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
@@ -102,6 +75,32 @@ public class CompostTowerModel extends CTModel {
                 .isCulled(null))
             quads.addAll(super.getQuads(state, null, rand, extraData, renderType));
         return quads;
+    }
+
+    public static class CompostTowerCTBehavior extends FluidTankCTBehaviour {
+        private final CTSpriteShiftEntry bottomShift;
+        private final CTSpriteShiftEntry bottomInnerShift;
+        private final CTSpriteShiftEntry shift2x2;
+
+        public CompostTowerCTBehavior(CTSpriteShiftEntry layerShift, CTSpriteShiftEntry topShift, CTSpriteShiftEntry innerShift,
+                                      CTSpriteShiftEntry bottom, CTSpriteShiftEntry bottomInner, CTSpriteShiftEntry shift2x2) {
+            super(layerShift, topShift, innerShift);
+            this.bottomShift = bottom;
+            this.bottomInnerShift = bottomInner;
+            this.shift2x2 = shift2x2;
+        }
+
+        @Override
+        public CTSpriteShiftEntry getShift(BlockState state, Direction direction, @Nullable TextureAtlasSprite sprite) {
+            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomShift.getOriginal() == sprite)
+                return bottomShift;
+            if (sprite != null && direction.getAxis() == Direction.Axis.Y && bottomInnerShift.getOriginal() == sprite)
+                return bottomInnerShift;
+            CTSpriteShiftEntry shift = super.getShift(state, direction, sprite);
+            if (shift == CRSpriteShifts.COMPOST_TOWER_SPRITE && state.getValue(CompostTowerBlock.IS_2x2))
+                return shift2x2;
+            return shift;
+        }
     }
 
     private static class CullData {

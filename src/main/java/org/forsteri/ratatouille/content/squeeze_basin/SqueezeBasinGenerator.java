@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.content.squeeze_basin;
 
-import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.SpecialBlockStateGen;
 import com.tterrag.registrate.providers.DataGenContext;
@@ -8,12 +7,14 @@ import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 
 import static org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock.CASING;
 
 public class SqueezeBasinGenerator extends SpecialBlockStateGen {
-    public SqueezeBasinGenerator() {}
+    public SqueezeBasinGenerator() {
+    }
+
     @Override
     protected int getXRotation(BlockState blockState) {
         return 0;
@@ -21,7 +22,7 @@ public class SqueezeBasinGenerator extends SpecialBlockStateGen {
 
     @Override
     protected int getYRotation(BlockState blockState) {
-        return this.horizontalAngle((Direction)blockState.getValue(SqueezeBasinBlock.FACING));
+        return this.horizontalAngle((Direction) blockState.getValue(SqueezeBasinBlock.FACING));
     }
 
     @Override

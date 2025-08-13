@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.ponder;
 
-import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.logistics.crate.CreativeCrateBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
@@ -16,7 +15,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 
 public class OvenScene {
     public OvenScene() {
@@ -93,14 +94,13 @@ public class OvenScene {
 
         for (int i = 0; i < 1; i++) {
             scene.idle(12);
-            scene.world().modifyBlockEntity(util.grid().at(4, 2, 3), OvenBlockEntity.class, (be)-> {
-                be.itemCapability.ifPresent(
-                        (inv) -> {
-                            for (int slot = 0; slot < inv.getSlots(); slot++) {
-                                inv.insertItem(slot, itemStack.copy(), false);
-                            }
-                        }
-                );
+            scene.world().modifyBlockEntity(util.grid().at(4, 2, 3), OvenBlockEntity.class, (be) -> {
+                if (be.getLevel() == null) return;
+                IItemHandler inv = be.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, be.getBlockPos(), null);
+                if (inv == null) return;
+                for (int slot = 0; slot < inv.getSlots(); slot++) {
+                    inv.insertItem(slot, itemStack.copy(), false);
+                }
             });
             scene.world().removeItemsFromBelt(inputPos);
             scene.world().flapFunnel(inputPos.above(), false);
@@ -126,18 +126,17 @@ public class OvenScene {
                 .placeNearTarget();
         for (int i = 0; i < 4; i++) {
             scene.idle(12);
-            scene.world().modifyBlockEntity(util.grid().at(4, 2, 5), OvenBlockEntity.class, (be)-> {
-                be.itemCapability.ifPresent(
-                        (inv) -> {
-                            ItemStack insertStack = itemStack.copy();
-                            for (int slot = 0; slot < inv.getSlots(); slot++) {
-                                ItemStack returnedStack = inv.insertItem(slot, insertStack, false);
-                                if (insertStack.isEmpty())
-                                    break;
-                                insertStack = returnedStack;
-                            }
-                        }
-                );
+            scene.world().modifyBlockEntity(util.grid().at(4, 2, 5), OvenBlockEntity.class, (be) -> {
+                if (be.getLevel() == null) return;
+                IItemHandler inv = be.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, be.getBlockPos(), null);
+                if (inv == null) return;
+                ItemStack insertStack = itemStack.copy();
+                for (int slot = 0; slot < inv.getSlots(); slot++) {
+                    ItemStack returnedStack = inv.insertItem(slot, insertStack, false);
+                    if (insertStack.isEmpty())
+                        break;
+                    insertStack = returnedStack;
+                }
             });
 
             scene.world().removeItemsFromBelt(inputPos);

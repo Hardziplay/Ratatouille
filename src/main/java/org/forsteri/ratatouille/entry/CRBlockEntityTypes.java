@@ -3,6 +3,7 @@ package org.forsteri.ratatouille.entry;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlockEntity;
+import org.forsteri.ratatouille.content.compost_tower.CompostTowerRenderer;
 import org.forsteri.ratatouille.content.demolder.DemolderVisual;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderBlockEntity;
 import org.forsteri.ratatouille.content.demolder.MechanicalDemolderRenderer;
@@ -12,22 +13,19 @@ import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerRenderer
 import org.forsteri.ratatouille.content.oven.OvenBlockEntity;
 import org.forsteri.ratatouille.content.oven.OvenRenderer;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanBlockEntity;
-import org.forsteri.ratatouille.content.oven_fan.OvenFanVisual;
 import org.forsteri.ratatouille.content.oven_fan.OvenFanRenderer;
+import org.forsteri.ratatouille.content.oven_fan.OvenFanVisual;
 import org.forsteri.ratatouille.content.spreader.SpreaderBlockEntity;
-import org.forsteri.ratatouille.content.spreader.SpreaderVisual;
 import org.forsteri.ratatouille.content.spreader.SpreaderRenderer;
+import org.forsteri.ratatouille.content.spreader.SpreaderVisual;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlockEntity;
-import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinVisual;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinRenderer;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinVisual;
 import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
-import org.forsteri.ratatouille.content.thresher.ThresherVisual;
 import org.forsteri.ratatouille.content.thresher.ThresherRenderer;
-import org.forsteri.ratatouille.content.compost_tower.CompostTowerBlockEntity;
-import org.forsteri.ratatouille.content.compost_tower.CompostTowerRenderer;
+import org.forsteri.ratatouille.content.thresher.ThresherVisual;
 
 public class CRBlockEntityTypes {
-    public CRBlockEntityTypes() {}
     public static final BlockEntityEntry<OvenBlockEntity> OVEN_ENTITY = Ratatouille.REGISTRATE
             .blockEntity("oven", OvenBlockEntity::new)
             .renderer(() -> OvenRenderer::new)
@@ -85,5 +83,6 @@ public class CRBlockEntityTypes {
             .register();
 
 
-    public static void register() {}
+    public static void register() {
+    }
 }

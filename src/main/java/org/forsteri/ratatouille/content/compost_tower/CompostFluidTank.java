@@ -2,15 +2,17 @@ package org.forsteri.ratatouille.content.compost_tower;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.forsteri.ratatouille.entry.CRFluids;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +20,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class CompostFluidTank implements IFluidHandler, INBTSerializable<CompoundTag> {
-    protected int capacity;
-    protected int index;
     protected final BiMap<Fluid, Integer> fluidIds;
     protected final HashMap<Fluid, Integer> tanks;
     protected final Consumer<HashMap<Fluid, Integer>> updateCallback;
+    protected int capacity;
+    protected int index;
 
     public CompostFluidTank(BiMap<Fluid, Integer> fluidIds, HashMap<Fluid, Integer> tanks, Consumer<HashMap<Fluid, Integer>> updateCallback, int index, int capacity) {
         this.fluidIds = fluidIds;
@@ -38,26 +40,6 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         this.tanks = new HashMap<>();
         this.fluidIds = HashBiMap.create();
         this.index = 0;
-    }
-
-    public void onContentsChanged() {
-        updateCallback.accept(tanks);
-    }
-    public float getFilledPercentage(Fluid fluid) {
-        float existingAmount = tanks.getOrDefault(fluid, 0);
-        return existingAmount / capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getFilledAmount() {
-        return tanks.values().stream().mapToInt(Integer::intValue).sum();
-    }
-
-    public int getRemainingAmount() {
-        return capacity - getFilledAmount();
     }
 
     @Override
@@ -77,6 +59,14 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         var fluid = this.fluidIds.inverse().get(tank);
         if (fluid == null) return getRemainingAmount();
         return getRemainingAmount() + this.tanks.get(fluid);
+    }
+
+    public int getRemainingAmount() {
+        return capacity - getFilledAmount();
+    }
+
+    public int getFilledAmount() {
+        return tanks.values().stream().mapToInt(Integer::intValue).sum();
     }
 
     @Override
@@ -111,12 +101,16 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
 
         var existingAmount = this.tanks.getOrDefault(resourceFluid, 0);
         int drained = Math.min(existingAmount, resourceAmount);
-        if (action.execute()){
+        if (action.execute()) {
             this.tanks.put(resourceFluid, existingAmount - drained);
             this.onContentsChanged();
         }
 
         return new FluidStack(resourceFluid, drained);
+    }
+
+    public void onContentsChanged() {
+        updateCallback.accept(tanks);
     }
 
     @Override
@@ -143,7 +137,8 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    @ParametersAreNonnullByDefault
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
 
         tag.putInt("Capacity", capacity);
@@ -153,7 +148,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : tanks.keySet()) {
             CompoundTag fluidTag = new CompoundTag();
             var fluidStack = new FluidStack(fluid, tanks.get(fluid));
-            fluidTag.put("FluidStack", fluidStack.writeToNBT(new CompoundTag()));
+            fluidTag.put("FluidStack", fluidStack.save(provider));
             fluidTag.putInt("Id", fluidIds.get(fluid));
             tankList.add(fluidTag);
         }
@@ -163,19 +158,20 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        this.capacity = nbt.getInt("Capacity");
-        this.index = nbt.getInt("Index");
+    @ParametersAreNonnullByDefault
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag) {
+        this.capacity = compoundTag.getInt("Capacity");
+        this.index = compoundTag.getInt("Index");
 
         this.tanks.clear();
         this.fluidIds.clear();
 
-        var tankList = nbt.getList("Tanks", Tag.TAG_COMPOUND);
+        var tankList = compoundTag.getList("Tanks", Tag.TAG_COMPOUND);
         for (int i = 0; i < tankList.size(); i++) {
             CompoundTag fluidTag = tankList.getCompound(i);
 
-            FluidStack stack = FluidStack.loadFluidStackFromNBT(fluidTag.getCompound("FluidStack"));
-            if (stack == null || stack.isEmpty()) continue;
+            FluidStack stack = FluidStack.parseOptional(provider, fluidTag.getCompound("FluidStack"));
+            if (stack.isEmpty()) continue;
 
             int id = fluidTag.getInt("Id");
             Fluid fluid = stack.getFluid();
@@ -187,6 +183,10 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     // Returns an array of Fluids currently present in the tank,
@@ -215,28 +215,21 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
 //        onContentsChanged();
     }
 
-    public FluidStack[] getFluidStacks() {
-        return tanks.entrySet().stream()
-                .map(entry -> new FluidStack(entry.getKey(), entry.getValue()))
-                .toArray(FluidStack[]::new);
-    }
-
-
     public void fillFrom(CompostFluidTank otherTank) {
         for (FluidStack stack : otherTank.getFluidStacks()) {
             this.fill(stack, FluidAction.EXECUTE);
         }
     }
 
+    public FluidStack[] getFluidStacks() {
+        return tanks.entrySet().stream()
+                .map(entry -> new FluidStack(entry.getKey(), entry.getValue()))
+                .toArray(FluidStack[]::new);
+    }
+
     public void clear() {
         tanks.replaceAll((f, v) -> 0);
         onContentsChanged();
-    }
-
-    private boolean isValidInputFluid(Fluid resource) {
-//        return resource.isSame(CRFluids.COMPOST_RESIDUE_FLUID.get())
-//                || resource.isSame(CRFluids.COMPOST_FLUID.get());
-        return resource.isSame(CRFluids.COMPOST_FLUID.get());
     }
 
     public Fluid getFluidAtBlockHeight(int blockHeight, int towerHeight) {
@@ -271,5 +264,16 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         }
 
         return FluidStack.EMPTY.getFluid();
+    }
+
+    public float getFilledPercentage(Fluid fluid) {
+        float existingAmount = tanks.getOrDefault(fluid, 0);
+        return existingAmount / capacity;
+    }
+
+    private boolean isValidInputFluid(Fluid resource) {
+//        return resource.isSame(CRFluids.COMPOST_RESIDUE_FLUID.get())
+//                || resource.isSame(CRFluids.COMPOST_FLUID.get());
+        return resource.isSame(CRFluids.COMPOST_FLUID.get());
     }
 }

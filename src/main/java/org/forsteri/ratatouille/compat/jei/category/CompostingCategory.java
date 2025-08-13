@@ -3,22 +3,19 @@ package org.forsteri.ratatouille.compat.jei.category;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.forge.ForgeTypes;
 import net.createmod.catnip.data.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.SmokingRecipe;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedCompostTower;
 import org.forsteri.ratatouille.content.compost_tower.CompostingRecipe;
@@ -70,15 +67,9 @@ public class CompostingCategory extends CreateRecipeCategory<CompostingRecipe> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, x, y)
                 .setBackground(getRenderedSlot(), -1, -1)
                 .setFluidRenderer(stack.getAmount(), false, 16, 16)
-                .addIngredient(ForgeTypes.FLUID_STACK, stack);
+                .addIngredient(NeoForgeTypes.FLUID_STACK, stack);
     }
-    protected void renderWidgets(GuiGraphics graphics, CompostingRecipe recipe, double mouseX, double mouseY) {
-        getBlockShadow().render(graphics, 65, 39);
-        AllGuiTextures.JEI_LONG_ARROW.render(graphics, 54, 51);
-    }
-    protected AllGuiTextures getBlockShadow() {
-        return AllGuiTextures.JEI_LIGHT;
-    }
+
     @Override
     public void draw(CompostingRecipe recipe, IRecipeSlotsView view, GuiGraphics g, double mouseX, double mouseY) {
         PoseStack stack = g.pose();
@@ -93,5 +84,14 @@ public class CompostingCategory extends CreateRecipeCategory<CompostingRecipe> {
         stack.popPose();
         tower.draw(g);
         stack.popPose();
+    }
+
+    protected void renderWidgets(GuiGraphics graphics, CompostingRecipe recipe, double mouseX, double mouseY) {
+        getBlockShadow().render(graphics, 65, 39);
+        AllGuiTextures.JEI_LONG_ARROW.render(graphics, 54, 51);
+    }
+
+    protected AllGuiTextures getBlockShadow() {
+        return AllGuiTextures.JEI_LIGHT;
     }
 }

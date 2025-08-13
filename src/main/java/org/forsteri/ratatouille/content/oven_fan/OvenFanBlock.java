@@ -12,7 +12,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -32,39 +32,21 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.forsteri.ratatouille.entry.CRBlocks;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, IWrenchable, IBE<OvenFanBlockEntity> {
+    private static final int placementHelperId = PlacementHelpers.register(new OvenFanBlock.PlacementHelper());
+
     public OvenFanBlock(Properties properties) {
         super(properties);
     }
 
-    @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pPlayer.isShiftKeyDown())
-            return InteractionResult.PASS;
-
-        ItemStack heldItem = pPlayer.getItemInHand(pHand);
-        IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
-        if (placementHelper.matchesItem(heldItem))
-            return placementHelper.getOffset(pPlayer, pLevel, pState, pPos, pHit)
-                    .placeInWorld(pLevel, (BlockItem) heldItem.getItem(), pPlayer, pHand, pHit);
-
-        return InteractionResult.SUCCESS;
-    }
-
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, worldIn, pos, oldState, isMoving);
-        this.blockUpdate(state, worldIn, pos);
-    }
-
-    public void updateIndirectNeighbourShapes(BlockState stateIn, LevelAccessor worldIn, BlockPos pos, int flags, int count) {
-        super.updateIndirectNeighbourShapes(stateIn, worldIn, pos, flags, count);
-        this.blockUpdate(stateIn, worldIn, pos);
-    }
-
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         this.blockUpdate(state, worldIn, pos);
     }
 
@@ -78,13 +60,53 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
         this.withBlockEntityDo(world, pos, OvenFanBlockEntity::blockInFrontChanged);
     }
 
+    @Override
+    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+        return face == state.getValue(HORIZONTAL_FACING)
+                .getOpposite();
+    }
+
+    public void updateIndirectNeighbourShapes(BlockState stateIn, LevelAccessor worldIn, BlockPos pos, int flags, int count) {
+        super.updateIndirectNeighbourShapes(stateIn, worldIn, pos, flags, count);
+        this.blockUpdate(stateIn, worldIn, pos);
+    }
+
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        this.blockUpdate(state, worldIn, pos);
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (player.isShiftKeyDown())
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
+        if (placementHelper.matchesItem(heldItem))
+            return placementHelper.getOffset(player, level, state, pos, hitResult)
+                    .placeInWorld(level, (BlockItem) heldItem.getItem(), player, hand, hitResult);
+
+        return ItemInteractionResult.SUCCESS;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
+        Direction direction = pState.getValue(HORIZONTAL_FACING);
+        return switch (direction) {
+            case WEST -> Shapes.create(0, 0, 0, 13 / 16F, 1, 1);
+            case EAST -> Shapes.create(3 / 16F, 0, 0, 1, 1, 1);
+            case NORTH -> Shapes.create(0, 0, 0, 1, 1, 13 / 16F);
+            case SOUTH -> Shapes.create(0, 0, 3 / 16F, 1, 1, 1);
+            case UP, DOWN -> Shapes.block();
+        };
+    }
+
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction preferredFacing = this.getPreferredHorizontalFacing(context);
         if (preferredFacing == null) {
             preferredFacing = context.getHorizontalDirection();
         }
 
-        return (BlockState)this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? preferredFacing : preferredFacing.getOpposite());
+        return (BlockState) this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? preferredFacing : preferredFacing.getOpposite());
     }
 
     public BlockState updateAfterWrenched(BlockState newState, UseOnContext context) {
@@ -94,13 +116,7 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
 
     @Override
     public Direction.Axis getRotationAxis(BlockState blockState) {
-        return ((Direction)blockState.getValue(HORIZONTAL_FACING)).getAxis();
-    }
-
-    @Override
-    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-        return face == state.getValue(HORIZONTAL_FACING)
-                .getOpposite();
+        return ((Direction) blockState.getValue(HORIZONTAL_FACING)).getAxis();
     }
 
     @Override
@@ -112,20 +128,6 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
     public BlockEntityType<? extends OvenFanBlockEntity> getBlockEntityType() {
         return CRBlockEntityTypes.OVEN_FAN_ENTITY.get();
     }
-
-    @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
-        Direction direction = pState.getValue(HORIZONTAL_FACING);
-        return switch (direction) {
-            case WEST -> Shapes.create(0, 0, 0, 13/16F, 1, 1);
-            case EAST -> Shapes.create(3/16F, 0, 0, 1, 1, 1);
-            case NORTH -> Shapes.create(0, 0, 0, 1, 1, 13/16F);
-            case SOUTH -> Shapes.create(0, 0, 3/16F, 1, 1, 1);
-            case UP, DOWN -> Shapes.block();
-        };
-    }
-
-    private static final int placementHelperId = PlacementHelpers.register(new OvenFanBlock.PlacementHelper());
 
     @MethodsReturnNonnullByDefault
     private static class PlacementHelper implements IPlacementHelper {
@@ -149,7 +151,7 @@ public class OvenFanBlock extends HorizontalKineticBlock implements ICogWheel, I
 
             return directions.isEmpty() ? PlacementOffset.fail()
                     : PlacementOffset.success(pos.relative(directions.get(0)), s ->
-                            s.setValue(HORIZONTAL_FACING, state.getValue(OvenFanBlock.HORIZONTAL_FACING)));
+                    s.setValue(HORIZONTAL_FACING, state.getValue(OvenFanBlock.HORIZONTAL_FACING)));
         }
     }
 

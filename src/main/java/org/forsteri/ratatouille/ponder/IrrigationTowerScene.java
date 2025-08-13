@@ -10,8 +10,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.forsteri.ratatouille.content.irrigation_tower.IrrigationTowerBlockEntity;
 import org.forsteri.ratatouille.entry.CRFluids;
 import vectorwing.farmersdelight.common.block.RichSoilFarmlandBlock;
@@ -49,7 +49,9 @@ public class IrrigationTowerScene {
         scene.world().setBlock(towerPos.below().north(), Blocks.FARMLAND.defaultBlockState(), true);
         scene.idle(10);
         scene.overlay().showControls(util.vector().blockSurface(towerPos, Direction.UP), Pointing.DOWN, 60).rightClick().withItem(new ItemStack(Items.WATER_BUCKET)).rightClick();
-        scene.world().modifyBlockEntity(towerPos, IrrigationTowerBlockEntity.class, (be) -> {be.getTankInventory().fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);});
+        scene.world().modifyBlockEntity(towerPos, IrrigationTowerBlockEntity.class, (be) -> {
+            be.getTankInventory().fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
+        });
         scene.idle(60);
         scene.world().setBlock(towerPos.below().north(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), false);
         scene.idle(10);

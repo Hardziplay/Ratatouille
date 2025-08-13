@@ -3,7 +3,6 @@ package org.forsteri.ratatouille.entry;
 import com.simibubi.create.foundation.block.connected.AllCTTypes;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
-import net.minecraft.resources.ResourceLocation;
 import org.forsteri.ratatouille.Ratatouille;
 
 public class CRSpriteShifts {
@@ -20,15 +19,18 @@ public class CRSpriteShifts {
             COMPOST_TOWER_BOTTOM_INNER = getCT("compost_tower/compost_tower_bottom_inner"),
             COMPOST_TOWER_SHIFT_2x2 = getCT("compost_tower/compost_tower", "compost_tower/compost_tower_2x2");
 
-    private static CTSpriteShiftEntry getCT(String blockTextureName, String connectedTextureName) {
-        return CTSpriteShifter.getCT(AllCTTypes.RECTANGLE, new ResourceLocation(Ratatouille.MOD_ID, "block/" + blockTextureName),
-                new ResourceLocation(Ratatouille.MOD_ID, "block/" + connectedTextureName + "_connected"));
+    public CRSpriteShifts() {
     }
 
     private static CTSpriteShiftEntry getCT(String blockTextureName) {
         return getCT(blockTextureName, blockTextureName);
     }
 
-    public CRSpriteShifts() {}
-    public static void register() {}
+    private static CTSpriteShiftEntry getCT(String blockTextureName, String connectedTextureName) {
+        return CTSpriteShifter.getCT(AllCTTypes.RECTANGLE, Ratatouille.asResource("block/" + blockTextureName),
+                Ratatouille.asResource("block/" + connectedTextureName + "_connected"));
+    }
+
+    public static void register() {
+    }
 }

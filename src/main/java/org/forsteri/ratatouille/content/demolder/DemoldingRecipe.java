@@ -1,15 +1,16 @@
 package org.forsteri.ratatouille.content.demolder;
+
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.forsteri.ratatouille.compat.jei.category.AssemblyCategory;
 import org.forsteri.ratatouille.entry.CRBlocks;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
@@ -19,13 +20,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class DemoldingRecipe extends ProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
-    public DemoldingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+public class DemoldingRecipe extends StandardProcessingRecipe<SingleRecipeInput> implements IAssemblyRecipe {
+    public DemoldingRecipe(ProcessingRecipeParams params) {
         super(CRRecipeTypes.DEMOLDING, params);
     }
 
     @Override
-    public boolean matches(RecipeWrapper inv, Level worldIn) {
+    public boolean matches(SingleRecipeInput inv, Level worldIn) {
         if (inv.isEmpty())
             return false;
         return ingredients.get(0)
@@ -43,9 +44,6 @@ public class DemoldingRecipe extends ProcessingRecipe<RecipeWrapper> implements 
     }
 
     @Override
-    public void addAssemblyIngredients(List<Ingredient> list) {}
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public Component getDescriptionForAssembly() {
         return Lang.translateDirect("recipe.assembly.demolding");
@@ -53,6 +51,10 @@ public class DemoldingRecipe extends ProcessingRecipe<RecipeWrapper> implements 
 
     public void addRequiredMachines(Set<ItemLike> list) {
         list.add(CRBlocks.MECHANICAL_DEMOLDER.get());
+    }
+
+    @Override
+    public void addAssemblyIngredients(List<Ingredient> list) {
     }
 
     @Override

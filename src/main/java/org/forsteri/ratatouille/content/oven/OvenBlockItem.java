@@ -3,12 +3,14 @@ package org.forsteri.ratatouille.content.oven;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -31,13 +33,14 @@ public class OvenBlockItem extends BlockItem {
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(@NotNull BlockPos p_195943_1_, Level p_195943_2_, Player p_195943_3_,
-                                                 @NotNull ItemStack p_195943_4_, @NotNull BlockState p_195943_5_) {
-        MinecraftServer minecraftserver = p_195943_2_.getServer();
+    protected boolean updateCustomBlockEntityTag(@NotNull BlockPos pos, Level level, Player player,
+                                                 @NotNull ItemStack stack, @NotNull BlockState state) {
+        MinecraftServer minecraftserver = level.getServer();
         if (minecraftserver == null)
             return false;
-        CompoundTag nbt = p_195943_4_.getTagElement("BlockEntityTag");
-        if (nbt != null) {
+        CustomData blockEntityData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+        if (blockEntityData != null) {
+            CompoundTag nbt = blockEntityData.copyTag();
             nbt.remove("Size");
             nbt.remove("Height");
             nbt.remove("Controller");
@@ -50,7 +53,7 @@ public class OvenBlockItem extends BlockItem {
 //                }
 //            }
         }
-        return super.updateCustomBlockEntityTag(p_195943_1_, p_195943_2_, p_195943_3_, p_195943_4_, p_195943_5_);
+        return super.updateCustomBlockEntityTag(pos, level, player, stack, state);
     }
 
     private void tryMultiPlace(BlockPlaceContext ctx) {

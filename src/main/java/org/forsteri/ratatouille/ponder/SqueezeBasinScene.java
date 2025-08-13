@@ -1,8 +1,5 @@
 package org.forsteri.ratatouille.ponder;
 
-import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
-import org.forsteri.ratatouille.entry.CRFluids;
-import org.forsteri.ratatouille.entry.CRItems;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
@@ -22,10 +19,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
+import org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock;
+import org.forsteri.ratatouille.entry.CRFluids;
+import org.forsteri.ratatouille.entry.CRItems;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 public class SqueezeBasinScene {
@@ -106,7 +103,7 @@ public class SqueezeBasinScene {
                 .pointAt(util.vector().centerOf(pumpPos));
         scene.world().modifyBlockEntityNBT(util.select().position(basinPos), BasinBlockEntity.class, nbt -> {
             nbt.put("VisualizedFluids",
-                    NBTHelper.writeCompoundList(ImmutableList.of(IntAttached.with(1, new FluidStack(CRFluids.MINCE_MEAT.get(), 1000))), ia -> ia.getValue().writeToNBT(new CompoundTag())));
+                    NBTHelper.writeCompoundList(ImmutableList.of(IntAttached.with(1, new FluidStack(CRFluids.MINCE_MEAT.get(), 1000))), ia -> (CompoundTag) ia.getValue().save(scene.world().getHolderLookupProvider())));
         });
         scene.world().modifyBlock(squeezeBasinPos, s -> s.setValue(SqueezeBasinBlock.CASING, true), false);
         scene.world().modifyBlockEntity(mixerPos, MechanicalMixerBlockEntity.class, MechanicalMixerBlockEntity::startProcessingBasin);
@@ -138,7 +135,7 @@ public class SqueezeBasinScene {
 
         BlockPos deployerPos = util.grid().at(1, 2, 2);
         scene.world().modifyBlockEntityNBT(util.select().position(deployerPos), DeployerBlockEntity.class,
-                nbt -> nbt.put("HeldItem", CRItems.SAUSAGE_CASING.asStack().serializeNBT()));
+                nbt -> nbt.put("HeldItem", CRItems.SAUSAGE_CASING.asStack().saveOptional(scene.world().getHolderLookupProvider())));
         scene.world().showSection(util.select().position(deployerPos), Direction.EAST);
         scene.idle(5);
         scene.world().showSection(util.select().fromTo(1, 2, 3, 1, 2, 4), Direction.NORTH);

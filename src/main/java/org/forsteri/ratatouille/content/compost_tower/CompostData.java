@@ -2,32 +2,26 @@ package org.forsteri.ratatouille.content.compost_tower;
 
 import com.simibubi.create.content.fluids.tank.BoilerHeaters;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import joptsimple.internal.Strings;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
-import org.forsteri.ratatouille.entry.CRFluids;
-import org.forsteri.ratatouille.entry.CRItems;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class CompostData {
@@ -44,34 +38,6 @@ public class CompostData {
         lastRecipe = null;
     }
 
-    public boolean updateCompostTower(CompostTowerBlockEntity controller) {
-        assert controller.getLevel() != null;
-
-        BlockPos controllerPos = controller.getBlockPos();
-        Level level = controller.getLevel();
-        updateRequired--;
-
-        int prevTemp = tempLevel;
-        tempLevel = 0;
-
-        for (int xOffset = 0; xOffset < controller.getWidth(); xOffset++) {
-            for (int zOffset = 0; zOffset < controller.getWidth(); zOffset++) {
-                BlockPos pos = controllerPos.offset(xOffset, -1, zOffset);
-                BlockState blockState = level.getBlockState(pos);
-
-                if (blockState.getBlock() instanceof BlazeBurnerBlock
-                        || blockState.hasProperty(BlazeBurnerBlock.HEAT_LEVEL)) {
-
-                    float heat = BoilerHeaters.blazeBurner(level, pos, blockState);
-                    if (heat > 0)
-                        tempLevel += heat;
-                }
-            }
-        }
-        tempLevel = Mth.clamp(tempLevel, 0, 8);
-        return tempLevel != prevTemp;
-    }
-
     public void tick(CompostTowerBlockEntity tower) {
         if (updateCompostTower(tower))
             tower.notifyUpdate();
@@ -83,11 +49,11 @@ public class CompostData {
         RecipeWrapper inventoryIn = new RecipeWrapper(itemHandler);
         if (timer > 0) {
             if (this.lastRecipe == null || !this.lastRecipe.matches(inventoryIn, tower.getLevel())) {
-                Optional<CompostingRecipe> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
+                Optional<RecipeHolder<CompostingRecipe>> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
                 if (recipe.isEmpty()) {
                     return;
                 }
-                this.lastRecipe =  recipe.get();
+                this.lastRecipe = recipe.get().value();
             }
 
             boolean canOutput = true;
@@ -128,17 +94,52 @@ public class CompostData {
         }
 
         if (lastRecipe == null || !lastRecipe.matches(inventoryIn, tower.getLevel())) {
-            Optional<CompostingRecipe> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
+            Optional<RecipeHolder<CompostingRecipe>> recipe = CRRecipeTypes.COMPOSTING.find(inventoryIn, tower.getLevel());
             if (recipe.isEmpty()) {
                 timer = 100;
             } else {
-                lastRecipe = recipe.get();
+                lastRecipe = recipe.get().value();
                 timer = lastRecipe.getProcessingDuration();
             }
         } else {
             timer = lastRecipe.getProcessingDuration();
         }
         tower.notifyUpdate();
+    }
+
+    public boolean updateCompostTower(CompostTowerBlockEntity controller) {
+        assert controller.getLevel() != null;
+
+        BlockPos controllerPos = controller.getBlockPos();
+        Level level = controller.getLevel();
+        updateRequired--;
+
+        int prevTemp = tempLevel;
+        tempLevel = 0;
+
+        for (int xOffset = 0; xOffset < controller.getWidth(); xOffset++) {
+            for (int zOffset = 0; zOffset < controller.getWidth(); zOffset++) {
+                BlockPos pos = controllerPos.offset(xOffset, -1, zOffset);
+                BlockState blockState = level.getBlockState(pos);
+
+                if (blockState.getBlock() instanceof BlazeBurnerBlock
+                        || blockState.hasProperty(BlazeBurnerBlock.HEAT_LEVEL)) {
+
+                    float heat = BoilerHeaters.blazeBurner(level, pos, blockState);
+                    if (heat > 0)
+                        tempLevel += heat;
+                }
+            }
+        }
+        tempLevel = Mth.clamp(tempLevel, 0, 8);
+        return tempLevel != prevTemp;
+    }
+
+    public int getProcessingSpeed() {
+        if (Math.min(this.sizeLevel, this.tempLevel) == 0)
+            return 16;
+        else
+            return (int) (sizeLevel / 8.0 * tempLevel / 8.0 * 512);
     }
 
     public boolean evaluate(CompostTowerBlockEntity tower) {
@@ -150,7 +151,6 @@ public class CompostData {
         sizeLevel = Mth.clamp(sizeLevel, 0, 8);
         return sizeLevelBefore != sizeLevel;
     }
-
 
     public void read(CompoundTag compound, boolean ignoredClientPacket) {
         sizeLevel = compound.getInt("sizeCount");
@@ -189,7 +189,8 @@ public class CompostData {
 
     private MutableComponent blockComponent(int level) {
         int clamped = Mth.clamp(level, 0, 8);
-        return Component.literal("\u2588".repeat(clamped) + "\u2591".repeat(8 - clamped));}
+        return Component.literal("\u2588".repeat(clamped) + "\u2591".repeat(8 - clamped));
+    }
 
     private MutableComponent barComponent(int level) {
         return Component.empty()
@@ -228,12 +229,5 @@ public class CompostData {
         tooltip.add(indent2.copy().append(this.getHeatComponent(true, false)));
 
         return true;
-    }
-
-    public int getProcessingSpeed() {
-        if(Math.min(this.sizeLevel, this.tempLevel) == 0 )
-            return 16;
-        else
-            return (int) (sizeLevel / 8.0 * tempLevel / 8.0 * 512);
     }
 }

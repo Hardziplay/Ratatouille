@@ -7,9 +7,10 @@ import com.simibubi.create.content.kinetics.fan.NozzleBlockEntity;
 import com.simibubi.create.content.logistics.chute.ChuteBlockEntity;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AgeableMob;
@@ -24,26 +25,26 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
+import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 
 import static com.simibubi.create.content.kinetics.base.DirectionalKineticBlock.FACING;
 
-public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurrentSource {
+@MethodsReturnNonnullByDefault
+public class SpreaderBlockEntity extends KineticBlockEntity implements IAirCurrentSource {
     public int timer;
     public ItemStackHandler inventory;
-    public LazyOptional<IItemHandler> capability;
+    public IItemHandler capability;
     public AirCurrent airCurrent;
     protected int airCurrentUpdateCooldown;
     protected int entitySearchCooldown;
@@ -55,35 +56,21 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         updateAirFlow = true;
         timer = 1000;
         this.inventory = new ItemStackHandler(1);
-        this.capability = LazyOptional.of(SpreaderBlockEntity.SpreaderInventoryHandler::new);
+        this.capability = new SpreaderBlockEntity.SpreaderInventoryHandler();
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                CRBlockEntityTypes.OVEN_ENTITY.get(),
+                (be, context) -> be.itemCapability
+        );
     }
 
     public void invalidate() {
         super.invalidate();
-        this.capability.invalidate();
-    }
-
-    @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
-        if (clientPacket)
-            airCurrent.rebuild();
-        this.timer = compound.getInt("Timer");
-        this.inventory.deserializeNBT(compound.getCompound("Inventory"));
-    }
-
-    @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
-        compound.putInt("Timer", this.timer);
-        compound.put("Inventory", this.inventory.serializeNBT());
-    }
-
-    @Override
-    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
-        if (isItemHandlerCap(cap))
-            return capability.cast();
-        return super.getCapability(cap, side);
+        capability = null;
+        invalidateCapabilities();
     }
 
     public void destroy() {
@@ -124,69 +111,12 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
     }
 
     @Override
-    public void remove() {
-        super.remove();
-        updateChute();
-    }
-
-    @Override
     public boolean isSourceRemoved() {
         return remove;
     }
 
-    @Override
-    public void onSpeedChanged(float prevSpeed) {
-        super.onSpeedChanged(prevSpeed);
-        updateAirFlow = true;
-        updateChute();
-    }
-
-    public void updateChute() {
-        Direction direction = getBlockState().getValue(FACING);
-        if (!direction.getAxis()
-                .isVertical())
-            return;
-        BlockEntity poweredChute = level.getBlockEntity(worldPosition.relative(direction));
-        if (!(poweredChute instanceof ChuteBlockEntity))
-            return;
-        ChuteBlockEntity chuteBE = (ChuteBlockEntity) poweredChute;
-        if (direction == Direction.DOWN)
-            chuteBE.updatePull();
-        else
-            chuteBE.updatePush(1);
-    }
-
     public void blockInFrontChanged() {
         updateAirFlow = true;
-    }
-
-    public int getProcessingSpeed() {
-        return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
-    }
-
-    public int getProcessingLevel() {
-        int speed = getProcessingSpeed();
-        if (1 <= speed && speed < 4) {
-            return 2;
-        } else if (4 <= speed && speed < 8) {
-            return 3;
-        } else if (8 <= speed && speed < 12) {
-            return 4;
-        } else {
-            return 5;
-        }
-    }
-
-    public void addCorpBuffer(ArrayList<BlockPos> corps, BlockPos corpPos) {
-        BlockState corpState = level.getBlockState(corpPos);
-        if (!(corpState.getBlock() instanceof AirBlock)
-            && !(corpState.getBlock() instanceof GrassBlock)
-            && !(corpState.getBlock() instanceof TallGrassBlock)
-            && corpState.getBlock() instanceof BonemealableBlock growable
-            && growable.isValidBonemealTarget(level, corpPos, corpState, false)
-        ) {
-            corps.add(corpPos);
-        }
     }
 
     @Override
@@ -236,7 +166,7 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
                         addCorpBuffer(corps, new BlockPos(pos));
                     }
 
-                    var aabb = new net.minecraft.world.phys.AABB(min, max);
+                    var aabb = new net.minecraft.world.phys.AABB(min.getCenter(), max.getCenter());
                     level.getEntitiesOfClass(Animal.class, aabb).forEach(animal -> {
                         if (!animal.isBaby() && !animal.isInLove()) adultAnimals.add(animal);
                         if (animal.isBaby()) babyAnimals.add(animal);
@@ -263,12 +193,12 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
                             BlockPos corpPos = corps.get(level.random.nextInt(0, corps.size()));
                             BlockState corpState = level.getBlockState(corpPos);
                             if (corpState.getBlock() instanceof BonemealableBlock growable
-                                    && growable.isValidBonemealTarget(level, corpPos, corpState, false)
-                                    && ForgeHooks.onCropsGrowPre(level, corpPos, corpState, true)
+                                    && growable.isValidBonemealTarget(level, corpPos, corpState)
+//                                    && ForgeHook.onCropsGrowPre(level, corpPos, corpState, true)
                             ) {
                                 growable.performBonemeal(level.getServer().overworld(), level.random, corpPos, corpState);
                                 level.levelEvent(2005, corpPos, 0);
-                                ForgeHooks.onCropsGrowPost(level, corpPos, corpState);
+//                                ForgeHooks.onCropsGrowPost(level, corpPos, corpState);
                             }
                             count--;
                         }
@@ -309,28 +239,82 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         }
     }
 
-    private class SpreaderInventoryHandler extends CombinedInvWrapper {
-        public SpreaderInventoryHandler() {
-            super(new IItemHandlerModifiable[]{SpreaderBlockEntity.this.inventory});
-        }
+    public int getProcessingSpeed() {
+        return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
+    }
 
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            return stack.is(CRItems.RIPEN_MATTER.get()) || stack.is(CRItems.MATURE_MATTER.get());
+    public void addCorpBuffer(ArrayList<BlockPos> corps, BlockPos corpPos) {
+        BlockState corpState = level.getBlockState(corpPos);
+        if (!(corpState.getBlock() instanceof AirBlock)
+                && !(corpState.getBlock() instanceof GrassBlock)
+                && !(corpState.getBlock() instanceof TallGrassBlock)
+                && corpState.getBlock() instanceof BonemealableBlock growable
+                && growable.isValidBonemealTarget(level, corpPos, corpState)
+        ) {
+            corps.add(corpPos);
         }
+    }
 
-        @Override
-        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if (!this.isItemValid(slot, stack))
-                return stack;
-            return super.insertItem(slot, stack, simulate);
+    public int getProcessingLevel() {
+        int speed = getProcessingSpeed();
+        if (1 <= speed && speed < 4) {
+            return 2;
+        } else if (4 <= speed && speed < 8) {
+            return 3;
+        } else if (8 <= speed && speed < 12) {
+            return 4;
+        } else {
+            return 5;
         }
-
     }
 
     @Override
     public float calculateStressApplied() {
         return 2.0f;
+    }
+
+    @Override
+    public void onSpeedChanged(float prevSpeed) {
+        super.onSpeedChanged(prevSpeed);
+        updateAirFlow = true;
+        updateChute();
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        updateChute();
+    }
+
+    @Override
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound, registries, clientPacket);
+        compound.putInt("Timer", this.timer);
+        compound.put("Inventory", this.inventory.serializeNBT(registries));
+    }
+
+    @Override
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
+        if (clientPacket)
+            airCurrent.rebuild();
+        this.timer = compound.getInt("Timer");
+        this.inventory.deserializeNBT(registries, compound.getCompound("Inventory"));
+    }
+
+    public void updateChute() {
+        Direction direction = getBlockState().getValue(FACING);
+        if (!direction.getAxis()
+                .isVertical())
+            return;
+        BlockEntity poweredChute = level.getBlockEntity(worldPosition.relative(direction));
+        if (!(poweredChute instanceof ChuteBlockEntity))
+            return;
+        ChuteBlockEntity chuteBE = (ChuteBlockEntity) poweredChute;
+        if (direction == Direction.DOWN)
+            chuteBE.updatePull();
+        else
+            chuteBE.updatePush(1);
     }
 
     public int getParticleColor() {
@@ -342,5 +326,24 @@ public class SpreaderBlockEntity  extends KineticBlockEntity implements IAirCurr
         } else {
             return 0xffffff;
         }
+    }
+
+    private class SpreaderInventoryHandler extends CombinedInvWrapper {
+        public SpreaderInventoryHandler() {
+            super(new IItemHandlerModifiable[]{SpreaderBlockEntity.this.inventory});
+        }
+
+        @Override
+        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+            if (!this.isItemValid(slot, stack))
+                return stack;
+            return super.insertItem(slot, stack, simulate);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return stack.is(CRItems.RIPEN_MATTER.get()) || stack.is(CRItems.MATURE_MATTER.get());
+        }
+
     }
 }
