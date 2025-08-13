@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import net.createmod.catnip.lang.FontHelper;
 import net.createmod.catnip.lang.LangBuilder;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -56,6 +57,7 @@ public class Ratatouille {
 
     public static void clientInit(final FMLClientSetupEvent event) {
         CRPartialModels.init();
+        PonderIndex.addPlugin(new CRPonderPlugin());
     }
 
     private void init(final FMLCommonSetupEvent event) {
