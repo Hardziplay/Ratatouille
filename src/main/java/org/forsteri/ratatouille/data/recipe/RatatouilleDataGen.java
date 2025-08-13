@@ -63,7 +63,7 @@ public class RatatouilleDataGen {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         if (event.includeServer()) {
-            RatatoullieRecipeProvider.registerAllProcessing(generator, output, lookupProvider);
+            RatatouilleRecipeProvider.registerAllProcessing(generator, output, lookupProvider);
         }
     }
 }

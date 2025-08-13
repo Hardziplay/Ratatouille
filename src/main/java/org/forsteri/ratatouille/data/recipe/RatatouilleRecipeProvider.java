@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public final class RatatoullieRecipeProvider extends RecipeProvider {
+public final class RatatouilleRecipeProvider extends RecipeProvider {
     static final List<com.simibubi.create.api.data.recipe.ProcessingRecipeGen<?, ?, ?>> GENERATORS = new ArrayList<>();
     static final int BUCKET = 1000;
     static final int BOTTLE = 250;
 
-    public RatatoullieRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+    public RatatouilleRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
 
