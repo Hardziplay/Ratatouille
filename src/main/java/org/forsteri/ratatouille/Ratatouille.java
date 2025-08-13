@@ -14,6 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.forsteri.ratatouille.data.recipe.RatatouilleDataGen;
 import org.forsteri.ratatouille.entry.*;
@@ -32,6 +33,7 @@ public class Ratatouille {
     public Ratatouille(IEventBus modEventBus, ModContainer modContainer) {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
         REGISTRATE.registerEventListeners(modEventBus);
+        modEventBus.addListener(Ratatouille::clientInit);
 
         CRCreativeModeTabs.register(modEventBus);
 
@@ -50,6 +52,10 @@ public class Ratatouille {
         modEventBus.addListener(this::init);
         modEventBus.addListener(EventPriority.HIGHEST, RatatouilleDataGen::gatherDataHighPriority);
         modEventBus.addListener(EventPriority.LOWEST, RatatouilleDataGen::gatherData);
+    }
+
+    public static void clientInit(final FMLClientSetupEvent event) {
+        CRPartialModels.init();
     }
 
     private void init(final FMLCommonSetupEvent event) {

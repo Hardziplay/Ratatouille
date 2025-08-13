@@ -16,10 +16,10 @@ public class CRPartialModels {
     public CRPartialModels() {
     }
 
-    private static PartialModel block(@SuppressWarnings("SameParameterValue") String path) {
+    private static PartialModel block(String path) {
         return PartialModel.of(Ratatouille.asResource(path));
     }
 
-    public static void register() {
+    public static void init() {
     }
 }
