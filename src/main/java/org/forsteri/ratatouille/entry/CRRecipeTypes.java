@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.entry;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -41,7 +40,7 @@ public enum CRRecipeTypes implements IRecipeTypeInfo {
 
     private CRRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(this.name());
-        this.id = Create.asResource(name);
+        this.id = Ratatouille.asResource(name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
         this.typeObject = CRRecipeTypes.Registers.TYPE_REGISTER.register(name, () -> {
             return RecipeType.simple(this.id);
