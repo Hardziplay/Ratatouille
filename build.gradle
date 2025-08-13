@@ -111,12 +111,12 @@ dependencies {
 //    implementation("curse.maven:create-central-kitchen-820977:${create_central_kitchen_version}")
 }
 
-sourceSets.main {
-    resources {
-        srcDir("src/generated/resources")
-        exclude(".cache/")
-    }
-}
+//sourceSets.main {
+//    resources {
+//        srcDir("src/generated/resources")
+//        exclude(".cache/")
+//    }
+//}
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [

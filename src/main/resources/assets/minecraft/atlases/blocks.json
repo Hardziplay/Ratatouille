@@ -1,0 +1,76 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/bio_gas_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/bio_gas_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/cake_batter_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/cake_batter_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/cocoa_liquor_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/cocoa_liquor_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/compost_fluid_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/compost_fluid_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/compost_residue_fluid_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/compost_residue_fluid_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/compost_tea_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/compost_tea_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/egg_yolk_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/egg_yolk_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/mince_meat_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/mince_meat_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/tomato_sauce_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/tomato_sauce_still"
+    }
+  ]
+}
