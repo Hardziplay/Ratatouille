@@ -148,6 +148,7 @@ public class CompostFluidTank implements IFluidHandler, INBTSerializable<Compoun
         for (Fluid fluid : tanks.keySet()) {
             CompoundTag fluidTag = new CompoundTag();
             var fluidStack = new FluidStack(fluid, tanks.get(fluid));
+            if (fluidStack.isEmpty()) continue;
             fluidTag.put("FluidStack", fluidStack.save(provider));
             fluidTag.putInt("Id", fluidIds.get(fluid));
             tankList.add(fluidTag);
