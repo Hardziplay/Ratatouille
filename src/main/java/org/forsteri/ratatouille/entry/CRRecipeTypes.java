@@ -4,8 +4,6 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.CreateLang;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -19,10 +17,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.content.compost_tower.CompostingRecipe;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.content.frozen_block.FreezingRecipe;
+import org.forsteri.ratatouille.content.oven.BakingRecipe;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
-import org.forsteri.ratatouille.content.compost_tower.CompostingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.Nullable;
@@ -36,16 +35,19 @@ public enum CRRecipeTypes implements IRecipeTypeInfo {
     SQUEEZING(SqueezingRecipe::new),
     DEMOLDING(DemoldingRecipe::new),
     FREEZING(FreezingRecipe::new),
-    COMPOSTING(CompostingRecipe::new);
+    COMPOSTING(CompostingRecipe::new),
+    BAKING(BakingRecipe::new);
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
     private final @Nullable RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
+
     private CRRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory processingFactory) {
         this(() -> {
             return new ProcessingRecipeSerializer(processingFactory);
         });
     }
+
     private CRRecipeTypes(Supplier serializerSupplier) {
         String name = Lang.asId(this.name());
         this.id = Create.asResource(name);
@@ -82,12 +84,12 @@ public enum CRRecipeTypes implements IRecipeTypeInfo {
         private static final DeferredRegister<RecipeSerializer<?>> SERIALIZER_REGISTER;
         private static final DeferredRegister<RecipeType<?>> TYPE_REGISTER;
 
-        private Registers() {
-        }
-
         static {
             SERIALIZER_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Ratatouille.MOD_ID);
             TYPE_REGISTER = DeferredRegister.create(Registries.RECIPE_TYPE, Ratatouille.MOD_ID);
+        }
+
+        private Registers() {
         }
     }
 }

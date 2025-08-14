@@ -11,34 +11,34 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.item.crafting.SmokingRecipe;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedOven;
-import org.forsteri.ratatouille.content.oven.BakingRecipe;
 
-public class BakingCategory extends CreateRecipeCategory<BakingRecipe> {
+public class BakeSmokingCategory extends CreateRecipeCategory<SmokingRecipe> {
 
     protected static final int SCALE = 24;
 
     private final AnimatedOven oven = new AnimatedOven();
     private final AnimatedBlazeBurner heater = new AnimatedBlazeBurner();
 
-    public BakingCategory(Info<BakingRecipe> info) {
+    public BakeSmokingCategory(Info<SmokingRecipe> info) {
         super(info);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder iRecipeLayoutBuilder, BakingRecipe BakingRecipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder iRecipeLayoutBuilder, SmokingRecipe SmokingRecipe, IFocusGroup iFocusGroup) {
         iRecipeLayoutBuilder
                 .addSlot(RecipeIngredientRole.INPUT, 21, 48)
                 .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredients(BakingRecipe.getIngredients().get(0));
+                .addIngredients(SmokingRecipe.getIngredients().get(0));
         iRecipeLayoutBuilder
                 .addSlot(RecipeIngredientRole.OUTPUT, 141, 48)
                 .setBackground(getRenderedSlot(), -1, -1)
-                .addItemStack(BakingRecipe.getResultItem(RegistryAccess.EMPTY));
+                .addItemStack(SmokingRecipe.getResultItem(RegistryAccess.EMPTY));
     }
 
     @Override
-    public void draw(BakingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(SmokingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         PoseStack stack = graphics.pose();
         renderWidgets(graphics, recipe, mouseX, mouseY);
         stack.pushPose();
@@ -52,7 +52,7 @@ public class BakingCategory extends CreateRecipeCategory<BakingRecipe> {
         stack.popPose();
     }
 
-    protected void renderWidgets(GuiGraphics graphics, BakingRecipe recipe, double mouseX, double mouseY) {
+    protected void renderWidgets(GuiGraphics graphics, SmokingRecipe recipe, double mouseX, double mouseY) {
         getBlockShadow().render(graphics, 65, 39);
         AllGuiTextures.JEI_LONG_ARROW.render(graphics, 54, 51);
     }

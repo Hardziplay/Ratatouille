@@ -1,24 +1,18 @@
 package org.forsteri.ratatouille.compat.jei;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllItems;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
 import com.simibubi.create.compat.jei.DoubleItemIcon;
 import com.simibubi.create.compat.jei.EmptyBackground;
 import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
-import com.simibubi.create.compat.jei.category.PressingCategory;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -35,17 +29,18 @@ import org.forsteri.ratatouille.compat.jei.category.*;
 import org.forsteri.ratatouille.content.compost_tower.CompostingRecipe;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.content.frozen_block.FreezingRecipe;
+import org.forsteri.ratatouille.content.oven.BakingRecipe;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.entry.CRBlocks;
-import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
-import vectorwing.farmersdelight.data.Recipes;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -57,7 +52,8 @@ public class RatatouilleJei implements IModPlugin {
     private final List<CreateRecipeCategory<?>> allCategories = new ArrayList();
     private IIngredientManager ingredientManager;
 
-    public RatatouilleJei() {}
+    public RatatouilleJei() {
+    }
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
@@ -88,12 +84,19 @@ public class RatatouilleJei implements IModPlugin {
                 .emptyBackground(177, 70)
                 .build("demolding", DemoldingCategory::new);
 
-        final CreateRecipeCategory<?> baking = builder(SmokingRecipe.class)
+        final CreateRecipeCategory<?> baking = builder(BakingRecipe.class)
+                .addTypedRecipes(CRRecipeTypes.BAKING::getType)
+                .catalyst(CRBlocks.OVEN::get)
+                .itemIcon(CRBlocks.OVEN.get())
+                .emptyBackground(178, 72)
+                .build("baking", BakingCategory::new);
+
+        final CreateRecipeCategory<?> bakeSmoking = builder(SmokingRecipe.class)
                 .addTypedRecipes(() -> RecipeType.SMOKING)
                 .catalyst(CRBlocks.OVEN::get)
                 .doubleItemIcon(CRBlocks.OVEN.get(), Items.CAMPFIRE)
                 .emptyBackground(178, 72)
-                .build("baking", BakingCategory::new);
+                .build("bakesmoking", BakeSmokingCategory::new);
 
         final CreateRecipeCategory<?> freezing = builder(FreezingRecipe.class)
                 .addTypedRecipes(CRRecipeTypes.FREEZING::getType)
@@ -128,21 +131,14 @@ public class RatatouilleJei implements IModPlugin {
 
     private class CategoryBuilder<T extends Recipe<?>> {
         private final Class<? extends T> recipeClass;
+        private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
+        private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
         private Predicate<CRecipes> predicate = cRecipes -> true;
-
         private IDrawable background;
         private IDrawable icon;
 
-        private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
-        private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
-
         public CategoryBuilder(Class<? extends T> recipeClass) {
             this.recipeClass = recipeClass;
-        }
-
-        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<T>> consumer) {
-            recipeListConsumers.add(consumer);
-            return this;
         }
 
         public CategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
@@ -153,6 +149,10 @@ public class RatatouilleJei implements IModPlugin {
             return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipes::add, recipeType.get()));
         }
 
+        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<T>> consumer) {
+            recipeListConsumers.add(consumer);
+            return this;
+        }
 
         public CategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<? extends T>> recipeType, Predicate<Recipe<?>> pred) {
             return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipe -> {
@@ -191,18 +191,13 @@ public class RatatouilleJei implements IModPlugin {
             });
         }
 
-        public CategoryBuilder<T> catalystStack(Supplier<ItemStack> supplier) {
-            catalysts.add(supplier);
-            return this;
-        }
-
         public CategoryBuilder<T> catalyst(Supplier<ItemLike> supplier) {
             return catalystStack(() -> new ItemStack(supplier.get()
                     .asItem()));
         }
 
-        public CategoryBuilder<T> icon(IDrawable icon) {
-            this.icon = icon;
+        public CategoryBuilder<T> catalystStack(Supplier<ItemStack> supplier) {
+            catalysts.add(supplier);
             return this;
         }
 
@@ -211,18 +206,23 @@ public class RatatouilleJei implements IModPlugin {
             return this;
         }
 
+        public CategoryBuilder<T> icon(IDrawable icon) {
+            this.icon = icon;
+            return this;
+        }
+
         public CategoryBuilder<T> doubleItemIcon(ItemLike item1, ItemLike item2) {
             icon(new DoubleItemIcon(() -> new ItemStack(item1), () -> new ItemStack(item2)));
             return this;
         }
 
-        public CategoryBuilder<T> background(IDrawable background) {
-            this.background = background;
+        public CategoryBuilder<T> emptyBackground(int width, int height) {
+            background(new EmptyBackground(width, height));
             return this;
         }
 
-        public CategoryBuilder<T> emptyBackground(int width, int height) {
-            background(new EmptyBackground(width, height));
+        public CategoryBuilder<T> background(IDrawable background) {
+            this.background = background;
             return this;
         }
 
