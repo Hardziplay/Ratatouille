@@ -159,6 +159,23 @@ public final class RatatouilleStandardRecipeGen extends BaseRecipeProvider {
                             .define('X', AllBlocks.MECHANICAL_HARVESTER)
                     );
 
+    // smoking
+    GeneratedRecipe
+            CAKE_MOLD_BAKED = create(CRItems.CAKE_MOLD_BAKED::get)
+            .viaCooking(CRItems.CAKE_MOLD_FILLED::get)
+            .forDuration(200)
+            .inSmoker(),
+
+    ROAST_COCO = create(CRItems.DRIED_COCOA_BEANS::get)
+            .viaCooking(() -> Items.COCOA_BEANS)
+            .forDuration(20)
+            .inSmoker(),
+
+    SAUSAGE = create(CRItems.SAUSAGE::get)
+            .viaCooking(CRItems.RAW_SAUSAGE::get)
+            .forDuration(100)
+            .inSmoker();
+
     public RatatouilleStandardRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, Ratatouille.MOD_ID);
     }
