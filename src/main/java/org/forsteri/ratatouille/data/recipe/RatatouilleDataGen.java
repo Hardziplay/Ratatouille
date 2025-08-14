@@ -62,6 +62,8 @@ public class RatatouilleDataGen {
         PackOutput output = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
+        generator.addProvider(event.includeServer(), new RatatouilleStandardRecipeGen(output, lookupProvider));
+
         if (event.includeServer()) {
             RatatouilleRecipeProvider.registerAllProcessing(generator, output, lookupProvider);
         }
