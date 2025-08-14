@@ -24,7 +24,6 @@ import org.forsteri.ratatouille.entry.CRBlocks;
 import org.forsteri.ratatouille.entry.CRFluids;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.jetbrains.annotations.NotNull;
-import vectorwing.farmersdelight.common.block.OrganicCompostBlock;
 import vectorwing.farmersdelight.common.registry.ModItems;
 import vectorwing.farmersdelight.common.tag.CommonTags;
 
@@ -33,6 +32,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 
+@SuppressWarnings("unused")
 public final class RatatouilleStandardRecipeGen extends BaseRecipeProvider {
     final List<GeneratedRecipe> all = new ArrayList<>();
 
@@ -99,7 +99,7 @@ public final class RatatouilleStandardRecipeGen extends BaseRecipeProvider {
                             .define('Y', AllBlocks.ANDESITE_CASING)
                             .define('X', Items.SLIME_BALL)
                     ),
-            ORGANIC_COMPOST = create(ModItems.ORGANIC_COMPOST)
+            ORGANIC_COMPOST = create(ModItems.ORGANIC_COMPOST::get)
                     .unlockedBy(CRItems.COMPOST_RESIDUE::asItem) // mandatory
                     .viaShaped(b -> b
                             .pattern(" Y ")
