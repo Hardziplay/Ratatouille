@@ -26,7 +26,7 @@ public class RatatouilleDataGen {
     }
 
     private static void addExtraRegistrateData() {
-
+        RatatouilleRegistrateTags.addGenerators();
         Ratatouille.REGISTRATE.addDataGenerator(ProviderType.LANG, provider -> {
             BiConsumer<String, String> langConsumer = provider::add;
 
