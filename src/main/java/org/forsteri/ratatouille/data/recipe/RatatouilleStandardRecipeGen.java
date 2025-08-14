@@ -1,6 +1,8 @@
 package org.forsteri.ratatouille.data.recipe;
 
 import com.google.common.base.Supplier;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.api.data.recipe.BaseRecipeProvider;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import net.createmod.catnip.registry.RegisteredObjectsHelper;
@@ -18,8 +20,12 @@ import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.entry.CRBlocks;
+import org.forsteri.ratatouille.entry.CRFluids;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.jetbrains.annotations.NotNull;
+import vectorwing.farmersdelight.common.block.OrganicCompostBlock;
+import vectorwing.farmersdelight.common.registry.ModItems;
 import vectorwing.farmersdelight.common.tag.CommonTags;
 
 import java.util.ArrayList;
@@ -44,6 +50,113 @@ public final class RatatouilleStandardRecipeGen extends BaseRecipeProvider {
                     .viaShapeless(b -> b
                             .requires(CRItems.CHEF_HAT.get())
                             .requires(com.simibubi.create.AllItems.GOGGLES.get())
+                    ),
+            COMPOST_TEA_BOTTLE = create(CRItems.COMPOST_TEA_BOTTLE)
+                    .unlockedBy(CRFluids.COMPOST_TEA.getBucket()::get)
+                    .viaShapeless(b -> b
+                            .requires(CRFluids.COMPOST_TEA.getBucket().get())
+                            .requires(Items.GLASS_BOTTLE, 8)
+                    ),
+            COMPOST_TOWER = create(CRBlocks.COMPOST_TOWER_BLOCK)
+                    .unlockedBy(Items.BARREL::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Y ")
+                            .pattern(" X ")
+                            .pattern(" Y ")
+                            .define('Y', AllItems.ZINC_INGOT.get())
+                            .define('X', Items.BARREL)
+                    ),
+            EGG_SHELL_TO_BONE_MEAL = create(Items.BONE_MEAL::asItem)
+                    .unlockedBy(Items.EGG::asItem)
+                    .viaShapeless(b -> b
+                            .requires(CRItems.EGG_SHELL.get())
+                    ),
+            FROZEN_BLOCK = create(CRBlocks.FROZEN_BLOCK)
+                    .unlockedBy(Items.BLUE_ICE::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Y ")
+                            .pattern("YXY")
+                            .pattern(" Y ")
+                            .define('Y', Items.BLUE_ICE)
+                            .define('X', Items.POWDER_SNOW_BUCKET)
+                    ),
+            IRRIGATION_TOWER = create(CRBlocks.IRRIGATION_TOWER_BLOCK)
+                    .unlockedBy(AllBlocks.FLUID_TANK::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Z ")
+                            .pattern("YXY")
+                            .define('Y', AllBlocks.FLUID_PIPE)
+                            .define('X', AllItems.COPPER_SHEET)
+                            .define('Z', AllBlocks.FLUID_TANK)
+                    ),
+            MECHANICAL_DEMOLDER = create(CRBlocks.MECHANICAL_DEMOLDER)
+                    .unlockedBy(AllBlocks.ANDESITE_CASING::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Z ")
+                            .pattern(" Y ")
+                            .pattern(" X ")
+                            .define('Z', AllItems.ANDESITE_ALLOY)
+                            .define('Y', AllBlocks.ANDESITE_CASING)
+                            .define('X', Items.SLIME_BALL)
+                    ),
+            ORGANIC_COMPOST = create(ModItems.ORGANIC_COMPOST)
+                    .unlockedBy(CRItems.COMPOST_RESIDUE::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Y ")
+                            .pattern("YXY")
+                            .pattern(" Y ")
+                            .define('Y', CRItems.COMPOST_RESIDUE)
+                            .define('X', Items.DIRT)
+                    ),
+            OVEN = create(CRBlocks.OVEN)
+                    .unlockedBy(AllItems.ANDESITE_ALLOY::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Y ")
+                            .pattern(" X ")
+                            .pattern(" Y ")
+                            .define('Y', AllItems.ANDESITE_ALLOY)
+                            .define('X', Items.BARREL)
+                    ),
+            OVEN_FAN = create(CRBlocks.OVEN_FAN)
+                    .unlockedBy(AllBlocks.ANDESITE_CASING::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Y ")
+                            .pattern(" X ")
+                            .pattern(" Z ")
+                            .define('Y', AllBlocks.COGWHEEL)
+                            .define('X', AllBlocks.ANDESITE_CASING)
+                            .define('Z', AllItems.PROPELLER)
+                    ),
+            SPREADER = create(CRBlocks.SPREADER_BLOCK)
+                    .unlockedBy(AllItems.ANDESITE_ALLOY::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" S ")
+                            .pattern("ZXZ")
+                            .pattern(" Y ")
+                            .define('Y', AllItems.ANDESITE_ALLOY)
+                            .define('X', AllBlocks.ANDESITE_CASING)
+                            .define('Z', AllItems.TREE_FERTILIZER)
+                            .define('S', AllBlocks.COGWHEEL)
+                    ),
+            SQUEEZE_BASIN = create(CRBlocks.SQUEEZE_BASIN)
+                    .unlockedBy(Items.COPPER_INGOT::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" Z ")
+                            .pattern("Y Y")
+                            .pattern("YYY")
+                            .define('Y', Items.COPPER_INGOT)
+                            .define('Z', AllItems.COPPER_SHEET)
+                    ),
+            THRESHER = create(CRBlocks.THRESHER)
+                    .unlockedBy(AllItems.ANDESITE_ALLOY::asItem) // mandatory
+                    .viaShaped(b -> b
+                            .pattern(" S ")
+                            .pattern("ZXZ")
+                            .pattern(" Y ")
+                            .define('Y', AllBlocks.ANDESITE_CASING)
+                            .define('Z', AllBlocks.SHAFT)
+                            .define('S', AllItems.ANDESITE_ALLOY)
+                            .define('X', AllBlocks.MECHANICAL_HARVESTER)
                     );
 
     public RatatouilleStandardRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
