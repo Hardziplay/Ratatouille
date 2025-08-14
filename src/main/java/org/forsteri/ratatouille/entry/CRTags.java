@@ -12,6 +12,9 @@ public class CRTags {
     public static final TagKey<Item> RAW_MEAT = CRTags.modItemTag("raw_meat");
     public static final TagKey<Item> EGGS = CRTags.modItemTag("eggs");
     public static final TagKey<Item> COMPOSTABLE_ITEMS_1to1 = CRTags.modItemTag("compostable_items_1to1");
+    public static final TagKey<Item> COMPOSTABLE_ITEMS_1to4 = CRTags.modItemTag("compostable_items_1to4");
+    public static final TagKey<Item> COMPOSTABLE_ITEMS_2to1 = CRTags.modItemTag("compostable_items_2to1");
+    public static final TagKey<Item> COMPOSTABLE_ITEMS_4to1 = CRTags.modItemTag("compostable_items_4to1");
 
     public static void init() {
     }

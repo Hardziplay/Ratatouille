@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.Tags;
 import org.forsteri.ratatouille.Ratatouille;
@@ -85,6 +86,32 @@ public class RatatouilleRegistrateTags {
                 .addTag(ItemTags.FISHES)
                 .addTag(Tags.Items.FOODS_RAW_FISH)
                 .addTag(Tags.Items.FOODS_COOKED_MEAT);
+
+        prov.tag(CRTags.COMPOSTABLE_ITEMS_1to4)
+                .add(
+                        Blocks.MOSS_BLOCK.asItem(),
+                        Blocks.MUSHROOM_STEM.asItem(),
+                        Blocks.BROWN_MUSHROOM_BLOCK.asItem(),
+                        Blocks.RED_MUSHROOM_BLOCK.asItem(),
+                        Blocks.SHROOMLIGHT.asItem(),
+                        Blocks.CACTUS.asItem(),
+                        Blocks.PUMPKIN.asItem(),
+                        Blocks.CARVED_PUMPKIN.asItem()
+                );
+
+
+        prov.tag(CRTags.COMPOSTABLE_ITEMS_2to1)
+                .addTag(ItemTags.SAPLINGS)
+                .addTag(ItemTags.FLOWERS)
+                .addTag(Tags.Items.MUSHROOMS);
+
+
+        prov.tag(CRTags.COMPOSTABLE_ITEMS_4to1)
+                .add(CRItems.DRIED_COCOA_NIBS.get())
+                .add(CRItems.WHEAT_KERNELS.get())
+                .add(CRItems.EGG_SHELL.get())
+                .addTag(ItemTags.LEAVES)
+                .addTag(Tags.Items.SEEDS);
     }
 
     private static void genFluidTags(RegistrateTagsProvider<Fluid> provIn) {
