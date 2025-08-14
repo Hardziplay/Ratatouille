@@ -146,6 +146,11 @@ public class SqueezingRecipe extends StandardProcessingRecipe<RecipeInput> {
     }
 
     @Override
+    protected boolean canSpecifyDuration() {
+        return true;
+    }
+
+    @Override
     protected int getMaxFluidInputCount() {
         return 1;
     }
