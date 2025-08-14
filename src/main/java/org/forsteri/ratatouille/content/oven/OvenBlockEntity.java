@@ -13,11 +13,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.item.crafting.SmokingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -28,12 +25,14 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
+import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IMultiBlockEntityContainer {
     public CombinedInvWrapper itemCapability;
@@ -354,7 +353,7 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
     @ParametersAreNonnullByDefault
     public class Inventory extends ItemStackHandler {
         public int tickTillFinishCooking = -1;
-        public SmokingRecipe lastRecipe = null;
+        public Recipe<?> lastRecipe = null;
 
         @Override
         public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
@@ -363,10 +362,25 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
             ItemStack returnValue = super.insertItem(slot, stack, simulate);
 
             if (!simulate && returnValue.getCount() != stack.getCount()) {
-                level.getRecipeManager().getRecipeFor(RecipeType.SMOKING, new SingleRecipeInput(stack), level).ifPresent(recipe -> {
-                    tickTillFinishCooking = recipe.value().getCookingTime() * ((getStackInSlot(slot).getCount() - 1) / 16 + 1);
-                    lastRecipe = recipe.value();
-                });
+                var singleInputInv = new SingleRecipeInput(stack);
+                Optional<RecipeHolder<BakingRecipe>> bakingOpt = CRRecipeTypes.BAKING.find(singleInputInv, level);
+                if (bakingOpt.isPresent()) {
+                    BakingRecipe bakingRecipe = bakingOpt.get().value();
+                    tickTillFinishCooking =
+                            bakingRecipe.getProcessingDuration() *
+                                    ((getStackInSlot(slot).getCount() - 1) / 16 + 1);
+                    lastRecipe = bakingRecipe;
+                    return returnValue;
+                }
+
+                Optional<RecipeHolder<SmokingRecipe>> smokingOpt = level.getRecipeManager().getRecipeFor(RecipeType.SMOKING, singleInputInv, level);
+                if (smokingOpt.isPresent()) {
+                    SmokingRecipe smokingRecipe = smokingOpt.get().value();
+                    tickTillFinishCooking =
+                            smokingRecipe.getCookingTime() *
+                                    ((getStackInSlot(slot).getCount() - 1) / 16 + 1);
+                    lastRecipe = smokingRecipe;
+                }
             }
 
             return returnValue;
@@ -388,16 +402,17 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             assert level != null;
-            return level.getRecipeManager()
-                    .getRecipeFor(RecipeType.SMOKING, new SingleRecipeInput(stack), level).isPresent();
+            var singleInputInv = new SingleRecipeInput(stack);
+            return CRRecipeTypes.BAKING.find(singleInputInv, level).isPresent()
+                    || level.getRecipeManager().getRecipeFor(RecipeType.SMOKING, singleInputInv, level).isPresent();
         }
 
         @Override
         public CompoundTag serializeNBT(HolderLookup.Provider provider) {
             CompoundTag tag = super.serializeNBT(provider);
             tag.putInt("tickTillFinishCooking", tickTillFinishCooking);
-            if (lastRecipe != null)
-                tag.putString("lastRecipe", lastRecipe.toString());
+//            if (lastRecipe != null)
+//                tag.putString("lastRecipe", lastRecipe.toString());
             return tag;
         }
 
@@ -407,10 +422,8 @@ public class OvenBlockEntity extends SmartBlockEntity implements IHaveGoggleInfo
             super.deserializeNBT(provider, nbt);
             if (nbt.contains("tickTillFinishCooking"))
                 tickTillFinishCooking = nbt.getInt("tickTillFinishCooking");
-            if (nbt.contains("lastRecipe"))
-                lastRecipe = (SmokingRecipe) level.getRecipeManager().byKey(ResourceLocation.parse(nbt.getString("lastRecipe"))).orElse(null).value();
-
-
+//            if (nbt.contains("lastRecipe"))
+//                lastRecipe = (SmokingRecipe) level.getRecipeManager().byKey(ResourceLocation.parse(nbt.getString("lastRecipe"))).orElse(null).value();
         }
 
         @Override

@@ -27,6 +27,7 @@ public final class RatatouilleRecipeProvider extends RecipeProvider {
         GENERATORS.add(new DemoldingRecipeGen(output, registries));
         GENERATORS.add(new FreezingRecipeGen(output, registries));
         GENERATORS.add(new CompostingRecipeGen(output, registries));
+        GENERATORS.add(new BakingRecipeGen(output, registries));
 
         gen.addProvider(true, new DataProvider() {
             @Override

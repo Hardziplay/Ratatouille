@@ -25,6 +25,7 @@ import org.forsteri.ratatouille.compat.jei.category.*;
 import org.forsteri.ratatouille.content.compost_tower.CompostingRecipe;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.content.frozen_block.FreezingRecipe;
+import org.forsteri.ratatouille.content.oven.BakingRecipe;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.entry.CRBlocks;
@@ -79,12 +80,19 @@ public class RatatouilleJei implements IModPlugin {
                 .emptyBackground(177, 70)
                 .build("demolding", DemoldingCategory::new);
 
-        final CreateRecipeCategory<?> baking = builder(SmokingRecipe.class)
+        final CreateRecipeCategory<?> baking = builder(BakingRecipe.class)
+                .addTypedRecipes(CRRecipeTypes.BAKING::getType)
+                .catalyst(CRBlocks.OVEN::get)
+                .itemIcon(CRBlocks.OVEN.get())
+                .emptyBackground(178, 72)
+                .build("baking", BakingCategory::new);
+
+        final CreateRecipeCategory<?> bakeSmoking = builder(SmokingRecipe.class)
                 .addTypedRecipes(() -> RecipeType.SMOKING)
                 .catalyst(CRBlocks.OVEN::get)
                 .doubleItemIcon(CRBlocks.OVEN.get(), Items.CAMPFIRE)
                 .emptyBackground(178, 72)
-                .build("baking", BakingCategory::new);
+                .build("bakesmoking", BakeSmokingCategory::new);
 
         final CreateRecipeCategory<?> freezing = builder(FreezingRecipe.class)
                 .addTypedRecipes(CRRecipeTypes.FREEZING::getType)

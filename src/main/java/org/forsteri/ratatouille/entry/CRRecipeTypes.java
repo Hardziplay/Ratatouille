@@ -14,6 +14,7 @@ import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.compost_tower.CompostingRecipe;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.content.frozen_block.FreezingRecipe;
+import org.forsteri.ratatouille.content.oven.BakingRecipe;
 import org.forsteri.ratatouille.content.squeeze_basin.SqueezingRecipe;
 import org.forsteri.ratatouille.content.thresher.ThreshingRecipe;
 import org.forsteri.ratatouille.util.Lang;
@@ -28,7 +29,8 @@ public enum CRRecipeTypes implements IRecipeTypeInfo {
     SQUEEZING(SqueezingRecipe::new),
     DEMOLDING(DemoldingRecipe::new),
     FREEZING(FreezingRecipe::new),
-    COMPOSTING(CompostingRecipe::new);
+    COMPOSTING(CompostingRecipe::new),
+    BAKING(BakingRecipe::new);
     private final ResourceLocation id;
     private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> serializerObject;
     private final @Nullable DeferredHolder<RecipeType<?>, RecipeType<?>> typeObject;

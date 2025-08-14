@@ -1,5 +1,5 @@
 {
-  "itemGroup.ratatouille.base":"Create:Ratatouille",
+  "itemGroup.ratatouille.base": "Create:Ratatouille",
   "ratatouille.oven.status": "Oven Status : ",
   "ratatouille.oven.idle": "idle ",
   "ratatouille.oven.lvl": "Lvl ",
@@ -22,6 +22,7 @@
   "ratatouille.recipe.squeezing": "Squeezing",
   "ratatouille.recipe.threshing": "Threshing",
   "ratatouille.recipe.baking": "Bulk Baking",
+  "ratatouille.recipe.bakesmoking": "Bulk Smoking",
   "ratatouille.recipe.sausage_casing_requirement": "Sausage Casing Requirement",
   "ratatouille.recipe.demolding": "Demolding",
   "ratatouille.recipe.freezing": "Freezing",

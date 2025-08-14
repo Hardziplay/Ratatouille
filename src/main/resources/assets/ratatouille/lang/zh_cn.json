@@ -1,5 +1,5 @@
 {
-  "itemGroup.ratatouille.base":"机械动力：齿轮与麦穗",
+  "itemGroup.ratatouille.base": "机械动力：齿轮与麦穗",
   "block.ratatouille.bio_gas": "沼气",
   "block.ratatouille.compost_residue_fluid": "堆肥渣液",
   "block.ratatouille.compost_tea": "堆肥茶",
@@ -81,6 +81,7 @@
   "ratatouille.recipe.squeezing": "压制",
   "ratatouille.recipe.threshing": "脱粒",
   "ratatouille.recipe.baking": "批量烤制",
+  "ratatouille.recipe.bakesmoking": "批量熏制",
   "ratatouille.recipe.composting": "批量堆肥",
   "ratatouille.recipe.sausage_casing_requirement": "需要肠衣",
   "ratatouille.recipe.demolding": "脱模",
