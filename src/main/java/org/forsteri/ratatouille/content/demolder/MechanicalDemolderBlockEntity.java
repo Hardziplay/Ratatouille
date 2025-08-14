@@ -91,7 +91,7 @@ public class MechanicalDemolderBlockEntity extends KineticBlockEntity implements
                 canProcessInBulk() ? input.stack : new ItemStack(input.stack.getItem(), 1), recipe.get());
 
         for (ItemStack itemStack : outputs) {
-            if (!itemStack.is(CRTags.CRItemTags.MOLD.tag)) {
+            if (!itemStack.is(CRTags.MOLD)) {
                 outputList.add(itemStack);
             } else {
                 if (outputInv.insertItem(0, itemStack.copy(), true).isEmpty()) {

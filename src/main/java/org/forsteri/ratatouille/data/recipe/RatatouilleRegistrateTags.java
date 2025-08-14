@@ -1,12 +1,19 @@
 package org.forsteri.ratatouille.data.recipe;
 
+import com.simibubi.create.foundation.data.TagGen;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.Tags;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.entry.CRItems;
+import org.forsteri.ratatouille.entry.CRTags;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 public class RatatouilleRegistrateTags {
     public static void addGenerators() {
@@ -21,7 +28,63 @@ public class RatatouilleRegistrateTags {
     }
 
     private static void genItemTags(RegistrateTagsProvider<Item> provIn) {
+        TagGen.CreateTagsProvider<Item> prov = new TagGen.CreateTagsProvider<>(provIn, Item::builtInRegistryHolder);
 
+        prov.tag(CRTags.MOLD)
+                .add(
+                        CRItems.CAKE_MOLD.get(),
+                        CRItems.CHOCOLATE_MOLD.get()
+                );
+        prov.tag(CRTags.RAW_MEAT)
+                .add(
+                        Items.BEEF,
+                        Items.PORKCHOP,
+                        Items.CHICKEN,
+                        Items.MUTTON,
+                        Items.RABBIT
+                );
+        prov.tag(CRTags.EGGS)
+                .add(
+                        Items.EGG,
+                        Items.TURTLE_EGG,
+                        Items.SNIFFER_EGG,
+                        Items.FROGSPAWN,
+                        ModItems.FRIED_EGG.get(),
+                        CRItems.EGG_SHELL.get()
+                );
+        prov.tag(CRTags.COMPOSTABLE_ITEMS_1to1)
+                .add(
+                        Items.SUGAR_CANE,
+                        ModItems.STRAW.get(),
+                        ModItems.TREE_BARK.get(),
+                        Items.KELP,
+                        Items.DRIED_KELP,
+                        Items.SEAGRASS,
+                        Items.VINE,
+                        Items.TWISTING_VINES,
+                        Items.WEEPING_VINES,
+                        Items.MELON_SLICE,
+                        ModItems.PUMPKIN_SLICE.get(),
+                        Items.CRIMSON_FUNGUS,
+                        Items.WARPED_FUNGUS,
+                        Items.LILY_PAD,
+                        Items.BIG_DRIPLEAF,
+                        Items.SEA_PICKLE,
+                        Items.APPLE,
+                        Items.ROTTEN_FLESH,
+                        CRItems.SAUSAGE.get(),
+                        CRItems.RAW_SAUSAGE.get(),
+                        CRItems.SALTY_DOUGH.get(),
+                        CRItems.DRIED_COCOA_BEANS.get(),
+                        CRItems.CAKE_BASE.get()
+                )
+                .addTag(Tags.Items.CROPS)
+                .addTag(Tags.Items.FOODS_BERRY)
+                .addTag(CRTags.EGGS)
+                .addTag(CRTags.RAW_MEAT)
+                .addTag(ItemTags.FISHES)
+                .addTag(Tags.Items.FOODS_RAW_FISH)
+                .addTag(Tags.Items.FOODS_COOKED_MEAT);
     }
 
     private static void genFluidTags(RegistrateTagsProvider<Fluid> provIn) {
@@ -29,6 +92,6 @@ public class RatatouilleRegistrateTags {
     }
 
     private static void genEntityTags(RegistrateTagsProvider<EntityType<?>> provIn) {
-        
+
     }
 }

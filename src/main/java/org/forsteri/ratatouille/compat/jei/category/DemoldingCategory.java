@@ -31,7 +31,7 @@ public class DemoldingCategory extends CreateRecipeCategory<DemoldingRecipe> {
         List<ProcessingOutput> results = recipe.getRollableResults();
         int i = 0;
         for (ProcessingOutput output : results) {
-            if (output.getStack().is(CRTags.CRItemTags.MOLD.tag)) {
+            if (output.getStack().is(CRTags.MOLD)) {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 104, 1)
                         .setBackground(getRenderedSlot(output), -1, -1)
                         .addItemStack(output.getStack())
