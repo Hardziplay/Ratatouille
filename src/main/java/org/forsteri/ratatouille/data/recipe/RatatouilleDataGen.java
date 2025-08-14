@@ -10,6 +10,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.forsteri.ratatouille.Ratatouille;
+import org.forsteri.ratatouille.data.recipe.create.RatatouilleSequencedAssemblyRecipeGen;
 import org.forsteri.ratatouille.entry.CRPonderPlugin;
 
 import java.util.Map;
@@ -63,6 +64,8 @@ public class RatatouilleDataGen {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         generator.addProvider(event.includeServer(), new RatatouilleStandardRecipeGen(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new RatatouilleSequencedAssemblyRecipeGen(output, lookupProvider));
+
 
         if (event.includeServer()) {
             RatatouilleRecipeProvider.registerAllProcessing(generator, output, lookupProvider);

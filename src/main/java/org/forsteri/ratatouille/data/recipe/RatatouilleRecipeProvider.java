@@ -6,6 +6,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import org.forsteri.ratatouille.data.recipe.create.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,6 +29,12 @@ public final class RatatouilleRecipeProvider extends RecipeProvider {
         GENERATORS.add(new FreezingRecipeGen(output, registries));
         GENERATORS.add(new CompostingRecipeGen(output, registries));
         GENERATORS.add(new BakingRecipeGen(output, registries));
+        GENERATORS.add(new RatatouilleCompactingRecipeGen(output, registries));
+        GENERATORS.add(new RatatouilleCuttingRecipeGen(output, registries));
+        GENERATORS.add(new RatatouilleEmptyingRecipeGen(output, registries));
+        GENERATORS.add(new RatatouilleFillingRecipeGen(output, registries));
+        GENERATORS.add(new RatatouilleMillingRecipeGen(output, registries));
+        GENERATORS.add(new RatatouilleMixingRecipeGen(output, registries));
 
         gen.addProvider(true, new DataProvider() {
             @Override
