@@ -33,9 +33,9 @@ jobs:
       - name: Grant Permission
         run: chmod +x gradlew
       - name: Run data gen
-        run: ./gradlew runData
+        run: ./gradlew --refresh-dependencies runData
       - name: Run build with Gradle Wrapper
-        run: ./gradlew build
+        run: ./gradlew --refresh-dependencies build
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
