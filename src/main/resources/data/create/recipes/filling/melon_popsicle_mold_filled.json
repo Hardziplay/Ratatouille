@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "ratatouille:popsicle_mold"
+    },
+    {
+      "amount": 100,
+      "fluid": "ratatouille:melon_juice"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:melon_popsicle_mold_filled"
+    }
+  ]
+}

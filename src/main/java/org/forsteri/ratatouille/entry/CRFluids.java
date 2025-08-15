@@ -80,6 +80,12 @@ public class CRFluids {
                     .source(ForgeFlowingFluid.Source::new).block().build()
                     .bucket().build().register();
 
+    public static final FluidEntry<VirtualFluid> MELON_JUICE =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("melon_juice")
+                    .lang("Melon Juice")
+                    .register();
+
 
     public static void register() {}
 
