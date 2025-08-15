@@ -54,7 +54,7 @@ public class RatatouilleFillingRecipeGen extends FillingRecipeGen {
     ),
 
     MELON_POPSICLE_MOLD_FILLED = create("melon_popsicle_mold_filled", b -> b
-            .require(CRFluids.MELON_JUICE.get(), 100)
+            .require(CRFluids.MELON_JUICE_FLUID.get(), 100)
             .require(CRItems.POPSICLE_MOLD.get())
             .output(CRItems.MELON_POPSICLE_MOLD_FILLED.get())
     );

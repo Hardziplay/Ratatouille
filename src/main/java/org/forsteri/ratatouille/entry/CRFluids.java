@@ -71,9 +71,9 @@ public class CRFluids {
                     .lang("Compost Residue Fluid")
                     .source(BaseFlowingFluid.Source::new).block().build()
                     .bucket().build().register();
-    public static final FluidEntry<VirtualFluid> MELON_JUICE =
+    public static final FluidEntry<VirtualFluid> MELON_JUICE_FLUID =
             Ratatouille.REGISTRATE
-                    .virtualFluid("melon_juice")
+                    .virtualFluid("melon_juice_fluid")
                     .lang("Melon Juice")
                     .register();
 
