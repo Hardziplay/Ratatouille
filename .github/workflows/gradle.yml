@@ -22,6 +22,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clear all caches and temp files
+        run: |
+          rm -rf ~/.gradle
+          rm -rf ~/.m2
+          rm -rf ~/.cache
+
       - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -33,9 +39,9 @@ jobs:
       - name: Grant Permission
         run: chmod +x gradlew
       - name: Run data gen
-        run: ./gradlew --refresh-dependencies runData
+        run: ./gradlew runData
       - name: Run build with Gradle Wrapper
-        run: ./gradlew --refresh-dependencies build
+        run: ./gradlew build
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
