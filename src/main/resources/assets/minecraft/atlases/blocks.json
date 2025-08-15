@@ -71,6 +71,14 @@
     {
       "type": "single",
       "resource": "ratatouille:fluid/tomato_sauce_still"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/melon_juice_fluid_flow"
+    },
+    {
+      "type": "single",
+      "resource": "ratatouille:fluid/melon_juice_fluid_still"
     }
   ]
 }
