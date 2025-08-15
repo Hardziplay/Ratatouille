@@ -11,13 +11,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.content.spreader.SpreaderParticle;
+import org.forsteri.ratatouille.content.spreader.SpreaderParticleData;
 import org.forsteri.ratatouille.util.Lang;
 
 import java.util.function.Supplier;
 
 public enum CRParticleTypes {
-    SPREADER(SpreaderParticle.SpreaderParticleData::new);
+    SPREADER(SpreaderParticleData::new);
     private final ParticleEntry<?> entry;
 
     <D extends ParticleOptions> CRParticleTypes(Supplier<? extends ICustomParticleData<D>> typeFactory) {
