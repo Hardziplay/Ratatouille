@@ -6,12 +6,18 @@
     },
     {
       "amount": 100,
-      "fluid": "ratatouille:melon_juice_fluid"
+      "fluid": "create_central_kitchen:melon_juice"
     }
   ],
   "results": [
     {
       "item": "ratatouille:melon_popsicle_mold_filled"
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create_central_kitchen"
     }
   ]
 }

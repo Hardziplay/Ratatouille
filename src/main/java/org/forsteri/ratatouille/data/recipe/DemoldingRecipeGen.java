@@ -6,6 +6,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 public class DemoldingRecipeGen extends ProcessingRecipeGen{
     GeneratedRecipe
@@ -18,7 +19,13 @@ public class DemoldingRecipeGen extends ProcessingRecipeGen{
             CRItems.CAKE_MOLD_BAKED::get,
             b -> b.output(CRItems.CAKE_BASE.get())
                     .output(CRItems.CAKE_MOLD.get())
-        );
+        ),
+
+        MELON_POPSICLE = this.create(
+            CRItems.MELON_POPSICLE_MOLD_SOLID::get,
+            b -> b.output(ModItems.MELON_POPSICLE.get())
+                    .output(CRItems.POPSICLE_MOLD.get())
+            );
     public DemoldingRecipeGen(PackOutput generator) {
         super(generator);
     }

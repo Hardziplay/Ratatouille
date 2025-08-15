@@ -1,0 +1,13 @@
+{
+  "type": "ratatouille:freezing",
+  "ingredients": [
+    {
+      "item": "ratatouille:melon_popsicle_mold_filled"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:melon_popsicle_mold_solid"
+    }
+  ]
+}

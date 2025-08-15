@@ -2,8 +2,16 @@
   "type": "create:mixing",
   "ingredients": [
     {
-      "item": "minecraft:melon_slice",
-      "count": 4
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "item": "minecraft:melon_slice"
     },
     {
       "item": "minecraft:sugar"
@@ -12,7 +20,7 @@
   "results": [
     {
       "amount": 500,
-      "fluid": "ratatouille:melon_juice"
+      "fluid": "ratatouille:melon_juice_fluid"
     }
   ]
 }

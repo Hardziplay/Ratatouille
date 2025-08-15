@@ -2,16 +2,16 @@
   "type": "create:filling",
   "ingredients": [
     {
-      "item": "ratatouille:popsicle_mold"
+      "item": "minecraft:glass_bottle"
     },
     {
-      "amount": 100,
+      "amount": 250,
       "fluid": "ratatouille:melon_juice_fluid"
     }
   ],
   "results": [
     {
-      "item": "ratatouille:melon_popsicle_mold_filled"
+      "item": "farmersdelight:melon_juice"
     }
   ]
 }
