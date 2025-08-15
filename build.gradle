@@ -1,10 +1,22 @@
+buildscript {
+    repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
 plugins {
     id 'eclipse'
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.38'
 }
+
+apply plugin: 'org.spongepowered.mixin'
 
 group = mod_group_id
 version = mod_version
@@ -162,6 +174,7 @@ dependencies {
     implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}") { transitive = false })
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     implementation fg.deobf("curse.maven:farmers_delight-398521:${farmers_delight_version}")
+    implementation fg.deobf("curse.maven:create_central_kitchen-820977:${create_central_kitchen_version}")
 //    implementation fg.deobf("curse.maven:create_central_kitchen-820977:${create_central_kitchen_version}")
     runtimeOnly fg.deobf("curse.maven:oculus-581495:${oculus_version}")
     runtimeOnly fg.deobf("curse.maven:embeddium-908741:${embeddium_version}")
@@ -213,3 +226,4 @@ tasks.named('jar', Jar).configure {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+

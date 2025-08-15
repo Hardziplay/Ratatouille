@@ -1,0 +1,16 @@
+{
+  "type": "ratatouille:demolding",
+  "ingredients": [
+    {
+      "item": "ratatouille:cake_mold_baked"
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:cake_base"
+    },
+    {
+      "item": "ratatouille:cake_mold"
+    }
+  ]
+}

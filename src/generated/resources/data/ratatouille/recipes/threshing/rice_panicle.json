@@ -1,0 +1,24 @@
+{
+  "type": "ratatouille:threshing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "farmersdelight:rice_panicle"
+    }
+  ],
+  "processingTime": 200,
+  "results": [
+    {
+      "item": "farmersdelight:rice"
+    },
+    {
+      "chance": 0.5,
+      "item": "farmersdelight:rice"
+    }
+  ]
+}

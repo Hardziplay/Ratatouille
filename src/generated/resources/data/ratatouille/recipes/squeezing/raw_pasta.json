@@ -1,0 +1,19 @@
+{
+  "type": "ratatouille:squeezing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "ratatouille:salty_dough"
+    }
+  ],
+  "results": [
+    {
+      "item": "farmersdelight:raw_pasta"
+    }
+  ]
+}

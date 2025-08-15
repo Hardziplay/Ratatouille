@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "is_2x2=false": {
+      "model": "ratatouille:block/oven"
+    },
+    "is_2x2=true": {
+      "model": "ratatouille:block/oven"
+    }
+  }
+}

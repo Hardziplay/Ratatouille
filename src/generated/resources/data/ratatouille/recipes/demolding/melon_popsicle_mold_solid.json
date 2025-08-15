@@ -1,0 +1,16 @@
+{
+  "type": "ratatouille:demolding",
+  "ingredients": [
+    {
+      "item": "ratatouille:melon_popsicle_mold_solid"
+    }
+  ],
+  "results": [
+    {
+      "item": "farmersdelight:melon_popsicle"
+    },
+    {
+      "item": "ratatouille:popsicle_mold"
+    }
+  ]
+}

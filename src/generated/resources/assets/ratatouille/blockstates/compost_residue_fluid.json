@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ratatouille:block/compost_residue_fluid"
+    }
+  }
+}

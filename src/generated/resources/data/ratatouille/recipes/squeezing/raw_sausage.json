@@ -1,0 +1,18 @@
+{
+  "type": "ratatouille:squeezing",
+  "ingredients": [
+    {
+      "item": "ratatouille:sausage_casing"
+    },
+    {
+      "amount": 1000,
+      "fluid": "ratatouille:mince_meat",
+      "nbt": {}
+    }
+  ],
+  "results": [
+    {
+      "item": "ratatouille:raw_sausage"
+    }
+  ]
+}
