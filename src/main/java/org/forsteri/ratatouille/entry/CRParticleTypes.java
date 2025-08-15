@@ -11,13 +11,13 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.forsteri.ratatouille.Ratatouille;
-import org.forsteri.ratatouille.content.spreader.SpreaderParticle;
+import org.forsteri.ratatouille.content.spreader.SpreaderParticleData;
 import org.forsteri.ratatouille.util.Lang;
 
 import java.util.function.Supplier;
 
 public enum CRParticleTypes {
-    SPREADER(SpreaderParticle.SpreaderParticleData::new);
+    SPREADER(SpreaderParticleData::new);
     private final ParticleEntry<?> entry;
 
     <D extends ParticleOptions> CRParticleTypes(Supplier<? extends ICustomParticleData<D>> typeFactory) {
