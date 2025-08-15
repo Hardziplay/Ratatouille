@@ -85,8 +85,8 @@ public final class RatatouilleStandardRecipeGen extends BaseRecipeProvider {
                     .viaShaped(b -> b
                             .pattern(" Z ")
                             .pattern("YXY")
-                            .define('Y', AllBlocks.FLUID_PIPE)
-                            .define('X', AllItems.COPPER_SHEET)
+                            .define('X', AllBlocks.FLUID_PIPE)
+                            .define('Y', AllItems.COPPER_SHEET)
                             .define('Z', AllBlocks.FLUID_TANK)
                     ),
             MECHANICAL_DEMOLDER = create(CRBlocks.MECHANICAL_DEMOLDER)
@@ -130,13 +130,13 @@ public final class RatatouilleStandardRecipeGen extends BaseRecipeProvider {
             SPREADER = create(CRBlocks.SPREADER_BLOCK)
                     .unlockedBy(AllItems.ANDESITE_ALLOY::asItem) // mandatory
                     .viaShaped(b -> b
-                            .pattern(" S ")
-                            .pattern("ZXZ")
+                            .pattern(" X ")
+                            .pattern("ZSZ")
                             .pattern(" Y ")
-                            .define('Y', AllItems.ANDESITE_ALLOY)
-                            .define('X', AllBlocks.ANDESITE_CASING)
+                            .define('Y', AllItems.PROPELLER)
+                            .define('S', AllBlocks.ANDESITE_CASING)
                             .define('Z', AllItems.TREE_FERTILIZER)
-                            .define('S', AllBlocks.COGWHEEL)
+                            .define('X', AllBlocks.COGWHEEL)
                     ),
             SQUEEZE_BASIN = create(CRBlocks.SQUEEZE_BASIN)
                     .unlockedBy(Items.COPPER_INGOT::asItem) // mandatory

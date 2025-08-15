@@ -36,6 +36,9 @@ public class CRItems {
     public static final ItemEntry<Item> CAKE_BASE = Ratatouille.REGISTRATE.item("cake_base", Item::new).properties(p -> p.food(new FoodProperties.Builder().nutrition(10)
             .saturationModifier(0.5F)
             .build())).register();
+    public static final ItemEntry<Item> POPSICLE_MOLD = Ratatouille.REGISTRATE.item("popsicle_mold", Item::new).register();
+    public static final ItemEntry<Item> MELON_POPSICLE_MOLD_FILLED = Ratatouille.REGISTRATE.item("melon_popsicle_mold_filled", Item::new).register();
+    public static final ItemEntry<Item> MELON_POPSICLE_MOLD_SOLID = Ratatouille.REGISTRATE.item("melon_popsicle_mold_solid", Item::new).register();
     public static final ItemEntry<Item> EGG_SHELL = Ratatouille.REGISTRATE.item("egg_shell", Item::new).register();
     public static final ItemEntry<Item> WHEAT_KERNELS = Ratatouille.REGISTRATE.item("wheat_kernels", Item::new).register();
     public static final ItemEntry<Item> SALTY_DOUGH = Ratatouille.REGISTRATE.item("salty_dough", Item::new).register();

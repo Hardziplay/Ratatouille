@@ -8,6 +8,7 @@ import org.forsteri.ratatouille.Ratatouille;
 import org.forsteri.ratatouille.content.demolder.DemoldingRecipe;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,6 +24,12 @@ public class DemoldingRecipeGen extends StandardProcessingRecipeGen<DemoldingRec
                     CRItems.CAKE_MOLD_BAKED::get,
                     b -> b.output(CRItems.CAKE_BASE.get())
                             .output(CRItems.CAKE_MOLD.get())
+            ),
+
+            MELON_POPSICLE = this.create(
+                    CRItems.MELON_POPSICLE_MOLD_SOLID::get,
+                    b -> b.output(ModItems.MELON_POPSICLE.get())
+                            .output(CRItems.POPSICLE_MOLD.get())
             );
 
     public DemoldingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

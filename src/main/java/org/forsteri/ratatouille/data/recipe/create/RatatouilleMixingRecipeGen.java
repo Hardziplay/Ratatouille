@@ -90,7 +90,15 @@ public class RatatouilleMixingRecipeGen extends MixingRecipeGen {
             .require(CRItems.SALT.get())
             .require(CRFluids.EGG_YOLK.get(), 100)
             .output(CRItems.SALTY_DOUGH.get())
-    );
+    ),
+    MELON_JUICE = create("melon_juice", b -> b
+            .require(Items.MELON_SLICE)
+            .require(Items.MELON_SLICE)
+            .require(Items.MELON_SLICE)
+            .require(Items.MELON_SLICE)
+            .require(Items.SUGAR)
+            .output(CRFluids.MELON_JUICE.get(), 500)
+            );
 
     public RatatouilleMixingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, Ratatouille.MOD_ID);

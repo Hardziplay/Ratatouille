@@ -22,6 +22,11 @@ public class RatatouilleCompactingRecipeGen extends CompactingRecipeGen {
                     .require(AllItems.IRON_SHEET.get())
                     .require(AllItems.IRON_SHEET.get())
                     .output(CRItems.CHOCOLATE_MOLD.get(), 1)
+            ),
+
+            POPSICLE_MOLD = create("popsicle_mold", b -> b
+                    .require(AllItems.IRON_SHEET.get())
+                    .output(CRItems.POPSICLE_MOLD.get(), 1)
             );
 
     public RatatouilleCompactingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

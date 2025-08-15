@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @SuppressWarnings("unused")
 public class SqueezingRecipeGen extends StandardProcessingRecipeGen<SqueezingRecipe> {
     GeneratedRecipe
-            RAW_SAUSAGE = this.create("raw_sausage", b -> b.require(CRFluids.MINCE_MEAT.get(), 1000)
+            RAW_SAUSAGE = this.create("raw_sausage", b -> b.require(CRFluids.MINCE_MEAT.get(), 250)
             .require(CRItems.SAUSAGE_CASING.get())
             .output(CRItems.RAW_SAUSAGE.get())),
 

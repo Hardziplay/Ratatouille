@@ -19,7 +19,10 @@ public final class ThreshingRecipeGen extends StandardProcessingRecipeGen<Thresh
     GeneratedRecipe
             RICE = this.create(
             "rice",
-            b -> b.output(ModItems.RICE.get()).output(0.5F, vectorwing.farmersdelight.common.registry.ModItems.RICE.get()).duration(200)
+            b -> b
+                    .require(ModItems.RICE_PANICLE.get())
+                    .output(ModItems.RICE.get())
+                    .output(0.5F, vectorwing.farmersdelight.common.registry.ModItems.RICE.get()).duration(200)
     ),
 
     BOIL_STONE = this.create("boil_stone",

@@ -51,6 +51,12 @@ public class RatatouilleFillingRecipeGen extends FillingRecipeGen {
             .require(Tags.Fluids.HONEY, 500) // forge:honey 流体标签
             .output(ResourceLocation.parse("createaddition:honey_cake"))
             .whenModLoaded("createaddition")
+    ),
+
+    MELON_POPSICLE_MOLD_FILLED = create("melon_popsicle_mold_filled", b -> b
+            .require(CRFluids.MELON_JUICE.get(), 100)
+            .require(CRItems.POPSICLE_MOLD.get())
+            .output(CRItems.MELON_POPSICLE_MOLD_FILLED.get())
     );
 
     public RatatouilleFillingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

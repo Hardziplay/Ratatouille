@@ -34,7 +34,8 @@ public class RatatouilleRegistrateTags {
         prov.tag(CRTags.MOLD)
                 .add(
                         CRItems.CAKE_MOLD.get(),
-                        CRItems.CHOCOLATE_MOLD.get()
+                        CRItems.CHOCOLATE_MOLD.get(),
+                        CRItems.POPSICLE_MOLD.get()
                 );
         prov.tag(CRTags.RAW_MEAT)
                 .add(

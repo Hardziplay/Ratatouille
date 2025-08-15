@@ -71,6 +71,11 @@ public class CRFluids {
                     .lang("Compost Residue Fluid")
                     .source(BaseFlowingFluid.Source::new).block().build()
                     .bucket().build().register();
+    public static final FluidEntry<VirtualFluid> MELON_JUICE =
+            Ratatouille.REGISTRATE
+                    .virtualFluid("melon_juice")
+                    .lang("Melon Juice")
+                    .register();
 
     static {
         Ratatouille.REGISTRATE.setCreativeTab(CRCreativeModeTabs.BASE_CREATIVE_TAB);
