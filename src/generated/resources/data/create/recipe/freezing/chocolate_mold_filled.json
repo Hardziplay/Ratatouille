@@ -1,0 +1,13 @@
+{
+  "type": "ratatouille:freezing",
+  "ingredients": [
+    {
+      "item": "ratatouille:chocolate_mold_filled"
+    }
+  ],
+  "results": [
+    {
+      "id": "ratatouille:chocolate_mold_solid"
+    }
+  ]
+}

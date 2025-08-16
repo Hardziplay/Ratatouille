@@ -1,0 +1,14 @@
+{
+  "type": "ratatouille:threshing",
+  "ingredients": [
+    {
+      "tag": "c:stones"
+    }
+  ],
+  "processing_time": 200,
+  "results": [
+    {
+      "id": "ratatouille:boil_stone"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "type": "fluid_stack",
+      "amount": 200,
+      "fluid": "ratatouille:compost_residue_fluid"
+    }
+  ],
+  "results": [
+    {
+      "id": "ratatouille:compost_residue"
+    }
+  ]
+}
