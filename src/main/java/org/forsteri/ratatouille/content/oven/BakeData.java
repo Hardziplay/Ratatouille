@@ -34,47 +34,6 @@ public class BakeData {
         processFood(oven);
     }
 
-    public void processFood(OvenBlockEntity oven) {
-        List<List<List<OvenBlockEntity.Inventory>>> inventories = oven.inventories;
-
-        if (inventories == null)
-            return;
-
-        for (List<List<OvenBlockEntity.Inventory>> x : inventories) {
-            for (List<OvenBlockEntity.Inventory> y : x) {
-                for (OvenBlockEntity.Inventory inventory : y) {
-                    if (inventory == null)
-                        continue;
-                    if (inventory.tickTillFinishCooking < 0)
-                        continue;
-
-                    if (inventory.tickTillFinishCooking > 0)
-                        inventory.tickTillFinishCooking -= Math.min(Math.min(fanLevel, sizeLevel), tempLevel);
-
-                    if (inventory.tickTillFinishCooking <= 0) {
-                        if (inventory.lastRecipe == null)
-                            continue;
-                        ItemStack resultStack = inventory.lastRecipe.getResultItem(RegistryAccess.EMPTY).copy();
-                        resultStack.setCount(inventory.getStackInSlot(0).getCount());
-                        inventory.setStackInSlot(0, resultStack);
-                    }
-                }
-            }
-        }
-
-        oven.notifyUpdate();
-    }
-
-    public boolean evaluate(OvenBlockEntity oven) {
-        assert oven.getLevel() != null;
-
-        int sizeLevelBefore = sizeLevel;
-
-        sizeLevel = oven.radius * oven.height * oven.radius / 4;
-
-        return sizeLevelBefore != sizeLevel;
-    }
-
     public boolean updateOven(OvenBlockEntity controller) {
         assert controller.getLevel() != null;
 
@@ -127,8 +86,52 @@ public class BakeData {
         }
 
         fanLevel = (int) newFanLevel;
+        fanLevel = Math.clamp(fanLevel, 0, 8);
+        tempLevel = Math.clamp(tempLevel, 0, 8);
 
         return tempLevel != prevTemp || fanLevelBefore != fanLevel;
+    }
+
+    public void processFood(OvenBlockEntity oven) {
+        List<List<List<OvenBlockEntity.Inventory>>> inventories = oven.inventories;
+
+        if (inventories == null)
+            return;
+
+        for (List<List<OvenBlockEntity.Inventory>> x : inventories) {
+            for (List<OvenBlockEntity.Inventory> y : x) {
+                for (OvenBlockEntity.Inventory inventory : y) {
+                    if (inventory == null)
+                        continue;
+                    if (inventory.tickTillFinishCooking < 0)
+                        continue;
+
+                    if (inventory.tickTillFinishCooking > 0)
+                        inventory.tickTillFinishCooking -= Math.min(Math.min(fanLevel, sizeLevel), tempLevel);
+
+                    if (inventory.tickTillFinishCooking <= 0) {
+                        if (inventory.lastRecipe == null)
+                            continue;
+                        ItemStack resultStack = inventory.lastRecipe.getResultItem(RegistryAccess.EMPTY).copy();
+                        resultStack.setCount(inventory.getStackInSlot(0).getCount());
+                        inventory.setStackInSlot(0, resultStack);
+                    }
+                }
+            }
+        }
+
+        oven.notifyUpdate();
+    }
+
+    public boolean evaluate(OvenBlockEntity oven) {
+        assert oven.getLevel() != null;
+
+        int sizeLevelBefore = sizeLevel;
+
+        sizeLevel = oven.radius * oven.height * oven.radius / 4;
+        sizeLevel = Math.clamp(sizeLevel, 0, 8);
+
+        return sizeLevelBefore != sizeLevel;
     }
 
     public void clear() {
@@ -181,7 +184,8 @@ public class BakeData {
 
     private MutableComponent blockComponent(int level) {
         int clamped = Mth.clamp(level, 0, 8);
-        return Component.literal("\u2588".repeat(clamped) + "\u2591".repeat(8 - clamped));}
+        return Component.literal("\u2588".repeat(clamped) + "\u2591".repeat(8 - clamped));
+    }
 
     private MutableComponent barComponent(int level) {
         return Component.empty()
@@ -204,7 +208,7 @@ public class BakeData {
         if (ovenLevel == 0) {
             return Lang.translateDirect("oven.idle", new Object[0]);
         } else {
-            return ovenLevel == 8 ? Lang.translateDirect("oven.max_lvl", new Object[0]) : Lang.translateDirect("oven.lvl", new Object[0]).append(String.valueOf(ovenLevel));
+            return ovenLevel >= 8 ? Lang.translateDirect("oven.max_lvl", new Object[0]) : Lang.translateDirect("oven.lvl", new Object[0]).append(String.valueOf(ovenLevel));
         }
     }
 
