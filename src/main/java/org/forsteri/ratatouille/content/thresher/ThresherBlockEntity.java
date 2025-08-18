@@ -235,7 +235,7 @@ public class ThresherBlockEntity extends KineticBlockEntity {
 
     public void invalidate() {
         super.invalidate();
-        this.capability = null;
+//        this.capability = null;
         invalidateCapabilities();
     }
 

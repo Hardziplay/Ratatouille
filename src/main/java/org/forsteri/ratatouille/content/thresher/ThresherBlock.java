@@ -56,22 +56,22 @@ public class ThresherBlock extends HorizontalKineticBlock implements IBE<Threshe
         super.updateEntityAfterFallOn(worldIn, entityIn);
         if (!CRBlocks.THRESHER.has(worldIn.getBlockState(entityIn.blockPosition())))
             return;
-        if (!(entityIn instanceof ItemEntity))
+        if (!(entityIn instanceof ItemEntity itemEntity))
             return;
         if (!entityIn.isAlive())
             return;
-        ItemEntity itemEntity = (ItemEntity) entityIn;
         withBlockEntityDo(worldIn, entityIn.blockPosition(), be -> {
+            if (be.capability != null) {
+                ItemStack insertItem = ItemHandlerHelper.insertItem(be.capability, itemEntity.getItem()
+                        .copy(), false);
 
-            ItemStack insertItem = ItemHandlerHelper.insertItem(be.inputInv, itemEntity.getItem()
-                    .copy(), false);
+                if (insertItem.isEmpty()) {
+                    itemEntity.discard();
+                    return;
+                }
 
-            if (insertItem.isEmpty()) {
-                itemEntity.discard();
-                return;
+                itemEntity.setItem(insertItem);
             }
-
-            itemEntity.setItem(insertItem);
         });
     }
 
