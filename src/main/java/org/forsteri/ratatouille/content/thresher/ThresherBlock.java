@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.content.thresher;
 
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
@@ -26,15 +25,15 @@ public class ThresherBlock extends HorizontalKineticBlock implements IBE<Threshe
     }
 
     @Override
+    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+        return getRotationAxis(state) == face.getAxis();
+    }
+
+    @Override
     public Direction.Axis getRotationAxis(BlockState state) {
         return state.getValue(HORIZONTAL_FACING)
                 .getClockWise()
                 .getAxis();
-    }
-
-    @Override
-    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-        return getRotationAxis(state) == face.getAxis();
     }
 
     @Override
@@ -48,40 +47,40 @@ public class ThresherBlock extends HorizontalKineticBlock implements IBE<Threshe
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
-        boolean isZ = pState.getValue(HORIZONTAL_FACING).getAxis() == Direction.Axis.Z;
-        return Shapes.or(
-                Shapes.create(0, 0, 0, 1, 2/16f, 1),
-                Shapes.create(isZ ? 0 : 1/16f, 2/16f, isZ ? 1/16f : 0, isZ ? 1 : 15/16f, 15/16f, isZ ? 15/16f: 1)
-        );
-    }
-
-    @Override
     public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
         super.updateEntityAfterFallOn(worldIn, entityIn);
         if (!CRBlocks.THRESHER.has(worldIn.getBlockState(entityIn.blockPosition())))
             return;
-        if (!(entityIn instanceof ItemEntity))
+        if (!(entityIn instanceof ItemEntity itemEntity))
             return;
         if (!entityIn.isAlive())
             return;
-        ItemEntity itemEntity = (ItemEntity) entityIn;
         withBlockEntityDo(worldIn, entityIn.blockPosition(), be -> {
+            be.capability.ifPresent(cap -> {
+                ItemStack insertItem = ItemHandlerHelper.insertItem(cap, itemEntity.getItem()
+                        .copy(), false);
 
-            ItemStack insertItem = ItemHandlerHelper.insertItem(be.inputInv, itemEntity.getItem()
-                    .copy(), false);
+                if (insertItem.isEmpty()) {
+                    itemEntity.discard();
+                    return;
+                }
 
-            if (insertItem.isEmpty()) {
-                itemEntity.discard();
-                return;
-            }
-
-            itemEntity.setItem(insertItem);
+                itemEntity.setItem(insertItem);
+            });
         });
     }
 
     @Override
     public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
         return false;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
+        boolean isZ = pState.getValue(HORIZONTAL_FACING).getAxis() == Direction.Axis.Z;
+        return Shapes.or(
+                Shapes.create(0, 0, 0, 1, 2 / 16f, 1),
+                Shapes.create(isZ ? 0 : 1 / 16f, 2 / 16f, isZ ? 1 / 16f : 0, isZ ? 1 : 15 / 16f, 15 / 16f, isZ ? 15 / 16f : 1)
+        );
     }
 }
