@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ratatouille:block/mechanical_demolder/block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ratatouille:block/mechanical_demolder/block"
+    },
+    "facing=south": {
+      "model": "ratatouille:block/mechanical_demolder/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ratatouille:block/mechanical_demolder/block",
+      "y": 270
+    }
+  }
+}

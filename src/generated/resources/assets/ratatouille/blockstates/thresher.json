@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ratatouille:block/thresher/block",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "ratatouille:block/thresher/block",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ratatouille:block/thresher/block",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "ratatouille:block/thresher/block"
+    }
+  }
+}

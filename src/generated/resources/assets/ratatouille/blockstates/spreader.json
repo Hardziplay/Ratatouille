@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "ratatouille:block/spreader/block",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "ratatouille:block/spreader/block",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ratatouille:block/spreader/block",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "ratatouille:block/spreader/block",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "ratatouille:block/spreader/block"
+    },
+    "facing=west": {
+      "model": "ratatouille:block/spreader/block",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

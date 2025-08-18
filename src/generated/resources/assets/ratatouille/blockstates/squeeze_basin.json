@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "casing=false,facing=east": {
+      "model": "ratatouille:block/squeeze_basin/block",
+      "y": 270
+    },
+    "casing=false,facing=north": {
+      "model": "ratatouille:block/squeeze_basin/block",
+      "y": 180
+    },
+    "casing=false,facing=south": {
+      "model": "ratatouille:block/squeeze_basin/block"
+    },
+    "casing=false,facing=west": {
+      "model": "ratatouille:block/squeeze_basin/block",
+      "y": 90
+    },
+    "casing=true,facing=east": {
+      "model": "ratatouille:block/squeeze_basin/block_casing",
+      "y": 270
+    },
+    "casing=true,facing=north": {
+      "model": "ratatouille:block/squeeze_basin/block_casing",
+      "y": 180
+    },
+    "casing=true,facing=south": {
+      "model": "ratatouille:block/squeeze_basin/block_casing"
+    },
+    "casing=true,facing=west": {
+      "model": "ratatouille:block/squeeze_basin/block_casing",
+      "y": 90
+    }
+  }
+}

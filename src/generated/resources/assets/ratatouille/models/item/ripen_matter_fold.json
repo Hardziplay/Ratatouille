@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ratatouille:item/ripen_matter_fold"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "ratatouille:compost_residue"
+    },
+    {
+      "item": "ratatouille:compost_residue"
+    },
+    {
+      "item": "ratatouille:compost_residue"
+    },
+    {
+      "item": "ratatouille:compost_residue"
+    },
+    {
+      "item": "minecraft:dirt"
+    }
+  ],
+  "results": [
+    {
+      "id": "farmersdelight:organic_compost"
+    }
+  ]
+}
