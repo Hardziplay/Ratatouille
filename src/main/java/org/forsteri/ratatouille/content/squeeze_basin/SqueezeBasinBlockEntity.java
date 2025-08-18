@@ -111,16 +111,16 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
             return;
 
         if (inputInventory.getStackInSlot(0).isEmpty() && inputTank.isEmpty()) return;
-        if (lastRecipe == null || !SqueezingRecipe.match(this, lastRecipe)) {
+        if (lastRecipe == null || !lastRecipe.match(this)) {
             Optional<RecipeHolder<SqueezingRecipe>> recipe = CRRecipeTypes.SQUEEZING.find(inputInventory, level);
             if (recipe.isPresent()) {
                 lastRecipe = recipe.get().value();
-                if (SqueezingRecipe.match(this, lastRecipe))
+                if (lastRecipe.match(this))
                     getOperator().ifPresent(be -> be.pressingBehaviour.start(PressingBehaviour.Mode.BASIN));
             }
             sendData();
         } else {
-            if (SqueezingRecipe.match(this, lastRecipe))
+            if (lastRecipe.match(this))
                 getOperator().ifPresent(be -> be.pressingBehaviour.start(PressingBehaviour.Mode.BASIN));
             sendData();
         }
@@ -229,7 +229,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
 
     private void process() {
         if (level == null) return;
-        if (this.lastRecipe == null || !SqueezingRecipe.match(this, lastRecipe)) {
+        if (this.lastRecipe == null || !lastRecipe.match(this)) {
             Optional<RecipeHolder<SqueezingRecipe>> recipe = CRRecipeTypes.SQUEEZING.find(new RecipeWrapper(inputInventory), this.level);
             if (recipe.isEmpty()) {
                 return;
