@@ -80,9 +80,16 @@ public class ThresherBlockEntity extends KineticBlockEntity {
                     InvManipulationBehaviour inserter = null;
                     if (be != null) {
                         inserter = (InvManipulationBehaviour) BlockEntityBehaviour.get(this.level, be.getBlockPos(), InvManipulationBehaviour.TYPE);
+                        if (inserter == null) continue;
                     }
 
-                    IItemHandler targetInv = be == null ? null : (IItemHandler) level.getCapability(Capabilities.ItemHandler.BLOCK, be.getBlockPos(), direction.getOpposite()) == null ? null : (IItemHandler) inserter.getInventory();
+                    IItemHandler targetInv =
+                            be == null ?
+                                    null :
+                                    (IItemHandler) level.getCapability(Capabilities.ItemHandler.BLOCK, be.getBlockPos(), direction.getOpposite()) == null ?
+                                            null :
+                                            (IItemHandler) inserter.getInventory();
+
                     if (targetInv != null) {
                         if (ItemHandlerHelper.insertItemStacked(targetInv, stack, true).isEmpty()) {
                             ItemHandlerHelper.insertItemStacked(targetInv, stack.copy(), false);
