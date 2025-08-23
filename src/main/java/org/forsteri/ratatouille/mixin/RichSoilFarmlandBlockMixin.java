@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import vectorwing.farmersdelight.common.block.RichSoilFarmlandBlock;
 
 @Mixin(value = RichSoilFarmlandBlock.class, remap = false)
-public class RichSoilFarmlandBlockMixin extends FarmBlock{
+public class RichSoilFarmlandBlockMixin extends FarmBlock {
     public RichSoilFarmlandBlockMixin(Properties pProperties) {
         super(pProperties);
     }
 
-    @Inject(method = "hasWater", at=@At("HEAD"), cancellable = true)
-    private static void hasWater(LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "isNearWater", at = @At("HEAD"), cancellable = true)
+    private static void isNearWater(LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
         IrrigationTowerBlockEntity.isNearWater(pLevel, pPos, cir);
     }
 }
