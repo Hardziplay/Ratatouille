@@ -17,7 +17,7 @@ public class RichSoilFarmlandBlockMixin extends FarmBlock{
         super(pProperties);
     }
 
-    @Inject(method = "hasWater", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "IsNearWater", at=@At("HEAD"), cancellable = true)
     private static void hasWater(LevelReader pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
         IrrigationTowerBlockEntity.isNearWater(pLevel, pPos, cir);
     }
