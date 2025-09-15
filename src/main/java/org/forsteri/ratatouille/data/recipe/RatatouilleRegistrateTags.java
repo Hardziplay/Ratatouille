@@ -76,7 +76,6 @@ public class RatatouilleRegistrateTags {
                         Items.ROTTEN_FLESH,
                         CRItems.SAUSAGE.get(),
                         CRItems.RAW_SAUSAGE.get(),
-                        CRItems.SALTY_DOUGH.get(),
                         CRItems.DRIED_COCOA_BEANS.get(),
                         CRItems.CAKE_BASE.get()
                 )
