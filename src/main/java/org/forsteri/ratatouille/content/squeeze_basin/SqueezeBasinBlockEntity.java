@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.content.squeeze_basin;
 
-import com.google.common.collect.ImmutableList;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
@@ -20,7 +19,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,49 +28,53 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.*;
-import java.util.*;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import org.forsteri.ratatouille.content.thresher.ThresherBlockEntity;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.forsteri.ratatouille.util.Lang;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Optional;
+
 import static org.forsteri.ratatouille.content.squeeze_basin.SqueezeBasinBlock.CASING;
 
 public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
     public SqueezeBasinInventory inputInventory;
     public SmartFluidTankBehaviour inputTank;
+    public SqueezingRecipe lastRecipe;
     protected SmartInventory outputInventory;
     protected LazyOptional<IItemHandlerModifiable> itemCapability;
     protected LazyOptional<IFluidHandler> fluidCapability;
-    private boolean contentsChanged;
     int recipeBackupCheck;
-    public SqueezingRecipe lastRecipe;
+    private boolean contentsChanged;
 
     public SqueezeBasinBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         this.inputInventory = (new SqueezeBasinInventory(1, this));
         this.inputInventory.whenContentsChanged($ -> this.contentsChanged = true).withMaxStackSize(64);
-        this.outputInventory = (new SqueezeBasinInventory(1, this)).forbidInsertion().withMaxStackSize(1);
+        this.outputInventory = (new SqueezeBasinInventory(1, this)).forbidInsertion().withMaxStackSize(64);
         this.itemCapability = LazyOptional.of(SqueezeBasinInventoryHandler::new);
         this.contentsChanged = true;
         this.recipeBackupCheck = 20;
     }
 
     @Override
-    public void lazyTick() {
-        super.lazyTick();
-        if (!this.level.isClientSide) {
-            if (this.recipeBackupCheck-- <= 0) {
-                this.recipeBackupCheck = 20;
-                if (!this.isEmpty()) {
-                    this.notifyChangeOfContents();
-                }
-            }
-        }
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        behaviours.add(new DirectBeltInputBehaviour(this));
+        this.inputTank = (new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, true)).whenFluidUpdates(() -> {
+            this.contentsChanged = true;
+        });
+        behaviours.add(this.inputTank);
+        fluidCapability = LazyOptional.of(() -> {
+            LazyOptional<? extends IFluidHandler> inputCap = inputTank.getCapability();
+            return new CombinedTankWrapper(inputCap.orElse(null));
+        });
     }
 
     @Override
@@ -109,42 +111,58 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     }
 
-    private void process() {
-        if (this.lastRecipe == null || !this.lastRecipe.match(this, this.getBlockState().getValue(CASING))) {
-            Optional<SqueezingRecipe> recipe = CRRecipeTypes.SQUEEZING.find(inputInventory, this.level);
-            if (recipe.isEmpty()) {
-                return;
+    @Override
+    public void lazyTick() {
+        super.lazyTick();
+        if (!this.level.isClientSide) {
+            if (this.recipeBackupCheck-- <= 0) {
+                this.recipeBackupCheck = 20;
+                if (!this.isEmpty()) {
+                    this.notifyChangeOfContents();
+                }
             }
-
-            this.lastRecipe = (SqueezingRecipe) recipe.get();
         }
-
-
-        boolean useCasing = this.lastRecipe.useCasing();
-        if (useCasing != getBlockState().getValue(CASING))
-            return;
-
-        if (useCasing)
-            getLevel().setBlockAndUpdate(worldPosition, getBlockState().setValue(CASING, false));
-        if (!this.lastRecipe.getFluidIngredients().isEmpty())
-            this.fluidCapability.ifPresent(handler -> {handler.drain(handler.getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE);});
-        ItemStack stackInSlot = this.inputInventory.getStackInSlot(0);
-        stackInSlot.shrink(1);
-        this.inputInventory.setStackInSlot(0, stackInSlot);
-        this.lastRecipe.rollResults().forEach((stack) -> {
-            acceptOutputs(ImmutableList.of(stack), false);
-        });
-        notifyChangeOfContents();
-        notifyUpdate();
     }
 
-    public float getProcessingSpeed() {
-        if (getOperator().isPresent()) {
-            MechanicalPressBlockEntity be =  getOperator().get();
-            return be.pressingBehaviour.getRunningTickSpeed();
-        } else {
-            return 0F;
-        }
+    public boolean isEmpty() {
+        return this.inputInventory.isEmpty() && this.outputInventory.isEmpty();
+    }
+
+    public void write(CompoundTag compound, boolean clientPacket) {
+        super.write(compound, clientPacket);
+        compound.put("InputItems", this.inputInventory.serializeNBT());
+        compound.put("OutputItems", this.outputInventory.serializeNBT());
+    }
+
+    protected void read(CompoundTag compound, boolean clientPacket) {
+        super.read(compound, clientPacket);
+        this.inputInventory.deserializeNBT(compound.getCompound("InputItems"));
+        this.outputInventory.deserializeNBT(compound.getCompound("OutputItems"));
+    }
+
+    public void invalidate() {
+        super.invalidate();
+        this.itemCapability.invalidate();
+        fluidCapability.invalidate();
+    }
+
+    public void remove() {
+        super.remove();
+        this.onEmptied();
+    }
+
+    public void destroy() {
+        super.destroy();
+        ItemHelper.dropContents(this.level, this.worldPosition, this.inputInventory);
+        ItemHelper.dropContents(this.level, this.worldPosition, this.outputInventory);
+        if (this.getBlockState().getValue(CASING))
+            Containers.dropItemStack(this.level, (double) this.worldPosition.getX(), (double) this.worldPosition.getY(), (double) this.worldPosition.getZ(), new ItemStack(CRItems.SAUSAGE_CASING.get(), 1));
+    }
+
+    public void onEmptied() {
+        this.getOperator().ifPresent((be) -> {
+            be.basinRemoved = true;
+        });
     }
 
     private void tryClearingSpoutputOverflow() {
@@ -174,77 +192,51 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     }
 
-    public boolean isEmpty() {
-        return this.inputInventory.isEmpty() && this.outputInventory.isEmpty();
-    }
-
-    @Override
-    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        behaviours.add(new DirectBeltInputBehaviour(this));
-        this.inputTank = (new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, true)).whenFluidUpdates(() -> {
-            this.contentsChanged = true;
-        });
-        behaviours.add(this.inputTank);
-        fluidCapability = LazyOptional.of(() -> {
-            LazyOptional<? extends IFluidHandler> inputCap = inputTank.getCapability();
-            return new CombinedTankWrapper(inputCap.orElse(null));
-        });
-    }
-
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
-        this.inputInventory.deserializeNBT(compound.getCompound("InputItems"));
-        this.outputInventory.deserializeNBT(compound.getCompound("OutputItems"));
-    }
-
-    public void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
-        compound.put("InputItems", this.inputInventory.serializeNBT());
-        compound.put("OutputItems", this.outputInventory.serializeNBT());
-    }
-
-    public void destroy() {
-        super.destroy();
-        ItemHelper.dropContents(this.level, this.worldPosition, this.inputInventory);
-        ItemHelper.dropContents(this.level, this.worldPosition, this.outputInventory);
-        if (this.getBlockState().getValue(CASING))
-            Containers.dropItemStack(this.level, (double)this.worldPosition.getX(), (double)this.worldPosition.getY(), (double)this.worldPosition.getZ(), new ItemStack(CRItems.SAUSAGE_CASING.get(), 1));
-    }
-
-    public void remove() {
-        super.remove();
-        this.onEmptied();
-    }
-
-    public void onEmptied() {
-        this.getOperator().ifPresent((be) -> {
-            be.basinRemoved = true;
-        });
-    }
-
-    public void invalidate() {
-        super.invalidate();
-        this.itemCapability.invalidate();
-        fluidCapability.invalidate();
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER)
-            return itemCapability.cast();
-        if (cap == ForgeCapabilities.FLUID_HANDLER)
-            return fluidCapability.cast();
-        return super.getCapability(cap, side);
-    }
-
     public Optional<MechanicalPressBlockEntity> getOperator() {
         if (this.level == null) {
             return Optional.empty();
         } else {
             BlockEntity be = this.level.getBlockEntity(this.worldPosition.above(2));
-            return be instanceof MechanicalPressBlockEntity ? Optional.of((MechanicalPressBlockEntity)be) : Optional.empty();
+            return be instanceof MechanicalPressBlockEntity ? Optional.of((MechanicalPressBlockEntity) be) : Optional.empty();
         }
+    }
+
+    public float getProcessingSpeed() {
+        if (getOperator().isPresent()) {
+            MechanicalPressBlockEntity be = getOperator().get();
+            return be.pressingBehaviour.getRunningTickSpeed();
+        } else {
+            return 0F;
+        }
+    }
+
+    private void process() {
+        if (this.lastRecipe == null || !this.lastRecipe.match(this, this.getBlockState().getValue(CASING))) {
+            Optional<SqueezingRecipe> recipe = CRRecipeTypes.SQUEEZING.find(inputInventory, this.level);
+            if (recipe.isEmpty()) {
+                return;
+            }
+
+            this.lastRecipe = (SqueezingRecipe) recipe.get();
+        }
+
+
+        boolean useCasing = this.lastRecipe.useCasing();
+        if (useCasing != getBlockState().getValue(CASING))
+            return;
+
+        if (useCasing)
+            getLevel().setBlockAndUpdate(worldPosition, getBlockState().setValue(CASING, false));
+        if (!this.lastRecipe.getFluidIngredients().isEmpty())
+            this.fluidCapability.ifPresent(handler -> {
+                handler.drain(lastRecipe.getFluidIngredients().get(0).getRequiredAmount(), IFluidHandler.FluidAction.EXECUTE);
+            });
+        ItemStack stackInSlot = this.inputInventory.getStackInSlot(0);
+        stackInSlot.shrink(1);
+        this.inputInventory.setStackInSlot(0, stackInSlot);
+        acceptOutputs(this.lastRecipe.rollResults(), false);
+        notifyChangeOfContents();
+        notifyUpdate();
     }
 
     public void notifyChangeOfContents() {
@@ -283,6 +275,16 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
                 return false;
         }
         return true;
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER)
+            return itemCapability.cast();
+        if (cap == ForgeCapabilities.FLUID_HANDLER)
+            return fluidCapability.cast();
+        return super.getCapability(cap, side);
     }
 
     @Override
@@ -340,13 +342,6 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         }
 
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            if (SqueezeBasinBlockEntity.this.outputInventory == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
-                return false;
-            return super.isItemValid(slot, stack);
-        }
-
-        @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             if (SqueezeBasinBlockEntity.this.outputInventory == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
                 return stack;
@@ -360,6 +355,13 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
             if (SqueezeBasinBlockEntity.this.inputInventory == this.getHandlerFromIndex(getIndexForSlot(slot)))
                 return ItemStack.EMPTY;
             return super.extractItem(slot, amount, simulate);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            if (SqueezeBasinBlockEntity.this.outputInventory == this.getHandlerFromIndex(this.getIndexForSlot(slot)))
+                return false;
+            return super.isItemValid(slot, stack);
         }
     }
 
