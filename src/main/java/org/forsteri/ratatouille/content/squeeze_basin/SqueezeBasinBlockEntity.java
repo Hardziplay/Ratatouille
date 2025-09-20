@@ -1,6 +1,5 @@
 package org.forsteri.ratatouille.content.squeeze_basin;
 
-import com.google.common.collect.ImmutableList;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
@@ -60,7 +59,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         super(type, pos, state);
         this.inputInventory = (new SqueezeBasinInventory(1, this));
         this.inputInventory.whenContentsChanged($ -> this.contentsChanged = true).withMaxStackSize(64);
-        this.outputInventory = (new SqueezeBasinInventory(1, this)).forbidInsertion().withMaxStackSize(1);
+        this.outputInventory = (new SqueezeBasinInventory(1, this)).forbidInsertion().withMaxStackSize(64);
         this.itemCapability = new SqueezeBasinInventoryHandler();
         this.contentsChanged = true;
         this.recipeBackupCheck = 20;
@@ -250,9 +249,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         ItemStack stackInSlot = this.inputInventory.getStackInSlot(0);
         stackInSlot.shrink(1);
         this.inputInventory.setStackInSlot(0, stackInSlot);
-        this.lastRecipe.rollResults().forEach((stack) -> {
-            acceptOutputs(ImmutableList.of(stack), false);
-        });
+        acceptOutputs(this.lastRecipe.rollResults(), false);
         notifyChangeOfContents();
         notifyUpdate();
     }
