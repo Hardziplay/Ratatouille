@@ -74,7 +74,7 @@ public enum CRRecipeTypes implements IRecipeTypeInfo {
 
     public <I extends RecipeInput, R extends Recipe<I>> Optional<RecipeHolder<R>> find(I inv, Level world) {
         return world.getRecipeManager()
-                .getRecipeFor(getType(), inv, world);
+                .getRecipesFor(getType(), inv, world).stream().findFirst().map(r -> (RecipeHolder<R>) r);
     }
 
     private static class Registers {

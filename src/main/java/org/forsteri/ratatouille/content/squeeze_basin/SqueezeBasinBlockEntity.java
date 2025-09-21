@@ -33,7 +33,6 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.forsteri.ratatouille.entry.CRBlockEntityTypes;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
@@ -229,7 +228,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
     private void process() {
         if (level == null) return;
         if (this.lastRecipe == null || !lastRecipe.match(this)) {
-            Optional<RecipeHolder<SqueezingRecipe>> recipe = CRRecipeTypes.SQUEEZING.find(new RecipeWrapper(inputInventory), this.level);
+            Optional<RecipeHolder<SqueezingRecipe>> recipe = CRRecipeTypes.SQUEEZING.find(inputInventory, this.level);
             if (recipe.isEmpty()) {
                 return;
             }
