@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 public class SqueezeBasinInventory extends SmartInventory {
-    private SqueezeBasinBlockEntity blockEntity;
+    public SqueezeBasinBlockEntity blockEntity;
 
     public SqueezeBasinInventory(int slots, SqueezeBasinBlockEntity be) {
         super(slots, be, 16, true);
