@@ -62,8 +62,8 @@ public class SpreaderBlockEntity extends KineticBlockEntity implements IAirCurre
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
-                CRBlockEntityTypes.OVEN_ENTITY.get(),
-                (be, context) -> be.itemCapability
+                CRBlockEntityTypes.SPREADER_BLOCK_ENTITY.get(),
+                (be, context) -> be.capability
         );
     }
 
