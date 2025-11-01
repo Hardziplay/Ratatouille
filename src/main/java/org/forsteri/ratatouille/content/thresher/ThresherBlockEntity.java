@@ -199,7 +199,7 @@ public class ThresherBlockEntity extends KineticBlockEntity {
         ItemStack stackInSlot = this.inputInv.getStackInSlot(0);
         stackInSlot.shrink(1);
         this.inputInv.setStackInSlot(0, stackInSlot);
-        this.lastRecipe.rollResults().forEach((stack) -> {
+        this.lastRecipe.rollResults(level.random).forEach((stack) -> {
             ItemHandlerHelper.insertItemStacked(this.outputInv, stack, false);
         });
         notifyUpdate();

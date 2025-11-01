@@ -42,7 +42,7 @@ public class CompostData {
         if (updateCompostTower(tower))
             tower.notifyUpdate();
 
-        assert tower.getLevel() != null;
+        if (tower.getLevel() == null) return;
 
         var itemHandler = tower.getItemInventory();
         var fluidHandler = tower.tankInventory;
@@ -57,7 +57,7 @@ public class CompostData {
             }
 
             boolean canOutput = true;
-            for (ItemStack outputStack : lastRecipe.rollResults()) {
+            for (ItemStack outputStack : lastRecipe.rollResults(tower.getLevel().random)) {
                 if (outputStack.isEmpty()) continue;
                 if (!ItemHandlerHelper.insertItemStacked(itemHandler, outputStack, true).isEmpty()) {
                     canOutput = false;
@@ -81,8 +81,8 @@ public class CompostData {
                 return;
             }
             if (timer <= 0) {
-                itemHandler.consume(lastRecipe.getIngredients().get(0).getItems()[0], false);
-                this.lastRecipe.rollResults().forEach((stack) -> {
+                itemHandler.consume(lastRecipe.getIngredients().getFirst().getItems()[0], false);
+                this.lastRecipe.rollResults(tower.getLevel().random).forEach((stack) -> {
                     ItemHandlerHelper.insertItemStacked(itemHandler, stack, false);
                 });
                 this.lastRecipe.getFluidResults().forEach((fluidStack) -> {
@@ -108,7 +108,7 @@ public class CompostData {
     }
 
     public boolean updateCompostTower(CompostTowerBlockEntity controller) {
-        assert controller.getLevel() != null;
+        if (controller.getLevel() == null) return false;
 
         BlockPos controllerPos = controller.getBlockPos();
         Level level = controller.getLevel();

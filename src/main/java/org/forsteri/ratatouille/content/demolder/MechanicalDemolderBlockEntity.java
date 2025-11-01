@@ -88,7 +88,7 @@ public class MechanicalDemolderBlockEntity extends KineticBlockEntity implements
             return true;
         demoldingBehaviour.particleItems.add(input.stack);
         List<ItemStack> outputs = RecipeApplier.applyRecipeOn(this.level,
-                canProcessInBulk() ? input.stack : new ItemStack(input.stack.getItem(), 1), recipe.get());
+                canProcessInBulk() ? input.stack : new ItemStack(input.stack.getItem(), 1), recipe.get().value(), true);
 
         for (ItemStack itemStack : outputs) {
             if (!itemStack.is(CRTags.MOLD)) {

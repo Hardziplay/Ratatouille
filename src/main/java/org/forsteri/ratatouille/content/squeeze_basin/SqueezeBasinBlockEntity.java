@@ -248,7 +248,7 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
         ItemStack stackInSlot = this.inputInventory.getStackInSlot(0);
         stackInSlot.shrink(1);
         this.inputInventory.setStackInSlot(0, stackInSlot);
-        acceptOutputs(this.lastRecipe.rollResults(), false);
+        acceptOutputs(this.lastRecipe.rollResults(level.random), false);
         notifyChangeOfContents();
         notifyUpdate();
     }

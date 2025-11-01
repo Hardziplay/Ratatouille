@@ -2,8 +2,9 @@ package org.forsteri.ratatouille.content.squeeze_basin;
 
 import com.simibubi.create.foundation.item.SmartInventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeInput;
 
-public class SqueezeBasinInventory extends SmartInventory {
+public class SqueezeBasinInventory extends SmartInventory implements RecipeInput {
     public SqueezeBasinBlockEntity blockEntity;
 
     public SqueezeBasinInventory(int slots, SqueezeBasinBlockEntity be) {
@@ -28,5 +29,10 @@ public class SqueezeBasinInventory extends SmartInventory {
         }
 
         return extractItem;
+    }
+
+    @Override
+    public int size() {
+        return this.getSlots();
     }
 }

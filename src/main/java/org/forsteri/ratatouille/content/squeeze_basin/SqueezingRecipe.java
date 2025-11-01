@@ -2,10 +2,10 @@ package org.forsteri.ratatouille.content.squeeze_basin;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.forsteri.ratatouille.entry.CRItems;
 import org.forsteri.ratatouille.entry.CRRecipeTypes;
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +80,7 @@ public class SqueezingRecipe extends StandardProcessingRecipe<SqueezeBasinInvent
             if (fluidHandler == null) return false;
 
             boolean result = false;
-            for (FluidIngredient ingredient : fluidIngredients) {
+            for (SizedFluidIngredient ingredient : fluidIngredients) {
                 if (ingredient.test(fluidHandler.getFluidInTank(0))) {
                     result = true;
                     break;

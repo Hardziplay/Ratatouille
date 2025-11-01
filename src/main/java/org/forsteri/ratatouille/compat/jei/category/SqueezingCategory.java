@@ -3,7 +3,6 @@ package org.forsteri.ratatouille.compat.jei.category;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -17,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedSqueeze;
 import org.forsteri.ratatouille.compat.jei.category.animations.AnimatedThresher;
@@ -56,7 +56,7 @@ public class SqueezingCategory extends CreateRecipeCategory<SqueezingRecipe> {
                     .addItemStacks(stacks);
             i++;
         }
-        for(FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
+        for(SizedFluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
             addFluidSlot(builder, 17 + xOffset + i % 3 * 19, 51 - i / 3 * 19, fluidIngredient);
             ++i;
         }
