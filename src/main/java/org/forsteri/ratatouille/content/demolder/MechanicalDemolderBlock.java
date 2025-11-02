@@ -35,10 +35,10 @@ public class MechanicalDemolderBlock extends HorizontalKineticBlock implements I
                 .getAxis();
     }
 
-    @Override
-    public SpeedLevel getMinimumRequiredSpeedLevel() {
-        return SpeedLevel.MEDIUM;
-    }
+//    @Override
+//    public SpeedLevel getMinimumRequiredSpeedLevel() {
+//        return SpeedLevel.MEDIUM;
+//    }
 
     @Override
     public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
