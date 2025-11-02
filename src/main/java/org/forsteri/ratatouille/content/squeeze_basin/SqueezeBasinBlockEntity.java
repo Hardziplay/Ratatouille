@@ -332,10 +332,13 @@ public class SqueezeBasinBlockEntity extends SmartBlockEntity implements IHaveGo
             isEmpty = false;
         }
 
-        Lang.text("")
-                .add(Component.translatable(CRItems.SAUSAGE_CASING.get().getDescriptionId())
-                        .withStyle(ChatFormatting.GRAY))
-                .forGoggles(tooltip, 1);
+        if (getBlockState().getValue(CASING)) {
+            Lang.text("")
+                    .add(Component.translatable(CRItems.SAUSAGE_CASING.get().getDescriptionId())
+                            .withStyle(ChatFormatting.GRAY))
+                    .forGoggles(tooltip, 1);
+        }
+
 
         if (isEmpty)
             tooltip.removeFirst();
