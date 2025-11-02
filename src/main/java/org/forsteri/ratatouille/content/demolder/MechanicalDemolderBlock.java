@@ -57,10 +57,10 @@ public class MechanicalDemolderBlock extends HorizontalKineticBlock implements I
         return CRBlockEntityTypes.MECHANICAL_DEMOLDER_ENTITY.get();
     }
 
-    @Override
-    public SpeedLevel getMinimumRequiredSpeedLevel() {
-        return SpeedLevel.MEDIUM;
-    }
+//    @Override
+//    public SpeedLevel getMinimumRequiredSpeedLevel() {
+//        return SpeedLevel.MEDIUM;
+//    }
 
     @Override
     public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
